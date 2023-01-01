@@ -1,0 +1,10 @@
+{% extends "@App/exerciceNonGroupeLayout.html.twig" %}
+
+{% block Exercice %}
+    {% if placementQuestion is same as("AD") %}
+        <a class="bouton-lien neutre classique-neutre" href="{{ path("calcul-resultats", {"id": exercice.id }) }}">Passer à la question suivante</a>
+    {% else %}
+        <a class="bouton-lien neutre classique-neutre" href="{{ path("accueil-admin", {"id": exercice.id }) }}">Passer à la question suivante</a>
+    {% endif %}
+    <div class="submit submit-exercice">
+{% endblock %}

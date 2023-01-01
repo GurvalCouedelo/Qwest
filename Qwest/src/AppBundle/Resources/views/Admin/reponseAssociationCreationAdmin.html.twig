@@ -1,0 +1,39 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Création d'une paire de propositions
+{% endblock %}
+
+{% block StockHG3body %}
+    <h1>Création d'une paire de propositions</h1>
+    <div class="conteneur">
+        {% for message in app.session.flashbag.get('message') %}
+            {{ message | raw }}
+        {% endfor %}
+        <div class="formulaire">
+            {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+            {{ form_errors(form) }}
+
+            {{ form_label(form.corps, "Corps de la proposition à rentrer:") }}
+            {{ form_widget(form.corps) }}
+            {{ form_row(form.corps) }}
+            
+            {{ form_label(form.nbPoint, "Nombre de points obtenus:") }}
+            {{ form_widget(form.nbPoint) }}
+            {{ form_row(form.nbPoint) }}
+            
+            {{ form_label(form.commentaire, "Commentaire à la correction:") }}
+            {{ form_widget(form.commentaire) }}
+            {{ form_row(form.commentaire) }}
+
+            <div class="submit">
+                {{ form_widget(form.envoyer) }}
+            </div>
+
+            {{ form_rest(form) }}
+
+            {{ form_end(form) }}
+            <a class="bouton-lien neutre classique-neutre" href="{{ path("question-liste", {"id": question.exercice.id }) }}#{{ question.numeroOrdre }}">Retourner à la liste des questions</a><br/>
+        </div>
+    </div>
+{% endblock %}

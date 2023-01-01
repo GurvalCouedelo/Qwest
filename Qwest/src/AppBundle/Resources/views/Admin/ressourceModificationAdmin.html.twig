@@ -1,0 +1,46 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Modification d'une ressource
+{% endblock %}
+
+{% block StockHG3body %}
+    <h1>Modification d'une ressource</h1>
+    <div class="conteneur">
+        {% for message in app.session.flashbag.get('erreur') %}
+            <p class="erreur-marge-0">{{ message }}</p>
+        {% endfor %}
+        <div class="formulaire">
+            {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+            {{ form_errors(form) }}
+
+            {{ form_label(form.file, "Ressources:") }}
+            {{ form_widget(form.file) }}
+            {{ form_row(form.file) }}
+            
+            {{ form_label(form.lien, "Ou alors lien de votre vidéo:") }}
+            {{ form_widget(form.lien) }}
+            {{ form_row(form.lien) }}
+            
+            {{ form_label(form.alt, "Description:") }}
+            {{ form_widget(form.alt) }}
+            {{ form_row(form.alt) }}
+            
+            {{ form_label(form.matiere, "Matiere de la ressource:") }}
+            {{ form_widget(form.matiere) }}
+            {{ form_row(form.matiere) }}
+
+            <div class="submit">
+                {{ form_widget(form.envoyer) }}
+                <a class="bouton-lien-80 suppr classique-suppr" href="{{ path("ressource-suppression", {"id": ressource.id}) }}">Supprimer cette ressource</a>
+            </div>
+
+            {{ form_rest(form) }}
+
+            {{ form_end(form) }}
+        </div>
+        
+        
+        
+    </div>
+{% endblock %}

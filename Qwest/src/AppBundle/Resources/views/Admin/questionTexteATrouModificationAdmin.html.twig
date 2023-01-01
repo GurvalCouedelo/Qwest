@@ -1,0 +1,37 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Modification d'un texte  à trous / à listes
+{% endblock %}
+
+{% block StockHG3body %}
+    <h1>Modification d'un texte  à trous / à listes</h1>
+    
+    <div class="conteneur">
+        {% for message in app.session.flashbag.get('erreur') %}
+            <p class="erreur-marge-0">{{ message }}</p>
+        {% endfor %}
+    
+        <p>Pour les textes à trous, formez les propositions acceptées entre crochets [ ] séparées par une étoile *. <br/>
+           Pour les textes à listes, formez les propositions à l'aide entre accolades { } séparées par une étoile *, la proposition exacte en tête.</p><br/>
+        
+        <div class="formulaire">
+            {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+            {{ form_errors(form) }}
+
+            {{ form_label(form.corps, "Votre texte:") }}
+            {{ form_widget(form.corps) }}
+            {{ form_row(form.corps) }}
+            
+            <div class="submit">
+                {{ form_widget(form.envoyer) }}
+            </div>
+
+            {{ form_rest(form) }}
+
+            {{ form_end(form) }}
+            
+            <a class="bouton-lien neutre classique-neutre" href="{{ path("question-liste", {"id": id }) }}">Retourner à la liste des questions</a><br/>
+        </div>
+    </div>
+{% endblock %}

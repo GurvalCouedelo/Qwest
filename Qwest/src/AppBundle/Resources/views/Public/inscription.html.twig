@@ -1,0 +1,63 @@
+{% extends "@App/publicLayout.html.twig" %}
+
+{% block description %}
+    {{ parent() }}Page d'inscription
+{% endblock %}
+
+{% block title %}
+    {{ parent() }} - Inscription
+{% endblock %}
+
+{% block StockHG3body %}
+    <h1>Inscription</h1>
+
+    <div class="conteneur">
+        <p>Pour avoir accès aux exercices, créez vous un compte.<br/>
+            <strong>Gratuit, pas d'adresse mail demandée.</strong></p><br/>
+        {% for message in app.session.flashBag.get("erreur") %}
+            <p class="erreur">{{ message }}</p>
+        {% endfor %}
+        <div class="formulaire">
+            {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+            {{ form_errors(form) }}
+
+            {{ form_label(form.pseudo, "Votre pseudo:") }}
+            {{ form_widget(form.pseudo, { 'attr': { 'maxlength' : 30 } }) }}
+            {{ form_row(form.pseudo) }}
+
+            {{ form_label(form.nom, "Votre nom:") }}
+            {{ form_widget(form.nom, { 'attr': { 'maxlength' : 30 } }) }}
+            {{ form_row(form.nom) }}
+
+            {{ form_label(form.prenom, "Votre prénom:") }}
+            {{ form_widget(form.prenom, { 'attr': { 'maxlength' : 30 } }) }}
+            {{ form_row(form.prenom) }}
+
+            <div class="bloc-champ-edition">
+                {{ form_label(form.classeGroupe, "Votre classe:") }}
+                {{ form_widget(form.classeGroupe) }}
+                {{ form_row(form.classeGroupe) }}
+            </div>
+
+            {{ form_label(form.motDePasse.first, "Votre mot de passe") }}
+            {{ form_widget(form.motDePasse.first, { 'attr': { 'maxlength' : 50 } }) }}
+            {{ form_row(form.motDePasse.first) }}
+
+            {{ form_label(form.motDePasse.second, "Répètez votre mot de passe") }}
+            {{ form_widget(form.motDePasse.second, { 'attr': { 'maxlength' : 50 } }) }}
+            {{ form_row(form.motDePasse.second) }}
+
+            {{ captcha.creerCaptcha() | raw }}
+
+            <div class="submit">
+                {{ form_widget(form.envoyer) }}
+            </div>
+
+            {{ form_rest(form) }}
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+{% endblock %}

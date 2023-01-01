@@ -1,0 +1,322 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Config\Definition\Exception\Exception;
+
+/**
+ * GoodAnswer
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\GoodAnswerRepository")
+ */
+class GoodAnswer
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="corps", type="string", length=255, nullable=true)
+     * @Assert\Length(max=255)
+     */
+    private $corps;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Answer", mappedBy="reponseQuizz", cascade={"persist", "remove"})
+     * @Assert\Valid
+     */
+    private $reponseUtilisateurQuizz;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Answer", mappedBy="reponseAssoc", cascade={"persist", "remove"})
+     * @Assert\Valid
+     */
+    private $reponseUtilisateurAssoc;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="nbPoint", type="integer", nullable=true)
+     */
+    private $nbPoint = 0; 
+    
+    /**
+     * @ORM\Column(name="verite", type="boolean")
+     */
+    private $verite;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="commentaire", type="string", length=255, nullable=true)
+     * @Assert\Length(max=255)
+     */
+    private $commentaire;
+    
+    /**
+    * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Question", inversedBy="bonneReponses", cascade={"persist"})
+    * @Assert\Valid
+    */
+    private $question;
+    
+    /**
+    * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SubQuestion", inversedBy="bonneReponse", cascade={"persist"})
+    * @Assert\Valid
+    */
+    private $sousQuestion;
+    
+    /**
+    * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Means", inversedBy="bonneReponse", cascade={"persist", "remove"})
+    * @ORM\JoinColumn(nullable=true)
+    * @Assert\Valid
+    */
+    private $ressource;
+    
+    public function __construct()
+    {
+        $this->reponseUtilisateurQuizz = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->reponseUtilisateurAssoc = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    public function __toString()
+    {
+        return $this->getCorps();
+    }
+    
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set corps
+     *
+     * @param string $corps
+     * @return GoodAnswer
+     */
+    public function setCorps($corps)
+    {
+        $this->corps = $corps;
+
+        return $this;
+    }
+
+    /**
+     * Get corps
+     *
+     * @return string 
+     */
+    public function getCorps()
+    {
+        return $this->corps;
+    }
+
+    /**
+     * Set nbPoint
+     *
+     * @param integer $nbPoint
+     * @return GoodAnswer
+     */
+    public function setNbPoint($nbPoint)
+    {
+        $this->nbPoint = $nbPoint;
+
+        return $this;
+    }
+
+    /**
+     * Get nbPoint
+     *
+     * @return integer 
+     */
+    public function getNbPoint()
+    {
+        return $this->nbPoint;
+    }
+
+    /**
+     * Set question
+     *
+     * @param \AppBundle\Entity\Question $question
+     * @return GoodAnswer
+     */
+    public function setQuestion(\AppBundle\Entity\Question $question = null)
+    {
+        $this->question = $question;
+
+        return $this;
+    }
+
+    /**
+     * Get question
+     *
+     * @return \AppBundle\Entity\Question 
+     */
+    public function getQuestion()
+    {
+        return $this->question;
+    }
+
+    /**
+     * Set commentaire
+     *
+     * @param string $commentaire
+     * @return GoodAnswer
+     */
+    public function setCommentaire($commentaire)
+    {
+        $this->commentaire = $commentaire;
+
+        return $this;
+    }
+
+    /**
+     * Get commentaire
+     *
+     * @return string 
+     */
+    public function getCommentaire()
+    {
+        return $this->commentaire;
+    }
+
+    /**
+     * Set verite
+     *
+     * @param boolean $verite
+     * @return GoodAnswer
+     */
+    public function setVerite($verite)
+    {
+        $this->verite = $verite;
+
+        return $this;
+    }
+
+    /**
+     * Get verite
+     *
+     * @return boolean 
+     */
+    public function getVerite()
+    {
+        return $this->verite;
+    }
+    
+    /**
+     * Get reponseUtilisateurAssoc
+     *
+     * @return \AppBundle\Entity\Answer 
+     */
+    public function getReponseUtilisateurAssoc()
+    {
+        return $this->reponseUtilisateurAssoc;
+    }
+    
+    /**
+     * Add reponseUtilisateurAssoc
+     *
+     * @param \AppBundle\Entity\Answer $reponseUtilisateurAssoc
+     * @return GoodAnswer
+     */
+    public function addReponseUtilisateurAssoc(\AppBundle\Entity\Answer $reponseUtilisateurAssoc)
+    {
+        $this->resultats[] = $reponseUtilisateurAssoc;
+
+        return $this;
+    }
+
+    /**
+     * Remove reponseUtilisateurAssoc
+     *
+     * @param \AppBundle\Entity\Answer $resultats
+     */
+    public function removeReponseUtilisateurAssoc(\AppBundle\Entity\GoodAnswer $reponseUtilisateurAssoc)
+    {
+        $this->resultats->removeElement($reponseUtilisateurAssoc);
+    }
+
+    /**
+     * Add reponseUtilisateurQuizz
+     *
+     * @param \AppBundle\Entity\Answer $reponseUtilisateurQuizz
+     * @return GoodAnswer
+     */
+    public function addReponseUtilisateurQuizz(\AppBundle\Entity\Answer $reponseUtilisateurQuizz)
+    {
+        $this->reponseUtilisateurQuizz[] = $reponseUtilisateurQuizz;
+
+        return $this;
+    }
+
+    /**
+     * Remove reponseUtilisateurQuizz
+     *
+     * @param \AppBundle\Entity\Answer $reponseUtilisateurQuizz
+     */
+    public function removeReponseUtilisateurQuizz(\AppBundle\Entity\Answer $reponseUtilisateurQuizz)
+    {
+        $this->reponseUtilisateurQuizz->removeElement($reponseUtilisateurQuizz);
+    }
+
+    /**
+     * Get reponseUtilisateurQuizz
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getReponseUtilisateurQuizz()
+    {
+        return $this->reponseUtilisateurQuizz;
+    }
+
+    /**
+     * Set ressource
+     *
+     * @param \AppBundle\Entity\Means $ressource
+     * @return GoodAnswer
+     */
+    public function setRessource(\AppBundle\Entity\Means $ressource = null)
+    {
+        $this->ressource = $ressource;
+
+        return $this;
+    }
+
+    /**
+     * Get ressource
+     *
+     * @return \AppBundle\Entity\Means 
+     */
+    public function getRessource()
+    {
+        return $this->ressource;
+    }
+    
+    /**
+     * Get ressource
+     *
+     * @return \AppBundle\Entity\Means 
+     */
+    public function getLabel()
+    {
+        $label = ($this->getRessource() === null) ? "texte" : "ressource";
+        $label .= "&-&";
+        $label .= ($this->getRessource() === null) ? $this->getCorps() : $this->getRessource()->getId();
+        return $label;
+    }
+}

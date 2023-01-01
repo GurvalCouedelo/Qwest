@@ -1,0 +1,11 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }}
+{% endblock %}
+
+{% block StockHG3body %}
+    <div class="conteneur">
+        <p><a class="bouton-lien suppr classique-suppr" href="{{ path("groupe-suppression", {"id": groupe.id, "true": "true"}) }}">Supprimer la question</a></p>
+    </div>
+{% endblock %}

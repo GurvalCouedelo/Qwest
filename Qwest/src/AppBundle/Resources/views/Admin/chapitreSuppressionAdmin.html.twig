@@ -1,0 +1,11 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Chapitre d'un exercice
+{% endblock %}
+
+{% block StockHG3body %}
+    <div class="conteneur">
+        <p><a class="bouton-suppression suppr classique-suppr" href="{{ path("chapitre-suppression", {"id": chapitre.id, "true": "true"}) }}">Supprimer le chapitre</a></p>
+    </div>
+{% endblock %}

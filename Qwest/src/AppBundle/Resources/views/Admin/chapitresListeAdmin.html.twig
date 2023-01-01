@@ -1,0 +1,37 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Liste des chapitres
+{% endblock %}
+
+{% block StockHG3body %}
+
+    <div class="conteneur">
+        <h1>Liste des chapitres</h1>
+        {% for message in app.session.flashbag.get('message') %}
+            {{ message | raw }}
+        {% endfor %}
+
+        {% if chapitres is not empty %}
+            <table class="petit-tableau">
+                <thead>
+                <th>Nom</th>
+                <th>Matiere</th>
+                <th>Classe</th>
+                </thead>
+
+                {% for ch in chapitres %}
+                    <tr>
+                        <td><a href="{{ path("chapitre-modification", {"id": ch.id}) }}">{{ ch.nom }}</a></td>
+                        <td><p>{{ ch.matiere.nom }}</p></td>
+                        <td><p>{{ ch.classe.nom }}<p></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>Vous n'avez pas encore créé de chapitre.</p>
+        {% endif %}
+
+        <a class="lien-crea" href="{{ path("chapitre-creation") }}">Créer un chapitre</a>
+    </div>
+{% endblock %}

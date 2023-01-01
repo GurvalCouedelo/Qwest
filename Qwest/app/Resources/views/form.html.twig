@@ -1,0 +1,20 @@
+{% block choice_widget %}
+{% spaceless %}
+    {% if form.reponseQuizz is defined %}
+        <ul {{ block('widget_container_attributes') }}>
+        {% for reponseQuizz in form.reponseQuizz %}
+            <li>ffffffffff
+                <div class="choix-complexe">
+                    <div class="cc-widget">
+                        {{ form_widget(reponseQuizz) }}
+                    </div>
+                    <div class="cc-label">
+                        {{ form_label(reponseQuizz) }}
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+{% endspaceless %}
+{% endblock %}

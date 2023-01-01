@@ -1,0 +1,1033 @@
+/*Balises simples*/
+
+*{
+    word-wrap: break-word;
+    max-width: 100%;
+}
+
+html, body, .bloc-page{
+    min-height: 100%;
+    display: block;
+}
+
+h1, .conteneur, .conteneur-plat{
+    margin: 20px;
+}
+
+.taille-conteneur{
+    min-height: 73vh;
+}
+
+h2{
+    margin-top: 10px;
+}
+
+pre{
+    margin-left: 40px;
+}
+
+.editable{
+/*    display: inline-block;*/
+    overflow: hidden;
+}
+
+.annexe{
+    width: auto;
+}
+
+.erreur, .erreur-marge-0{
+    margin-left: 0px;
+}
+
+.attention{
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+.aligne{
+    display: inline-block;
+    margin: 10px;
+}
+
+.groupe-h6{
+    display: inline-block;
+    float: left;
+    margin-right: 10px;
+}
+
+.groupe-liste{
+    width: 2000px;
+}
+
+/*Préentation générale de la page d'accueil*/
+
+.separateur{
+    width: 100%;
+    height: 5px;
+}
+
+@media screen and (min-width: 1281px){ 
+    .carte{
+        height: 380px;
+        display: inline-block;
+    }
+
+    .carte h1{
+        margin: 0px;
+        width: 70%;
+        padding-left: 15%;
+        padding-right: 15%;
+        line-height: 1.6em;
+    }
+}
+
+@media screen and (max-width: 768px){ 
+    .bloc-page{
+        margin: 0px;
+    }
+    
+    .carte h1{
+        margin: 0px;
+        width: 90%;
+        padding-left: 5%;
+        padding-right: 5%;
+        line-height: 1.4em;
+    }
+    
+    .carte{
+        height: 152px;
+    }
+}
+
+
+@media only screen and (min-width: 769px) and (max-width: 1280px){ 
+    .carte h1{
+        margin: 0px;
+        width: 80%;
+        padding-left: 10%;
+        padding-right: 10%;
+        line-height: 1.5em;
+    }   
+    
+    .carte{
+        height: 253px;
+    }
+}
+
+@media screen and (min-width: 1280px){ 
+    .phone{
+        display: none;
+    }
+    
+    .ordi{
+        display: inline-block;
+    }
+}
+
+@media screen and (max-width: 1280px){ 
+    .ordi{
+        display: none;
+    }
+    
+    .phone{
+        display: inline-block;
+    }
+}
+
+/*Billets (page d'accueil)*/
+
+.interieur-bloc-accueil{
+    padding-left: 20px;
+    padding-right: 20px;
+    overflow: auto;
+}
+
+.premier{
+    margin-top: 50px;
+    height: 400px;
+}
+
+.dernier{
+    margin-bottom: 50px;
+    display: flex;
+}
+
+.large{
+    width: 100%;
+}
+
+.bloc-image, .bloc-texte{
+    float: left;
+    width: 50%;
+    height: 400px;
+}
+
+
+@media only screen and (min-width: 769px){
+    .interieur-bloc-accueil ul, .interieur-bloc-SP ul{
+        padding-left: 1.3em;
+    }
+}
+
+@media only screen and (min-width: 560px) and (max-width: 768px){
+    .interieur-bloc-accueil ul, .interieur-bloc-SP ul{
+        padding-left: 1em;
+    }
+}
+
+@media only screen and (max-width: 559px){
+    .interieur-bloc-accueil ul, .interieur-bloc-SP ul{
+        padding-left: 1em;
+    }
+}
+
+@media screen and (min-width: 769px){ 
+    .large{
+        height: 400px;
+    }
+
+    .interieur-bloc-accueil{
+        height: 300px;
+    }
+}
+
+@media screen and (max-width: 768px){ 
+    .bloc-image, .bloc-texte{
+        float: none;
+        width: 100%;
+    }
+
+    .bloc-texte{
+        height: auto;
+    }
+
+    .bloc-image{
+        height: 200px;
+    }
+    
+    .bloc-news{
+        height: auto;
+        margin-bottom: 0px;
+        margin-top: 0px;
+    }
+    
+    .titre-billet h2{
+        margin: 20px;
+    }
+    
+    .interieur-bloc-accueil{
+        padding-bottom: 50px;
+        height: auto;
+    }
+    
+    .large{
+        height: none;
+    }
+    
+    .premier{
+        margin-top: 70px;
+    }
+    
+    .dernier{
+        flex-direction: column-reverse;
+    }
+}
+
+/*Billets (page spécial)*/
+
+.interieur-bloc-SP{
+    margin: 160px;
+    margin-top: 80px;
+    flex-direction: column;
+    align-content: center;
+}
+
+.interieur-bloc-SP span p{
+    margin: 0px;
+}
+.interieur-bloc-SP .image-bloc-SP{
+    float: left;
+}
+
+.image-bloc-SP{
+    margin-right: 15px;
+    margin-bottom: 15px;
+}
+
+.billet h1{
+    margin-top: 50px;
+}
+
+@media screen and (min-width: 1080px){ 
+    .interieur-bloc-SP .image-bloc-SP{
+        width: 50%;
+        height: 400px;
+    }
+}
+
+@media screen and (max-width: 1080px){ 
+    .image-bloc-SP{
+        width: 100%;
+        height: 200px;
+    }
+    
+    .interieur-bloc-SP{
+        margin-right: 10px;
+        margin-left: 10px;
+        margin-top: 20px;
+        margin-bottom: 15px;
+    }
+}
+
+/*Billets (page a propos)*/
+
+.billet-a-propos{
+    padding: 20px;
+}
+
+.billet-a-propos p{
+    margin: 0px;
+}
+
+.interieur-bloc-a-propos{
+    margin: 160px;
+    margin-top: 80px;
+}
+
+/*Page acceuil de l'utilisateur classique*/
+
+.bloc-gauche, .bloc-droite{
+    width: 48%;
+    display: inline-block;
+}
+
+
+
+/*Formulaires*/
+
+.formulaire legend{
+    display: inline-block;
+    width: 40%;
+}
+
+@media screen and (max-width: 1280px){ 
+    .formulaire legend{
+        width: auto;
+    }
+}
+
+.formulaire input, .formulaire select{
+    height: 34px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 12px;
+    padding-right: 6px;
+    line-height: 1.42857143;
+    width: 375px;
+}
+
+
+
+.formulaire textarea{
+    height: 34px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    line-height: 1.42857143;
+    width: 375px;
+    display: block;
+}
+
+.formulaire input{
+    padding: 0px;
+    display: block;
+}
+
+.form-texte-a-trou input{
+    display: inline-block;
+}
+
+.formulaire .submit button, .formulaire .ajouter-un-trou button, .form-texte-a-trou .submit button, input[type=submit], button[type=submit]{
+    display: inline-block;
+    padding: 9px;
+    margin-right: 20px;
+    margin-top: 13px;
+    
+    width: 20%;
+}
+
+.formulaire .submit-exercice button, .form-texte-a-trou .submit-exercice button, input[type=submit], button[type=submit]{
+    position: relative;
+    bottom: 3px;
+}
+
+.choix{
+    margin-top: 10px;
+}
+
+.choix input{
+    display: inline-block;
+    margin: 5px;
+    width: 20px;
+    vertical-align: baseline;
+}
+
+.choix label{
+    display: inline-block;
+    position: relative;
+    bottom: 10px;
+}
+
+.choix-complexe{
+    max-width: 80%;
+    padding-right: 20px;
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.cc-label{
+    position: relative;
+    top: 5px;
+}
+
+.cc-widget{
+    width: 2.5em;
+}
+
+.formulaire .edition input{
+    display: inline-block;
+}
+
+.formulaire .edition input[type=text], .bloc-champ-edition{
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.formulaire .edition input[type=number]{
+    width: 100px;
+}
+
+.edition .choix{
+    display: inline-block;
+}
+
+@media screen and (min-width: 769px){ 
+    .cc-widget input{
+        margin: 5px;
+    }
+}
+
+@media screen and (max-width: 768px){ 
+    .formulaire textarea, .formulaire select, .formulaire .submit button, .formulaire .ajouter-un-trou button, .formulaire input:not([type=radio]), .form-texte-a-trou .submit button{
+        width: 100%;
+    }
+    .form-texte-a-trou textarea, .form-texte-a-trou select, .form-texte-a-trou input:not([type=radio]){
+        min-width: unset;
+    }
+    
+    .cc-widget input{
+        margin: 0px;
+    }
+}
+
+.g-recaptcha{
+    margin-top: 10px;
+}
+
+/*Texte à trou*/
+
+.form-texte-a-trou{
+    display: inline-block;
+}
+
+.form-texte-a-trou select{
+    height: 34px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 12px;
+    padding-right: 6px;
+    line-height: 1.42857143;
+    min-width: 200px;
+}
+
+.form-texte-a-trou input{
+    height: 26px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 3px;
+    padding-right: 3px;
+    line-height: 1.42857143;
+    min-width: 200px;
+}
+
+/*Carte à trou*/
+
+.carteExercice{
+    width: 100%;
+    height: 100%;
+}
+
+ .carte-liste-formulaire li{
+    position: relative;
+     display: inline;
+}
+
+.carteExercice input[type=number]{
+    display: none;
+}
+
+.carteExercice input[type=text]{
+/*    height: 100%;*/
+/*    display: inline-block;*/
+}
+
+/*Boutons*/
+
+.bouton-lien, .bouton-suppression, .bouton-suppression-entree, .bouton-lien-entree, .bouton-lien-45, .bouton-suppression-45, .bouton-lien-adapt, .bouton-suppression-adapt, .bouton-suppression-80, .bouton-lien-80{
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.bouton-lien, .bouton-suppression, .bouton-lien-entree, .bouton-suppression-entree{
+    display: block;
+}
+
+.bouton-lien-entree, .bouton-suppression-entree{
+    margin-top: 0px;
+}
+
+.bouton-lien-45, .bouton-suppression-45 {
+    width: 48%;
+}
+
+.bouton-lien-adapt, .bouton-suppression-adapt{
+    width: 31%;
+}
+
+.bouton-suppression-45{
+    margin-right: 20px;
+}
+
+.bouton-suppression-80, .bouton-lien-80{
+    width: 77%;
+    display: inline-block;
+}
+
+.marge{
+    margin-right: 20px;
+}
+
+.div-45, .div-adapt{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.lien-crea{
+    display: inline-block;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.sans-marge{
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-top: 0px;
+}
+
+#bouton-aide{
+    display: inline-block;
+    margin-top: 20px;
+}
+
+#aide{
+    position: fixed;
+    top: 50%;
+    left: 40%;
+    right: 40%;
+    width: 20%;
+    padding: 20px;
+}
+
+.selection-type-galerie, .selection-matiere-galerie{
+    width: 100%;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.selection-type-galerie li, .selection-matiere-galerie li{
+    display: inline-block;
+    padding: 15px;
+    margin: 0px;
+}
+
+@media screen and (max-width: 980px){ 
+    .bouton-lien-45, .bouton-suppression-45, .bouton-lien-adapt, .bouton-suppression-adapt{
+        width: 100%;
+        margin-right: 0px;
+    }
+    
+    .div-45, .div-adapt{
+        flex-wrap: wrap;
+    }
+    
+    #bouton-aide{
+        width: 100%;
+        padding: 0px;
+    }
+    
+    #aide{
+        top: 50%;
+        left: 20%;
+        right: 20%;
+        width: 60%;
+    }
+}
+@media screen and (max-width: 768px){ 
+    #bouton-aide{
+        width: 100%;
+    }
+    
+    #bouton-aide{
+        min-width: unset;
+    }
+}
+
+@media screen and (min-width: 768px){ 
+    #bouton-aide{
+        width: 20%;
+    }
+}
+
+/*Tableaux*/
+
+table{
+    width: 100%;
+    margin-top: 20px;
+}
+
+table > tbody > tr > th,
+table > tfoot > tr > th,
+table > thead > tr > td,
+table > tbody > tr > td,
+table > tfoot > tr > td {
+  padding: 5px;
+}
+
+table > thead > tr > th{
+  padding: 15px;
+}
+
+.petit-tableau{
+    width: auto;
+}
+
+.bloc{
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+/*Exercices*/
+
+.question{
+    margin-top: 20px;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.association > .question{
+    margin-top: 0px;
+}
+
+.bloc-association{
+    display: block;
+}
+
+.bloc-association > *{
+    display: inline-block;
+    vertical-align: top;
+}
+
+.premiere-proposition-association{
+    min-width: 20%;
+}
+
+.conteneur-question-entiere{
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+
+.ressources{
+    max-width: 90%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.ressource-petite{
+    width: 400px;
+    height: 300px;
+}
+
+.ressource-petite img{
+    overflow: auto;
+}
+
+.ressources{
+    margin-top: 20px;
+    margin-bottom: 20px; 
+    overflow: auto;
+}
+
+.ressources img{
+    max-width: 800px;
+    max-height: 800px;
+    margin: 10px;
+}
+
+.reponse-resultat{
+/*    min-height: 150px;*/
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.association{
+    margin-top: 20px;
+}
+
+.bloc-texte-SP{
+    overflow: auto;
+}
+
+.intro-exercice{
+    display: inline-block;
+}
+
+@media screen and (min-width: 769px){
+    .conteneur-reponse, .conteneur-ressources, .conteneur-question{
+        width: 32%;
+        margin-right: 0.5%;
+    }
+}
+
+@media screen and (max-width: 768px){
+    .ressources{
+        width: 100%;
+        max-width: none;
+        height: 360px;
+        float: none;
+    }
+
+    .ressources img{
+        width: 100%;
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+
+    .conteneur-reponse, .conteneur-ressources, .conteneur-question{
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 550px){ 
+    .ressources{
+        max-height: 180px;
+        max-width: 600px;
+    }
+}
+
+@media screen and (min-device-width: 550px) and (max-device-width: 768px){ 
+    .ressources{
+        max-height: 310px;
+    }
+}
+
+@media screen and (min-device-width: 768px) and (max-device-width: 1280px){ 
+    .ressources{
+        max-height: 410px;
+    }
+}
+
+@media screen and (min-width: 1080px){ 
+    .bloc-texte-SP{
+        height: 400px;
+    }
+}
+
+@media screen and (max-width: 1080px){ 
+    .bloc-texte-SP{
+        height: 200px;
+    }
+}
+
+.score{
+    margin-left: 20px;
+}
+
+/*Liste exercices*/
+
+.bloc-exercice{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.bloc-exercice .verrouille{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+    display: inline-block;
+}
+
+.titre-chapitre-exercice-liste, .bloc-exercice-chapitre{
+    margin: 20px;
+}
+
+/* tableau de bord */
+
+.pourcentage{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding-left: 5px;
+    height: 60px;
+}
+
+/*Galerie*/
+
+.galerie .ressources{
+    display: inline-block;
+    margin: 10px;
+}
+
+/*Messagerie*/
+
+.conteneur-messagerie{
+    display: block;
+    width:  100%;
+}
+
+.conteneur-message{
+    margin-bottom: 30px;
+}
+
+.bloc-message{
+    min-height: 3em;
+    margin-bottom: 20px;
+}
+
+.message-indication{
+    float: right;
+}
+.bloc-message{
+    padding: 20px;
+}
+
+.conteneur-discussion{
+    padding: 10px;
+}
+
+.bloc-discussion{
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+/*Pied de page*/
+
+@media screen and (min-width: 560px){
+    footer > .liste{
+        padding: 30px;
+    }
+}
+
+@media screen and (max-width: 559px){
+    footer > .liste{
+        padding: 0px;
+    }
+}
+
+footer{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 150px;
+}
+
+footer > .liste{
+    padding: 30px;
+    width: 300px;
+    display: block;
+}
+
+/*Nouvel exerciseur*/
+#menu-questions, #conteneur-formulaire{
+    position: absolute;
+}
+
+.conteneur-questions, header .banderole-titre, .banderole-titre{
+    display: inline-block;
+}
+
+#menu-questions, #conteneur-formulaire{
+    height: 98%;
+    overflow: auto;
+}
+
+#menu-questions{
+    width: 17%;
+}
+
+#menu-questions ul{
+    padding-bottom: 10px;
+}
+
+.banderole-titre{
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+.banderole-titre h1{
+    margin: 15px;
+    padding: 0px;
+}
+
+
+.liste-questions li{
+    display: block;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+#bouton-fenetre, .lien-exerciseur, #bouton-disponibilite{
+    display: block;
+    padding-top: 15px;
+    padding-bottom: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.liste-questions li:first-child{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#conteneur-formulaire{
+    left: 17%;
+    width: 83%;
+}
+
+#conteneur-formulaire form:first-child{
+    margin-bottom: 100px;
+}
+
+#conteneur-formulaire form{
+    margin: 30px 0px 30px 30px;
+    padding-bottom: 20px;
+    max-width: 96%;
+}
+
+#conteneur-formulaire input{
+    margin-top: 15px;
+    padding-bottom: 5px;
+}
+
+#conteneur-formulaire input[type="text"]{
+    width: 93%;
+}
+
+#conteneur-formulaire input[type="checkbox"], #conteneur-formulaire input[type="radio"]{
+    margin-left: 10px;
+}
+
+#conteneur-formulaire .label{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#conteneur-formulaire .label{
+    display: inline-block;
+}
+
+#conteneur-formulaire label{
+    margin-right: 10px;
+}
+
+#conteneur-formulaire button[type="submit"]{
+    float: right;
+    margin-top: 30px;
+}
+
+.bande-actualisation{
+    margin-right: 20px;
+}
+
+#pop-up-creation, #pop-up-suppression{
+    padding: 20px;
+    width: 50%;
+    height: 25%;
+    margin-left: 25%;
+    position: fixed;
+/*    top: 25%;*/
+}
+
+#pop-up-creation select, #pop-up-suppression select{
+    height: 34px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 12px;
+    padding-right: 6px;
+    line-height: 1.42857143;
+    width: 375px;
+    display: block;
+}
+
+#pop-up-creation #bouton-question-submit, #bouton-proposition-creation, #pop-up-suppression #bouton-question-suppression, .bouton-creation{
+    display: block;
+    
+    margin-top: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#pop-up-suppression #bouton-question-suppression{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#bouton-proposition-creation, #conteneur-formulaire > p{
+    margin: 30px 0px 30px 30px;
+}
+
+#conteneur-formulaire form .en-tete-proposition{
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.conteneur-exerciseur ul{
+    margin-top: 10px;
+}
+
+.liste-ressources{
+    width: 50%;
+}
+
+.liste-ressources, .bouton-creation{
+    display: inline-block;
+}
+

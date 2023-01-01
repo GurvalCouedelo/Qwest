@@ -1,0 +1,158 @@
+{% extends layout %}
+
+{% block title %}
+    {{ parent() }} {% if app.session.get("permission") is same as("A") %} - Page d'un élève {% endif %}
+{% endblock %}
+
+{% block StockHG3body %}
+    {% if app.session.get("permission") is same as("A") %}<h1>Page d'un élève</h1>{% endif %}
+    <div class="conteneur">
+        <div class="bloc">
+            <div class="bloc-gauche">
+                <p>Nom: <strong class="important">{{ utilisateur.nom | upper }} {{ utilisateur.prenom }}</strong></p>
+                <p>Pseudo: <strong class="important">{{ utilisateur.pseudo }}</strong></p>
+                <br/>
+
+                {% if app.session.get("permission") is same as("A") %}
+                    <p>Date d'inscription: {{ utilisateur.dateInscription | date("d/m/Y H:i") }}</p>
+                    <p>Date de connection: {{ utilisateur.dateConnection | date("d/m/Y H:i") }}</p>
+
+                    {% if utilisateur.classeGroupe is same as(null) %}
+                        <p>N'est dans aucune classe.</p>
+                    {% else %}
+                        <p>{{ utilisateur.classeGroupe.nom }}</p>
+                    {% endif %}
+                {% else %}
+                    <p>Les données ci-dessous sont actualisées toutes les six heures.</p>
+                {% endif %}
+
+                <br/>
+
+                {% if utilisateur.nombreExercices is not same as(0) %}
+                        <p>{% if utilisateur.pointsHonneur is same as(0) %}
+                                {% if visionnageAdmin is same as(true) %}
+                                    {{ utilisateur.pseudo }} n'a aucun point d'honneur.
+                                {% else %}
+                                    Vous n'avez aucun point d'honneur.
+                                {% endif %}
+                            {% else %}
+                                Points d'honneur: <strong class="important">{{ utilisateur.pointsHonneur }}</strong><br/>
+                            {% endif %}
+
+                            {% if utilisateur.totalPoints is same as(0) %}
+                                {% if visionnageAdmin is same as(true) %}
+                                    <strong class="pseudo">{{ utilisateur.pseudo }}</strong> n'a aucun point.
+                                {% else %}
+                                    Vous n'avez aucun point.
+                                {% endif %}    
+                            {% else %}
+                                Total des points: <strong class="important">{{ utilisateur.totalPoints }}</strong><br/>
+                            {% endif %}
+
+                            {% if utilisateur.nombreExercices is same as(1) %}
+                                {% if visionnageAdmin is same as(true) %}
+                                    <strong class="pseudo">{{ utilisateur.pseudo }}</strong> a réalisé <strong class="important">un</strong> exercice.<br/>
+                                {% else %}
+                                    Vous avez réalisé <strong class="important">un</strong> exercice.<br/>
+                                {% endif %}
+                            {% else %}
+                                {% if visionnageAdmin is same as(true) %}
+                                    <strong class="pseudo">{{ utilisateur.pseudo }}</strong> a réalisé <strong class="important">{{ utilisateur.nombreExercices }}</strong> exercices.<br/>
+                                {% else %}
+                                    Vous avez réalisé <strong class="important">{{ utilisateur.nombreExercices }}</strong> exercices.<br/>
+                                {% endif %}
+                            {% endif %}
+
+                            {% if positionNiveau is same as(1) %}
+                                {% if visionnageAdmin is same as(true) %}
+                                    <strong class="pseudo">{{ utilisateur.pseudo }}</strong> est <strong class="important">premier</strong> dans le niveau <strong class="important">{{ utilisateur.classeGroupe.niveau.nom }}</strong>.<br/>
+                                {% else %}
+                                    Vous êtes <strong class="important">premier</strong> dans le niveau <strong class="important">{{ utilisateur.classeGroupe.niveau.nom }}</strong>.<br/>
+                                {% endif %}
+
+                            {% else %}
+                                {% if visionnageAdmin is same as(true) %}
+                                    <strong class="pseudo">{{ utilisateur.pseudo }}</strong> est <strong class="important">{{ positionNiveau }}ème</strong> dans le niveau <strong class="important">{{ utilisateur.classeGroupe.niveau.nom }}</strong>.<br/>
+                                {% else %}
+                                    Vous êtes <strong class="important">{{ positionNiveau }}ème</strong> dans le niveau <strong class="important">{{ utilisateur.classeGroupe.niveau.nom }}</strong>.<br/>
+                                {% endif %}
+                            {% endif %}
+
+                            {% if positionGenerale is same as(1) %}
+                                {% if visionnageAdmin is same as(true) %}
+                                    <strong class="pseudo">{{ utilisateur.pseudo }}</strong> est <strong class="important">premier</strong> dans le <strong class="important">classement général</strong>.<br/>
+                                {% else %}
+                                    Vous êtes <strong class="important">premier</strong> dans le <strong class="important">classement général</strong>.<br/>
+                                {% endif %}
+
+                            {% else %}
+                                {% if visionnageAdmin is same as(true) %}
+                                    <strong class="pseudo">{{ utilisateur.pseudo }}</strong> est <strong class="important">{{ positionGenerale }}ème</strong> dans le <strong class="important">classement général</strong>.<br/>
+                                {% else %}
+                                    Vous êtes <strong class="important">{{ positionGenerale }}ème</strong> dans le <strong class="important">classement général</strong>.<br/>
+                                {% endif %}
+
+                            {% endif %}
+                        </p>
+                </div>
+                <div class="bloc-droite">
+                    <p><strong class="important">Exercices suggérés:</strong></p><br/> 
+                    
+                    {% if exercicesSuggeres is not empty %}
+                        {% for exercice in exercicesSuggeres %}
+                            <a href="{{ path("exercice-inscrits", {"id": exercice.id }) }}">{{ exercice.titre }}</a><br/>
+                        {% endfor %}
+                    {% else %}
+                        <p>Aucun exercice ne vous est suggéré.</p>
+                    {% endif %}
+                </div>
+            </div>
+        
+            <p><strong class="important">Exercices réalisés:</strong></p> 
+            <table>
+                <thead>
+                    <th>Exercices</th>
+                    <th>Résultats</th>
+                    <th>Points d'honneur</th>
+                    <th>Date</th>
+                </thead>
+                <tbody>
+                    {% for point in resultats %}
+                        <tr>
+                            <td>{{ point.exercice.titre }} {% if point.reponseOuverte is not null %}(réponse ouverte){% endif %}</td>
+                            <td>{{ point.points }}</td>
+                            <td>
+                                {% if point.points > 50 %}
+                                    + {{ point.points - 50 }}
+                                {% else %}
+                                            0
+                                {% endif %}
+                            </td>
+                            <td>{{ point.dateCreation | date("d/m/Y H:i") }}</td>
+                        <tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+                {% if visionnageAdmin is same as(true) %}
+                    <p>{{ utilisateur.pseudo }} n'a réalisé <strong class="important">aucun</strong> exercice.</p>
+                {% else %}
+                    <p>Vous n'avez réalisé <strong class="important">aucun</strong> exercice.</p>
+                {% endif %}
+        
+                <br/><p><strong class="important">Exercices suggérés:</strong></p><br/> 
+                    
+                {% if exercicesSuggeres is not empty %}
+                    {% for exercice in exercicesSuggeres %}
+                        <a href="{{ path("exercice-inscrits", {"id": exercice.id }) }}">{{ exercice.titre }}</a><br/>
+                    {% endfor %}
+                {% else %}
+                    <p>Aucun exercice ne vous est suggéré.</p>
+                {% endif %}
+                
+            </div>
+        {% endif %}
+        
+        
+    </div>
+{% endblock %}

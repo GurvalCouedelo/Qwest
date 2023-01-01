@@ -1,0 +1,4 @@
+{% if question.groupe.aide is not empty %}
+    <a id="bouton-aide">+ Aide</a>
+    <div id="aide" style="display: none;">{{ question.groupe.aide }}<br/> <span class="clique-disparait">Cliquez pour faire disparaitre</span></div>
+{% endif %}

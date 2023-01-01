@@ -1,0 +1,575 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Config\Definition\Exception\Exception;
+
+/**
+ * Means
+ *
+ * @ORM\Table()
+ * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
+ */
+class Means
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+    
+    private $tempFilename;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="extension", type="string", length=255, nullable=true)
+     * @Assert\Length(max=255)
+     */
+    private $extension;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="type", type="string", length=255, nullable=true)
+     * @Assert\Length(max=255)
+     */
+    private $type;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="alt", type="string", length=255)
+     * @Assert\Length(max=255)
+     */
+    private $alt;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="lien", type="string", length=255, nullable=true)
+     * @Assert\Length(max=255)
+     */
+    private $lien;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dimensionX", type="integer", nullable=true)
+     * @Assert\Length(max=255)
+     */
+    private $dimensionX;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dimensionY", type="integer", nullable=true)
+     * @Assert\Length(max=255)
+     */
+    private $dimensionY;
+    
+    /**
+    * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Question", inversedBy="ressources", cascade={"persist"})
+    * @ORM\JoinColumn(nullable=true)
+    * @Assert\Valid
+    */
+    private $question;
+    
+    /**
+    * @ORM\ManyToMany(targetEntity="AppBundle\Entity\AssociationGroup", inversedBy="ressources")
+    * @ORM\JoinColumn(nullable=true)
+    * @Assert\Valid
+    */
+    private $groupe;
+    
+    /**
+    * @ORM\OneToMany(targetEntity="AppBundle\Entity\GoodAnswer", mappedBy="ressource")
+    * @ORM\JoinColumn(nullable=true)
+    * @Assert\Valid
+    */
+    private $bonneReponse;
+    
+    /**
+    * @ORM\OneToMany(targetEntity="AppBundle\Entity\Note", mappedBy="ressource")
+    * @Assert\Valid
+    */
+    private $billet;
+    
+    /**
+    * @ORM\OneToMany(targetEntity="AppBundle\Entity\Question", mappedBy="ressourceFond")
+    * @Assert\Valid
+    */
+    private $questionRessourceFond;
+    
+    /**
+    * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Subject", inversedBy="ressources")
+    * @Assert\Valid
+    */
+    private $matiere;
+    
+    private $file;
+    
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function preUpload()
+    {
+        if ($this->file === null) {
+            return;
+        }
+        
+        $this->extension = $this->file->guessExtension();
+        $this->dimensionX = getimagesize($this->file)[0];
+        $this->dimensionY = getimagesize($this->file)[1];
+    }
+    
+    /**
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
+     */
+    public function Upload()
+    {
+        if(null === $this->file){
+            return;
+        }
+        
+        if (null !== $this->tempFilename) {
+            $oldFile = $this->getUploadRootDir().'/'.$this->id.'.'.$this->tempFilename;
+            if (file_exists($oldFile)) {
+                unlink($oldFile);
+            }
+        }
+        
+        $this->file->move($this->getUploadRootDir(), $this->id . $this->extension . '.' . $this->extension);
+    }
+    
+    /**
+     * @ORM\PreRemove()
+     */
+    public function preRemoveUpload()
+    {
+        $this->tempFilename = $this->getUploadRootDir().'/'.$this->id . $this->extension . '.'.$this->extension;
+    }
+    
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeUpload()
+    {
+        if (file_exists($this->tempFilename)) {
+            unlink($this->tempFilename);
+        }
+    }
+    
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set extension
+     *
+     * @param string $extension
+     * @return Means
+     */
+    public function setExtension($extension)
+    {
+        $this->extension = $extension;
+
+        return $this;
+    }
+
+    /**
+     * Get extension
+     *
+     * @return string 
+     */
+    public function getExtension()
+    {
+        return $this->extension;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->question = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    public function getUploadDir()
+    {
+        return 'uploads/img';
+    }
+    
+    public function getUploadRootDir()
+    {
+        return __DIR__.'/../../../web/'.$this->getUploadDir();
+    }
+
+    public function getFile()
+    {
+        return $this->file;
+    }
+    
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+        
+        if (null !== $this->extension) {
+            $this->tempFilename = $this->extension;
+            $this->extension = null;
+            $this->alt = null;
+        }
+    }
+    
+    public function getWebPath()
+    {
+        return $this->getUploadDir() . '/' . $this->getId() . $this->getExtension() . '.'. $this->getExtension();
+
+    }
+    
+    /**
+     * Add question
+     *
+     * @param \AppBundle\Entity\Question $question
+     * @return Means
+     */
+    public function addQuestion(\AppBundle\Entity\Question $question)
+    {
+        $this->question[] = $question;
+
+        return $this;
+    }
+
+    /**
+     * Remove question
+     *
+     * @param \AppBundle\Entity\Question $question
+     */
+    public function removeQuestion(\AppBundle\Entity\Question $question)
+    {
+        $this->question->removeElement($question);
+    }
+
+    /**
+     * Get question
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getQuestion()
+    {
+        return $this->question;
+    }
+
+    /**
+     * Set nom
+     *
+     * @param string $nom
+     * @return Means
+     */
+    public function setNom($nom)
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    /**
+     * Get nom
+     *
+     * @return string 
+     */
+    public function getNom()
+    {
+        return $this->nom;
+    }
+
+    /**
+     * Set alt
+     *
+     * @param string $alt
+     * @return Means
+     */
+    public function setAlt($alt)
+    {
+        $this->alt = $alt;
+
+        return $this;
+    }
+
+    /**
+     * Get alt
+     *
+     * @return string 
+     */
+    public function getAlt()
+    {
+        return $this->alt;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     * @return Means
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string 
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set lien
+     *
+     * @param string $lien
+     * @return Means
+     */
+    public function setLien($lien)
+    {
+        $this->lien = $lien;
+
+        return $this;
+    }
+
+    /**
+     * Get lien
+     *
+     * @return string 
+     */
+    public function getLien()
+    {
+        return $this->lien;
+    }
+
+    /**
+     * Add groupe
+     *
+     * @param \AppBundle\Entity\AssociationGroup $groupe
+     * @return Means
+     */
+    public function addGroupe(\AppBundle\Entity\AssociationGroup $groupe)
+    {
+        $this->groupe[] = $groupe;
+
+        return $this;
+    }
+
+    /**
+     * Remove groupe
+     *
+     * @param \AppBundle\Entity\AssociationGroup $groupe
+     */
+    public function removeGroupe(\AppBundle\Entity\AssociationGroup $groupe)
+    {
+        $this->groupe->removeElement($groupe);
+    }
+
+    /**
+     * Get groupe
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGroupe()
+    {
+        return $this->groupe;
+    }
+
+    /**
+     * Add bonneReponse
+     *
+     * @param \AppBundle\Entity\AssociationGroup $bonneReponse
+     * @return Means
+     */
+    public function addBonneReponse(\AppBundle\Entity\GoodAnswer $bonneReponse)
+    {
+        $this->bonneReponse[] = $bonneReponse;
+
+        return $this;
+    }
+
+    /**
+     * Remove bonneReponse
+     *
+     * @param \AppBundle\Entity\AssociationGroup $bonneReponse
+     */
+    public function removeBonneReponse(\AppBundle\Entity\GoodAnswer $bonneReponse)
+    {
+        $this->bonneReponse->removeElement($bonneReponse);
+    }
+
+    /**
+     * Get bonneReponse
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getBonneReponse()
+    {
+        return $this->bonneReponse;
+    }
+
+    /**
+     * Set matiere
+     *
+     * @param \AppBundle\Entity\Subject $matiere
+     *
+     * @return Means
+     */
+    public function setMatiere(\AppBundle\Entity\Subject $matiere = null)
+    {
+        $this->matiere = $matiere;
+
+        return $this;
+    }
+
+    /**
+     * Get matiere
+     *
+     * @return \AppBundle\Entity\Subject
+     */
+    public function getMatiere()
+    {
+        return $this->matiere;
+    }
+
+    /**
+     * Add billet
+     *
+     * @param \AppBundle\Entity\Note $billet
+     *
+     * @return Means
+     */
+    public function addBillet(\AppBundle\Entity\Note $billet)
+    {
+        $this->billet[] = $billet;
+
+        return $this;
+    }
+
+    /**
+     * Remove billet
+     *
+     * @param \AppBundle\Entity\Note $billet
+     */
+    public function removeBillet(\AppBundle\Entity\Note $billet)
+    {
+        $this->billet->removeElement($billet);
+    }
+
+    /**
+     * Get billet
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getBillet()
+    {
+        return $this->billet;
+    }
+
+    /**
+     * Add questionRessourceFond
+     *
+     * @param \AppBundle\Entity\Question $questionRessourceFond
+     *
+     * @return Means
+     */
+    public function addQuestionRessourceFond(\AppBundle\Entity\Question $questionRessourceFond)
+    {
+        $this->questionRessourceFond[] = $questionRessourceFond;
+
+        return $this;
+    }
+
+    /**
+     * Remove questionRessourceFond
+     *
+     * @param \AppBundle\Entity\Question $questionRessourceFond
+     */
+    public function removeQuestionRessourceFond(\AppBundle\Entity\Question $questionRessourceFond)
+    {
+        $this->questionRessourceFond->removeElement($questionRessourceFond);
+    }
+
+    /**
+     * Get questionRessourceFond
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getQuestionRessourceFond()
+    {
+        return $this->questionRessourceFond;
+    }
+
+    /**
+     * Set dimensionX
+     *
+     * @param integer $dimensionX
+     *
+     * @return Means
+     */
+    public function setDimensionX($dimensionX)
+    {
+        $this->dimensionX = $dimensionX;
+
+        return $this;
+    }
+
+    /**
+     * Get dimensionX
+     *
+     * @return integer
+     */
+    public function getDimensionX()
+    {
+        return $this->dimensionX;
+    }
+
+    /**
+     * Set dimensionY
+     *
+     * @param integer $dimensionY
+     *
+     * @return Means
+     */
+    public function setDimensionY($dimensionY)
+    {
+        $this->dimensionY = $dimensionY;
+
+        return $this;
+    }
+
+    /**
+     * Get dimensionY
+     *
+     * @return integer
+     */
+    public function getDimensionY()
+    {
+        return $this->dimensionY;
+    }
+}

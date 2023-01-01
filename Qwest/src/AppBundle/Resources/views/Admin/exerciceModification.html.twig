@@ -1,0 +1,43 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }}
+{% endblock %}
+
+{% block StockHG3body %}
+    <h1>Modification de l'identité de l'exercice</h1>
+    <div class="conteneur">
+        <div class="formulaire">
+            <div class="edition">
+                {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+                {{ form_errors(form) }}
+
+                {{ form_label(form.titre, "Titre de l'exercice:") }}
+                {{ form_widget(form.titre) }}
+                {{ form_row(form.titre) }}
+                
+                <br/>
+                <div class="bloc-champ-edition">
+                    {{ form_label(form.chapitre, "Chapitre:") }}
+                    {{ form_widget(form.chapitre) }}
+                    {{ form_row(form.chapitre) }}
+                </div>
+                
+                <div class="bloc-champ-edition">
+                    {{ form_label(form.difficulte, "Difficulté:") }}
+                    {{ form_widget(form.difficulte) }}
+                    {{ form_row(form.difficulte) }}
+                </div>
+                <br/>
+
+                <div class="submit">
+                    {{ form_widget(form.envoyer) }}
+                </div>
+
+                {{ form_rest(form) }}
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

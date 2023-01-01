@@ -1,0 +1,188 @@
+<?php
+
+namespace StockHG3\appBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * ClassGroup
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="StockHG3\appBundle\Entity\ClassGroupRepository")
+ */
+class ClassGroup
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nom", type="string", length=255)
+     * @Assert\Length(max=255)
+     */
+    private $nom;
+
+    /**
+     * @ORM\OneToMany(targetEntity="StockHG3\appBundle\Entity\User", mappedBy="classeGroupe")
+     * @Assert\Valid
+     */
+    private $eleve;
+
+    /**
+    * @ORM\ManyToOne(targetEntity="StockHG3\appBundle\Entity\Classroom", inversedBy="classeGroupe")
+    * @Assert\Valid
+    */
+    private $niveau;
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->utilisateur = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set nom
+     *
+     * @param string $nom
+     * @return ClassGroup
+     */
+    public function setNom($nom)
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    /**
+     * Get nom
+     *
+     * @return string 
+     */
+    public function getNom()
+    {
+        return $this->nom;
+    }
+    
+
+    /**
+     * Add proffesseur
+     *
+     * @param \StockHG3\appBundle\Entity\User $proffesseur
+     * @return ClassGroup
+     */
+    public function addProffesseur(\StockHG3\appBundle\Entity\User $proffesseur)
+    {
+        $this->proffesseur[] = $proffesseur;
+
+        return $this;
+    }
+
+    /**
+     * Remove proffesseur
+     *
+     * @param \StockHG3\appBundle\Entity\User $proffesseur
+     */
+    public function removeProffesseur(\StockHG3\appBundle\Entity\User $proffesseur)
+    {
+        $this->proffesseur->removeElement($proffesseur);
+    }
+
+    /**
+     * Get proffesseur
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProffesseur()
+    {
+        return $this->proffesseur;
+    }
+
+    /**
+     * Set proffesseur
+     *
+     * @param \StockHG3\appBundle\Entity\User $proffesseur
+     * @return ClassGroup
+     */
+    public function setProffesseur(\StockHG3\appBundle\Entity\User $proffesseur = null)
+    {
+        $this->proffesseur = $proffesseur;
+
+        return $this;
+    }
+    /**
+     * Set niveau
+     *
+     * @param \StockHG3\appBundle\Entity\Classroom $niveau
+     * @return ClassGroup
+     */
+    public function setNiveau(\StockHG3\appBundle\Entity\Classroom $niveau = null)
+    {
+        $this->niveau = $niveau;
+
+        return $this;
+    }
+
+    /**
+     * Get niveau
+     *
+     * @return \StockHG3\appBundle\Entity\Classroom 
+     */
+    public function getNiveau()
+    {
+        return $this->niveau;
+    }
+
+    /**
+     * Add eleve
+     *
+     * @param \StockHG3\appBundle\Entity\User $eleve
+     * @return ClassGroup
+     */
+    public function addEleve(\StockHG3\appBundle\Entity\User $eleve)
+    {
+        $this->eleve[] = $eleve;
+
+        return $this;
+    }
+
+    /**
+     * Remove eleve
+     *
+     * @param \StockHG3\appBundle\Entity\User $eleve
+     */
+    public function removeEleve(\StockHG3\appBundle\Entity\User $eleve)
+    {
+        $this->eleve->removeElement($eleve);
+    }
+
+    /**
+     * Get eleve
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEleve()
+    {
+        return $this->eleve;
+    }
+}

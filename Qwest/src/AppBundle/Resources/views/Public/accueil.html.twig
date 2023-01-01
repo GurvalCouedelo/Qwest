@@ -1,0 +1,69 @@
+{% extends "@App/publicLayout.html.twig" %}
+
+{% block description %}
+    {{ parent() }}Site d'exercices interactifs d'histoire-géo pour le lycée
+{% endblock %}
+
+{% block title %}
+    {{ parent() }}
+{% endblock %}
+
+{% block StockHG3body %}
+    {% for message in app.session.flashbag.get('erreur') %}
+        <p class="erreur">{{ message }}</p>
+    {% endfor %}
+
+    <div class="carte">
+        <h1>Qwest HG. Exercices d'Histoire-Géo pour le lycée.</h1>
+    </div>
+
+    {% for note in listNote %}
+        {% if loop.index is same as(1) %}
+            {% if note.ressource is not null %}
+                    <div class="bloc-news premier">
+                        <div class="bloc-image" style="background-image: url({{ asset(note.ressource.webPath) }});"></div>
+                        <div class="bloc-texte">
+                            <a class="titre-billet"  href="{{ path("billet", { "id": note.id }) }}"><h2>{{ note.titre }}</h2></a>
+                            <div class="interieur-bloc-accueil">
+                                {{ note.debutContenu | raw }}
+                            </div>
+                        </div>
+                    </div>
+            {% else %}
+                    <div class="bloc-news premier">
+                        <div class="large">
+                            <div class="interieur-bloc-accueil">
+                                <a class="titre-billet"  href="{{ path("billet", { "id": note.id }) }}"><h2>{{ note.titre }}</h2></a>
+                                {{ note.debutContenu | raw }}
+                            </div>
+                        </div>
+                    </div>
+            {% endif %}
+        {% else %}            
+            {% if note.ressource is not null %}
+                <div class="bloc-news dernier">
+                    <div class="bloc-texte">
+                        <a class="titre-billet"  href="{{ path("billet", { "id": note.id }) }}"><h2>{{ note.titre }}</h2></a>
+                        <div class="interieur-bloc-accueil">
+                            {{ note.debutContenu | raw }}
+                        </div>
+                    </div>
+                    <div class="bloc-image" style="background-image: url({{ asset(note.ressource.webPath) }});"></div>
+                </div>
+            {% else %}
+                <div class="bloc-news">
+                    <div class="large">
+                        <div class="interieur-bloc-accueil">
+                            <a class="titre-billet"  href="{{ path("billet", { "id": note.id }) }}"><h2>{{ note.titre }}</h2></a>
+                            {{ note.debutContenu | raw }}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    {% else %}
+        <div class="conteneur-plat">
+            <p>Il n'y a aucun billet.</p>
+        </div>
+    {% endfor %}
+{% endblock %}

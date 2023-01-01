@@ -1,0 +1,39 @@
+{% extends "@App/exerciceNonGroupeLayout.html.twig" %}
+{# form_theme form 'form.html.twig' #}
+
+{% block Exercice %}
+    {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+    {{ form_errors(form) }}
+            
+    {% if form.reponseQuizz is defined %}
+        <ul {{ block('widget_container_attributes') }}>
+        {% for reponseQuizz in form.reponseQuizz %}
+            <li>
+                <div class="choix-complexe">
+                    <div class="cc-widget">
+                        {{ form_widget(reponseQuizz) }}
+                    </div>
+                    <div class="cc-label">
+                        {% set indication = form_label(reponseQuizz)|striptags|split("&amp;-&amp;") %}
+                        {% if indication[0] is same as("texte") %}
+                            <label>{{ form_label(reponseQuizz) }}</label>
+                        {% elseif indication[0] is same as("ressource") %}
+                            {{ ressourceService.createRessource(indication[1], true) | raw }}
+                        {% endif %}
+                        {{ form_label(reponseQuizz) }}
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+
+    <br/>
+
+    <div class="submit submit-exercice">
+        {{ form_widget(form.envoyer) }}
+
+    {{ form_rest(form) }}
+
+    {{ form_end(form) }}
+{% endblock %}

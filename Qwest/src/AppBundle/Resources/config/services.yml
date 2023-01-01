@@ -1,0 +1,36 @@
+services:
+    GestionUtilisateur:
+        class: AppBundle\Service\StockHG3Utilisateur
+        calls:
+            - [setContainer, ["@service_container"]]
+            
+    GestionBillet:
+        class: AppBundle\Service\StockHG3Billet
+        calls:
+            - [setContainer, ["@service_container"]]
+            
+    GestionQuestion:
+        class: AppBundle\Question\StockHG3Question
+        calls:
+            - [setContainer, ["@service_container"]]
+            
+    GestionCalculResultats:
+        class: AppBundle\CalculResultats\StockHG3CalculResultats
+        calls:
+            - [setContainer, ["@service_container"]]
+    GestionRessource:
+        class: AppBundle\Ressource\StockHG3Ressource
+        calls:
+            - [setContainer, ["@service_container"]]
+    
+    GestionTexteATrou:
+        class: AppBundle\TexteATrou\StockHG3TexteATrou
+        calls:
+            - [setContainer, ["@service_container"]]
+
+    GestionCaptcha:
+            class: AppBundle\Captcha\StockHG3Captcha
+            calls:
+                - [setContainer, ["@service_container"]]
+            
+        

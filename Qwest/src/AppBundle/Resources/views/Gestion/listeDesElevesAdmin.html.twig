@@ -1,0 +1,62 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Liste des élèves
+{% endblock %}
+
+{% block StockHG3body %}
+    
+    <div class="conteneur">
+        <h1>Liste des élèves</h1>
+        {% for message in app.session.flashbag.get('erreur') %}
+            <p class="erreur-marge-0">{{ message | raw }}</p>
+        {% endfor %}
+
+        {% if listeEleves is not empty %}
+            <table>
+                <thead>
+                    <th>Pseudo</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Classe</th>
+                    <th>Total des points</th>
+                    <th>Scores</th>
+                    <th>Accès au compte</th>
+                </thead>
+
+                {% for ut in listeEleves %}
+                    <tr>
+                        <td><a href="{{ path("page-eleve", {"id": ut.id}) }}">{{ ut.pseudo }}</a></td>
+                        <td>{{ ut.nom | upper }}</td>
+                        <td>{{ ut.prenom }}</td>
+                        {% if ut.classeGroupe is same as(null) %}
+                            <td>N'appartient à aucune classe</td>
+                        {% else %}
+                            <td>{{ ut.classeGroupe.nom }}</td>
+                        {% endif %}
+
+                        {% if ut.totalPoints is same as(null) %}
+                            <td>0</td>
+                        {% else %}
+                            <td>{{ ut.totalPoints }}</td>
+                        {% endif %}
+                        
+                        {% if ut.pointsHonneur is same as(null) %}
+                            <td>0</td>
+                        {% else %}
+                            <td>{{ ut.pointsHonneur }}</td>
+                        {% endif %}
+
+                        {% if ut.bloque is same as("F") %}
+                            <td><a href="{{ path("blocage-utilisateur", {"id": ut.id}) }}"><span style="color: green;">✔</span></a></td>
+                        {% else %}
+                            <td><a href="{{ path("blocage-utilisateur", {"id": ut.id}) }}"><span style="color: red;">✘</span></a></td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>Il n'y a pas encore d'élève.</p>
+        {% endif %}
+    </div>
+{% endblock %}

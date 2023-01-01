@@ -1,0 +1,22 @@
+{% extends "@App/connecteLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - A propos
+{% endblock %}
+
+{% block StockHG3body %}
+    <h1>A propos</h1>
+    {% for note in listNote %}
+        <div class="billet">
+            <h1>{{ note.titre }}</h1>
+            <div class="interieur-bloc-SP">
+                <p>{{ note.contenu|raw}}</p>
+            </div>
+        </div>
+        
+    {% else %}
+        <div class="conteneur">
+            <p>La page à propos est vide.</p>
+        </div>
+    {% endfor %}
+{% endblock %}

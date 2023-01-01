@@ -1,0 +1,56 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Informations sur les exercices
+{% endblock %}
+
+{% block StockHG3body %}
+    <h1>Informations sur les exercices</h1>
+
+<div class="conteneur">
+    {% for message in app.session.flashbag.get('message') %}
+        {{ message }}
+    {% endfor %}
+    
+    <div class="bloc">
+        {% if listeExercices is not empty %}
+            <p><strong>Liste des exercices:</strong></p>
+        
+            <table>
+                <thead>
+                    <th>Titre</th>
+                    <th>Difficulté</th>
+                    <th>Chapitre</th>
+                    <th>Date de création</th>
+                    <th>Nombre de résultats</th>
+                    <th>Total des scores</th>
+                    <th>Moyenne des scores</th>
+                    <th>Médianne des scores</th>
+                    <th>Nombre de scores dépassants 100</th>
+                </thead>
+
+                <tbody>
+                    {% for exercice in listeExercices %}
+                        <tr>
+                            <td>{{ exercice.titre }}</td>
+                            <td>{{ exercice.difficulte.nom }}</td>
+                            <td>{{ exercice.chapitre.nom }}</td>
+                            <td>{{ exercice.dateCreation | date("d/m/Y H:s") }}</td>
+                            <td>{{ exercice.nbScores }}</td>
+                            <td>{{ exercice.totalScores }}</td>
+                            <td>{{ exercice.moyenneScores }}</td>
+                            <td>{{ exercice.medianeScores }}</td>
+                            <td>{{ exercice.scores100 }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        {% else %}
+            <p>Il n'y a aucun exercice.</p>
+        {% endif %}
+        <br/>
+    </div>
+</div>
+
+{% endblock %}

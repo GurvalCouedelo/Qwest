@@ -1,0 +1,74 @@
+{% extends layout %}
+
+{% block title %}
+    {{ parent() }} - Tableau d'honneur
+{% endblock %}
+
+{% block StockHG3body %}
+    {% if niveau is null %}
+        <h1>Tableau d'honneur général</h1>
+    {% else %}
+        <h1>Tableau d'honneur du niveau {{ niveau | lower }}</h1>
+    {% endif %}
+
+<div class="conteneur">
+    {% for message in app.session.flashbag.get('message') %}
+        {{ message }}
+    {% endfor %}
+    
+    {% if app.session.get("permission") is same as("A") %}
+        <a class="bouton-lien neutre classique-neutre" href="{{ path("tableau-honneur-actualisation", {"niveau": niveau }) }}">Actualiser le tableau</a>
+    {% endif %}
+    
+    {% if eleves is not empty %}
+        <table>
+            <thead>
+                <th>N °</th>
+                <th>Pseudo</th>
+                <th>Classe</th>
+                <th>Points d'honneur</th>
+                <th>Total des points</th>
+                <th>Nombre d'exercices réalisés</th>
+            </thead>
+            
+            <tbody>
+                {% for ut in eleves %}
+                    <tr class="tableau-honneur-{{ loop.index }}">
+                        <td>{{ loop.index }}</td>
+                        {% if app.session.get("permission") is same as("U") %}
+                            <td>{{ ut.pseudo }}</td>
+                        {% else %}
+                            <td><a href="{{ path("page-eleve", {"id": ut.id}) }}">{{ ut.pseudo }}</a></td>
+                        {% endif %}
+                        
+                        {% if ut.classeGroupe is same as(null) %}
+                            <td>N'appartient à aucune classe</td>
+                        {% else %}
+                            <td>{{ ut.classeGroupe.nom }}</td>
+                        {% endif %}
+
+                        {% if ut.pointsHonneur is same as(null) or ut.pointsHonneur is same as(0) %}
+                            <td>0</td>
+                        {% else %}
+                            <td>{{ ut.pointsHonneur }}</td>
+                        {% endif %}
+
+                        {% if ut.totalPoints is same as(null) or ut.totalPoints is same as(0) %}
+                            <td>0</td>
+                        {% else %}
+                            <td>{{ ut.totalPoints }}</td>
+                        {% endif %}
+
+                        <td>{{ ut.nombreExercices }}</td>
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    {% else %}
+        <p>Il n'y a aucun élève ayant réalisé des exercices.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

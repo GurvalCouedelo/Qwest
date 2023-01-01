@@ -1,0 +1,21 @@
+{% extends "@App/publicLayout.html.twig" %}
+
+{% block description %}
+    {{ parent() }}Articles sur: <br/>{{ note.titre }}
+{% endblock %}
+
+{% block title %}
+    {{ parent() }} - {{ note.titre }}
+{% endblock %}
+
+{% block StockHG3body %}
+    <div class="billet">
+        <h1 class="titre-billet">{{ note.titre }}</h1>
+        <div class="interieur-bloc-SP">
+            {% if note.ressource.webPath is defined %}
+                <img class="image-bloc-SP" src="{{ asset(note.ressource.webPath) }}"/>
+            {% endif %}
+            {{ note.contenu|raw }}
+        </div>
+    </div>
+{% endblock %}

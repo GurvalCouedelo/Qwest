@@ -1,0 +1,79 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <nav id="cssmenu">
+        <ul>
+            <div class="haut">
+                <li><a class="titre-menu" href='{{ path("accueil-admin") }}'><span class="titre-qwest">Q?west</span> <span class="titre-HG">HG</span> 1.3.7 Alpha</a></li>
+                <li class='has-sub'><a href="{{ path("exercice-liste-admin", {"id": "0"}) }}" id="exercice">Exercices</a>
+                    <ul>
+                        <li><a href="{{ path("exercice-liste-admin", {"id": "1"}) }}">Seconde</a></li>
+                        <li><a href="{{ path("exercice-liste-admin", {"id": "2"}) }}">Première ST</a></li>
+                        <li><a href="{{ path("exercice-liste-admin", {"id": "7"}) }}">Première G</a></li>
+                        <li><a href="{{ path("exercice-liste-admin", {"id": "3"}) }}">Terminale</a></li>
+                        <li><a href="{{ path("exercice-liste-admin", {"id": "4"}) }}">Lycée</a></li>
+                        <li><a href="{{ path("exercice-liste-admin", {"id": "5"}) }}">Collège</a></li>
+                        <li><a href="{{ path("exercice-liste-admin", {"id": "6"}) }}">Pour tous</a></li>
+                        <li><a href="{{ path("exercice-liste-admin", {"id": "0"}) }}">Tous les exercices toute classe comprise</a></li>
+                        <li><a href="{{ path("chapitres-liste", {"id": "0"}) }}">Liste des chapitres</a></li>
+                    </ul>
+                </li>
+                <li class='has-sub'><a href="{{ path("galerie", {"type": "I", "matiere": "1"}) }}" id="exercice">Galerie</a>
+                    <ul>
+                        <li><a href="{{ path("galerie", {"type": "I", "matiere": "1"}) }}">Images</a></li>
+                        <li><a href="{{ path("galerie", {"type": "S", "matiere": "1"}) }}">Sons</a></li>
+                        <li><a href="{{ path("galerie", {"type": "V", "matiere": "1"}) }}">Vidéos</a></li>
+                    </ul>
+                </li>
+                <li class='has-sub'><a href="{{ path("tableau-bord-admin") }}" id="exercice">Pages de controle</a>
+                    <ul>
+                        <li><a href='{{ path("exercices-prioritaires") }}'>Exercices prioritaires</a></li>
+                        <li><a href='{{ path("liste-des-eleves") }}'>Liste des élèves</a></li>
+                        <li><a href='{{ path("liste-des-classes") }}'>Liste des classes</a></li>
+                        <li><a href='{{ path("tableau-bord-admin") }}'>Tableau de bord</a></li>
+                        <li><a href='{{ path("infos-sur-exercices") }}'>Informations sur les exercices</a></li>
+                    </ul>
+                </li>
+                <li class='has-sub'><a href='{{ path("tableau-honneur") }}'>Tableau d'honneur</a>
+                    <ul>
+                        <li><a href='{{ path("tableau-honneur", {"niveau": "Seconde"}) }}'>Seconde</a></li>
+                        <li><a href='{{ path("tableau-honneur", {"niveau": "Première ST"}) }}'>Première ST</a></li>
+                        <li><a href='{{ path("tableau-honneur", {"niveau": "Première G"}) }}'>Première G</a></li>
+                        <li><a href='{{ path("tableau-honneur", {"niveau": "Terminale"}) }}'>Terminale</a></li>
+                        <li><a href='{{ path("tableau-honneur") }}'>Général</a></li>
+                    </ul>
+                </li>
+            </div>
+            
+            <div class="bas">
+                <li class='deconnection'><a href='{{ path("deconnection") }}'>Se déconnecter</a></li>
+                <li class='pseudo'><a href="{{ path("profil-admin") }}">{{ app.session.get("pseudo") }}</a></li>
+                <li class='message-menu'><a href="{{ path("messagerie") }}">{{ app.session.get("texteMessage") | raw }}</a></li>
+            </div>
+        </ul>
+    </nav>
+
+    <div class="bloc-page taille-conteneur">
+        {% block StockHG3body %}
+
+        {% endblock %}
+    </div>
+
+    <footer>
+        <div class="liste">
+            <h6>Qui sommes nous?</h6><br/>
+            <div>
+                <ul><a href="{{ path("a-propos-admin") }}">
+                    <li>Notre histoire,
+                    Nos anciens sites,
+                    Comment a t-on développé ce site?</li>
+                </a></ul>
+            </div>
+        </div>
+    </footer>
+
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Correction reponse ouverte
+{% endblock %}
+
+{% block StockHG3body %}
+    <script src="//cdn.ckeditor.com/4.7.1/basic/ckeditor.js"></script>
+    <h1>Correction reponse ouverte</h1>
+    <div class="conteneur">
+        {% for message in app.session.flashbag.get('message') %}
+            {{ message |raw }}
+        {% endfor %}
+
+        <div class="formulaire">
+            {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+            {{ form_errors(form) }}
+
+            {% for message in form.reception %}
+                {{ form_label(message.objet, "Titre de votre correction:") }}
+                {{ form_widget(message.objet) }}
+                {{ form_row(message.objet) }}
+
+                {{ form_label(message.contenu, "Votre correction:") }}
+                {{ form_widget(message.contenu) }}
+                {{ form_row(message.contenu) }}
+            {% endfor %}
+
+            {% for resultat in form.resultats %}
+                {{ form_label(resultat.points, "Note que vous lui attribuez:") }}
+                {{ form_widget(resultat.points) }}
+                {{ form_row(resultat.points) }}
+            {% endfor %}
+
+
+
+            {% if app.session.get("permission") is same as("U") %}
+                <div class="g-recaptcha" data-sitekey="6LdaFxcUAAAAAHnLSGjQv-5iLxzD6HvgtHEQXMvy"></div>
+            {% endif %}
+
+            <div class="submit">
+                {{ form_widget(form.envoyer) }}
+            </div>
+
+            {{ form_rest(form) }}
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset='utf-8'/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="description" content="{% block description %}{% endblock %}" />
+        <link rel="icon" type="image/ico" href="favicon.ico" />
+        <title>{% block title %}Qwest HG{% endblock %} </title>
+    </head>
+    <body>
+            {% block body %}
+            {% endblock %}
+        </div>
+            {% stylesheets '@AppBundle/Resources/public/css/layout.css' %}
+            <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
+            {% endstylesheets %}
+            {% stylesheets '@AppBundle/Resources/public/css/application.css' %}
+            <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
+            {% endstylesheets %}
+            {% stylesheets '@AppBundle/Resources/public/css/typo.css' %}
+            <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
+            {% endstylesheets %}
+            {% stylesheets '@AppBundle/Resources/public/css/reset.css' %}
+            <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
+            {% endstylesheets %}
+            {% stylesheets '@AppBundle/Resources/public/css/menu.css' %}
+            <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
+            {% endstylesheets %}
+            {% javascripts '@AppBundle/Resources/public/js/menu.js' %}
+            <script type="text/javascript" src="{{ asset_url }}"></script>
+            {% endjavascripts %}
+            {% javascripts '@AppBundle/Resources/public/js/bouton.js' %}
+            <script type="text/javascript" src="{{ asset_url }}"></script>
+            {% endjavascripts %}
+    </body>
+</html>

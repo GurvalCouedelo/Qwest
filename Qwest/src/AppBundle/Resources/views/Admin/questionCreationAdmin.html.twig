@@ -1,0 +1,58 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Création d'une question
+{% endblock %}
+
+{% block StockHG3body %}
+
+    <h1>Création d'une question</h1>
+
+    <div class="conteneur">
+        {% for message in app.session.flashbag.get('message') %}
+            {{ message | raw }}
+        {% endfor %}
+        
+        <div class="formulaire">
+            <div class="edition">
+                {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+                {{ form_errors(form) }}
+
+                {{ form_label(form.corps, "Texte de la question:") }}
+                {{ form_widget(form.corps, { 'attr': {'name': 'editor'} }) }}
+                {{ form_row(form.corps) }}
+
+                {{ form_label(form.aide, "Aide à la question") }}
+                {{ form_widget(form.aide) }}
+                {{ form_row(form.aide) }}
+
+                <div class="bloc-champ-edition">
+                    {% if form.points is defined %}
+                        {{ form_label(form.points, "Points attribués:") }}
+                        {{ form_widget(form.points) }}
+                        {{ form_row(form.points) }}
+                    {% endif %}
+                    
+                    {{ form_label(form.type, "Type de la question:") }}
+                    {{ form_widget(form.type) }}
+                    {{ form_row(form.type) }}
+                </div>
+
+                <div class="submit">
+                    {{ form_widget(form.envoyer) }}
+                    <a class="bouton-lien-80 neutre classique-neutre" href="{{ path("question-liste", {"id": id }) }}">Retourner à la liste des questions</a><br/>
+                </div>
+
+                {{ form_rest(form) }}
+
+                {{ form_end(form) }}
+
+            </div>
+        </div>
+        
+        
+    </div>
+    <script>
+        CKEDITOR.replace('editor');
+    </script>
+{% endblock %}

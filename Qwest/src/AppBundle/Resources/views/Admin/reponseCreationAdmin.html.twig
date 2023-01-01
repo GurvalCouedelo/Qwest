@@ -1,0 +1,48 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Création d'une réponse
+{% endblock %}
+
+{% block StockHG3body %}
+
+    <h1><strong class="important">{{ bonneReponse.question.type.nom }}: </strong> création d'une réponse</h1>
+    <div class="conteneur">
+        {% for message in app.session.flashbag.get('erreur') %}
+            <p class="erreur-marge-0">{{ message }}</p>
+        {% endfor %}
+    
+        <p>{{ bonneReponse.question.corps | raw }}<br/></p>
+        
+        <div class="formulaire">
+            <div class="edition">
+                {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+                {{ form_errors(form) }}
+
+                {{ form_label(form.corps, "Texte de la réponse:") }}
+                {{ form_widget(form.corps) }}
+                {{ form_row(form.corps) }}
+
+                <div class="bloc-champ-edition">
+                    {{ form_label(form.nbPoint, "Points attribués:") }}
+                    {{ form_widget(form.nbPoint) }}
+                    {{ form_row(form.nbPoint) }}
+                </div>
+
+                {{ form_label(form.commentaire, "Commentaire à la correction:") }}
+                {{ form_widget(form.commentaire) }}
+                {{ form_row(form.commentaire) }}
+
+                <div class="submit">
+                    {{ form_widget(form.envoyer) }}
+                    <a class="bouton-lien-80 neutre classique-neutre" href="{{ path("question-liste", {"id": question.exercice.id }) }}#{{ question.numeroOrdre }}">Retourner à la liste des questions</a>
+                </div>
+
+                {{ form_rest(form) }}
+
+                {{ form_end(form) }}
+            </div>
+            
+        </div>
+    </div>
+{% endblock %}

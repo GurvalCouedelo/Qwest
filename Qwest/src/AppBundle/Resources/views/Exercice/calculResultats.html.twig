@@ -1,0 +1,274 @@
+{% extends layout %}
+
+{% block title %}
+    {{ parent() }} - Calcul des résultats
+{% endblock %}
+
+{% block StockHG3body %}
+    {% set assoc = false %}
+    {% set vOf = false %}
+    {% set tAt = false %}
+    {% set numeroQuestion = 1 %}
+
+    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script>tinymce.init({ selector:'textarea' });</script>
+    
+    <h1>{{ exercice.titre }}</h1>
+    <div class="conteneur">
+        <p> Votre résultat est de: <span  class="score">{{ points.pointsFin |round(2, 'floor')  }}/{{ points.total }}</span> soit <span>{{ points.pourcentage }}%</span>.</p><br/>
+        {% if app.session.get("permission") is same as("A") %}
+            <div class="div-adapt">
+                <a class="bouton-lien-adapt neutre classique-neutre" href="{{ path("exercice-liste-admin", {"id": exercice.chapitre.classe.id }) }}">Retour à la liste des exercices</a><br/>
+                <a class="bouton-lien-adapt neutre classique-neutre" href="{{ path("exercice-inscrits", {"id": id }) }}">Refaire l'exercice</a><br/>
+                <a class="bouton-lien-adapt neutre classique-neutre" href=" {{ path("question-liste", {"id": exercice.id }) }} ">Modifier l'exercice</a>
+            </div>
+        {% else %}
+            <div class="div-45">
+                <a class="bouton-lien-45 neutre classique-neutre" href="{{ path("exercice-liste-connecte", {"id": exercice.chapitre.classe.id }) }}">Retour à la liste des exercices</a><br/>
+                <a class="bouton-lien-45 neutre classique-neutre" href="{{ path("exercice-inscrits", {"id": id }) }}">Refaire l'exercice</a><br/>
+            </div>
+        {% endif %}
+        
+        {% set iteration = 0 %}
+        
+        {% for pointAncien in pointsAncien %}
+            {% set iteration = iteration + 1 %}
+        {% endfor %}
+        
+        {% if iteration is same as(1) %}
+            <p>Votre résultat précédent pour cet exercice:</p>
+            <ul>
+                {% for pointAncien in pointsAncien %}
+                    <li>{{ pointAncien.points }}%</li>
+                {% endfor %}
+            </ul><br/>
+        {% elseif iteration > 1 %}
+            <p>Vos résultats précédents pour cet exercice:</p>
+                {% for pointAncien in pointsAncien|batch(2," - ") %}
+                    <ul class="aligne">
+                        {% for pointBoucle in pointAncien %}
+                            <li>{{ pointBoucle }}
+                                {% if pointBoucle is not same as(" - ") %}
+                                    %
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endfor %}
+            <br/>
+        {% endif %}
+            
+        <p>Voici le corrigé de vos réponses:</p>
+            {% for reponse in reponses %}
+                    {% if groupe is defined %}
+                        {% if reponse.question.type.nom is not same as("Association") and assoc is same as(true) or reponse.question.type.nom is same as("Association") and reponse.question.groupe.id is not same as(groupe) %}
+                            </div>{% set assoc = false %}
+                        {% elseif reponse.question.type.nom is not same as("Vrai ou faux") and vOf is same as(true) or reponse.question.type.nom is same as("Vrai ou faux") and reponse.question.groupe.id is not same as(groupe) %}
+                            </div>{% set assoc = false %}
+                        {% elseif reponse.question.type.nom is not same as("Texte à trou") and tAt is same as(true) or reponse.question.type.nom is same as("Texte à trou") and reponse.question.groupe.id is not same as(groupe) %}
+                            </div>{% set tAt = false %}
+                        {% endif %}
+                    {% endif %}
+                    
+                    {% set nonFerme = false %}
+
+
+                    {% if reponse.question.type.nom is same as("Question à trou") or reponse.question.type.nom is same as("Quizz") %}
+                        <div class="reponse-resultat">
+                            <p><strong>{{ numeroQuestion }}. {{ reponse.question.corps | raw | striptags   | raw  }}</strong></p>
+                            {% set numeroQuestion = numeroQuestion + 1 %}
+                            
+                    {% elseif reponse.question.type.nom is same as("Association") and assoc is same as(false) %}
+                        <div class="reponse-resultat">
+                            <p><strong>{{ numeroQuestion }}. {{ reponse.question.groupe.description  | raw | striptags   | raw }}</strong></p>
+                            {% set groupe = reponse.question.groupe.id %} {% set assoc = true %}  
+                            {% set numeroQuestion = numeroQuestion + 1 %}
+                            
+                    {% elseif reponse.question.type.nom is same as("Vrai ou faux") and vOf is same as(false) %}
+                        <div class="reponse-resultat">
+                            <p><strong>{{ numeroQuestion }}. {{ reponse.question.groupe.description  | raw | striptags   | raw }}</strong></p>
+                            {% set groupe = reponse.question.groupe.id %} {% set vOf = true %}
+                            {% set numeroQuestion = numeroQuestion + 1 %}
+                    
+                    {% elseif reponse.question.type.nom is same as("Texte à trou") and tAt is same as(false) %}
+                        <div class="reponse-resultat">
+                            <p><strong>{{ numeroQuestion }}. {{ reponse.question.groupe.description | raw | striptags   | raw }}</strong></p>
+                            {% set groupe = reponse.question.groupe.id %} {% set tAt = true %}  
+                            {% set numeroQuestion = numeroQuestion + 1 %}
+                            
+                    {% endif %}
+                
+                    
+
+                    {% if reponse.question.type.nom is same as("Question à trou") %}
+                        {% set bonneReponseTexte = ' ' %}
+                        {% set bonneReponseTrouve = false %}
+                        {% for bonneReponses in reponse.question.bonneReponses if bonneReponseTrouve is same as(false) %}
+                            {% if reponse.corps|upper is same as(bonneReponses.corps|upper) %}
+                                {% set bonneReponseTrouve = true %}
+                            {% else %}
+                                {% set bonneReponseTexte = bonneReponses.corps ~ "<br/>" %}
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if bonneReponseTrouve is same as(true) %}
+                            <span style="color: green;"><p>✔{{ reponse.corps | raw | striptags }}</p><br/></span>
+                        {% else %}
+                            <span style="color: red;"><p>✘{{ reponse.corps | raw | striptags }}</p></span>
+                            <p>La bonne réponse est: <br/>
+                            <span style="color: green;">{{ bonneReponseTexte | raw | striptags }}</span></p>
+                        {% endif %}
+                        </div>
+        
+                    {% elseif reponse.question.type.nom is same as("Quizz") %}
+                        {% for bonneReponses in reponse.question.bonneReponses %}
+                            {% set iterationBoucle = 0 %}
+                            {% set iterationReponse = 0 %}
+
+                            {% for reponsesUt in reponse.reponseQuizz %}
+                                {% set iterationBoucle = iterationBoucle + 1 %}
+                            {% endfor %}
+                            {% for reponsesUt in reponse.reponseQuizz if bonneReponses.id is not same as(reponsesUt.id) %}
+                                {% set iterationReponse = iterationReponse + 1 %}
+                            {% endfor %}
+                            <p>
+                                {% if iterationReponse < iterationBoucle %}
+                                    {% if bonneReponses.verite is same as(true) %}
+                                        ☒
+                                        <span style="color: green;">✔</span>
+                                    {% else %}
+                                        <span style="color: red;">☒ ✘
+                                        {% set nonFerme = true %}
+                                    {% endif %}
+                                {% else %}
+                                    {% if bonneReponses.verite is same as(false) %}
+                                        ☐
+                                        <span style="color: red;">✘</span>
+                                    {% else %}
+                                        <span style="color: red;">☐ ✔
+                                        {% set nonFerme = true %}
+                                    {% endif %}
+                                {% endif %}
+                                            
+                                {% if bonneReponses.ressource is empty %}
+                                    {{ bonneReponses.corps | raw | striptags("<em><strong>")  }}
+                                {% else %}
+                                    {{ bonneReponses.ressource.alt  }}
+                                {% endif %}
+                                            
+                                {% if nonFerme is same as(true) %}
+                                    </span>
+                                {% endif %}
+                                <br/>
+                                {% if bonneReponses.commentaire is not empty %}
+                                    <i>{{ bonneReponses.commentaire }}</i><br/>
+                                {% endif %}
+                            </p>
+                        {% endfor %}
+                        </div>
+        
+                    {% elseif reponse.question.type.nom is same as("Association") %}
+                        <p>
+                        {% for bonneReponses in reponse.question.bonneReponses %}
+                                {% if reponse.reponseAssoc.id is same as(bonneReponses.id) %}
+                                     {{ bonneReponses.question.corps | raw | striptags  }}<br/> <span style="color: green;">✔</span>{{ bonneReponses.corps }}</p>
+                                {% else %}
+                                    <span style="color: red;"> {{ bonneReponses.question.corps | raw | striptags  }} <br/> ✘{{ reponse.reponseAssoc.corps }}</span></p>
+                                    <p>La bonne réponse était: <span style="color: green;">{{ bonneReponses.corps }}</span></p>
+                                {% endif %}
+
+                            {% if bonneReponses.commentaire is not empty %}
+                                <i>{{ bonneReponses.commentaire }}</i><br/>
+                            {% endif %}
+                            <br/>
+                        {% endfor %}
+                    {% elseif reponse.question.type.nom is same as("Vrai ou faux") %}
+                        <p>
+                        {% for bonneReponses in reponse.question.bonneReponses %}
+                                {% if bonneReponses.verite is same as(true) %}
+                                    {% if reponse.corps is same as("V") %}
+                                        {{ bonneReponses.question.corps  | raw | striptags  }}<br/> <span style="color: green;">✔</span> Vrai</p>
+                                    {% else %}
+                                        {{ bonneReponses.question.corps  | raw | striptags  }}<br/> <span style="color: red;">✔ Vrai</span></p>
+                                    {% endif %}
+                                {% else %}
+                                    {{ reponse.verite }}
+                                    {% if reponse.corps is same as("F") %}
+                                        {{ bonneReponses.question.corps  | raw | striptags  }}<br/> <span style="color: green;">✘</span> Faux</p>
+                                    {% else %}
+                                        {{ bonneReponses.question.corps  | raw | striptags  }}<br/> <span style="color: red;">✘ Faux</span></p>
+                                    {% endif %}
+                                {% endif %}
+
+                            {% if bonneReponses.commentaire is not empty %}
+                                <i>{{ bonneReponses.commentaire }}</i>
+                            {% endif %}
+                            <br/>
+                        {% endfor %}
+                    {% elseif reponse.question.type.nom is same as("Texte à trou") and reponse.question.trouOuListe is same as("T") %}
+                        {% set bonneReponseTexte = ' ' %}
+                        {% set bonneReponseTrouve = false %}
+                        {% for bonneReponses in reponse.question.bonneReponses if bonneReponseTrouve is same as(false) %}
+                            {% if reponse.corps|upper is same as(bonneReponses.corps|upper) %}
+                                {% set bonneReponseTrouve = true %}
+                            {% else %}
+                                {% set bonneReponseTexte = bonneReponses.corps ~ "<br/>" %}
+                            {% endif %}
+                        {% endfor %}
+                        <p>{{ reponse.question.corps | raw | striptags("<em><strong>")  }}</p>
+                        {% if bonneReponseTrouve is same as(true) %}
+                            <span style="color: green;"><p>✔{{ reponse.corps  }}</p></span><br/>
+                        {% else %}
+                            <span style="color: red;"><p>✘{{ reponse.corps  }}</p></span>
+                            <p>La bonne réponse est: <br/>
+                            <span style="color: green;">{{ bonneReponseTexte | raw | striptags }}</span></p><br/>
+                        {% endif %}
+
+                    {% elseif reponse.question.type.nom is same as("Texte à trou") and reponse.question.trouOuListe is same as("L") %}
+                        <p>{{ reponse.question.corps | raw | striptags("<em><strong>")  }}<br/>
+                        {% for bonneReponses in reponse.question.bonneReponses %}
+                            {% set trouve = false %}
+
+                            {% if bonneReponses.id is same as(reponse.reponseAssoc.id) %}
+                                {% set trouve = true %}
+                            {% endif %}
+                            <p>
+                                {% if trouve is same as(true) %}
+                                    {% if bonneReponses.verite is same as(true) %}
+                                        ☒
+                                        <span style="color: green;">✔</span>
+                                    {% else %}
+                                        <span style="color: red;">☒ ✘
+                                        {% set nonFerme = true %}
+                                    {% endif %}
+                                {% else %}
+                                    {% if bonneReponses.verite is same as(false) %}
+                                        ☐
+                                        <span style="color: red;">✘</span>
+                                    {% else %}
+                                        <span style="color: red;">☐ ✔
+                                        {% set nonFerme = true %}
+                                    {% endif %}
+                                {% endif %}
+                                {% if bonneReponses.ressource is empty %}
+                                    {{ bonneReponses.corps | raw | striptags("<em><strong>")   }}
+                                {% else %}
+                                    {{ bonneReponses.ressource.alt  }}
+                                {% endif %}
+                                {% if nonFerme is same as(true) %}
+                                    </span>
+                                {% endif %}
+                                {% if bonneReponses.commentaire is not empty %}
+                                    <i>{{ bonneReponses.commentaire }}</i><br/>
+                                {% endif %}
+                                <br/>
+                            </p>
+                        {% endfor %}
+                    {% endif %}
+                                            
+                {% endfor %}
+            {% if assoc is same as(true) or vOf is same as(true) or tAt is same as(true) %}
+                </div>
+            {% endif %}
+        </div>
+{% endblock %}

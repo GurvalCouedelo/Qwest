@@ -1,0 +1,49 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Modification d'un billet
+{% endblock %}
+
+{% block StockHG3body %}
+    <h1>Modification d'un billet</h1>
+    <div class="conteneur">
+        <div class="formulaire">
+            <div class="edition">
+                {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+                {{ form_errors(form) }}
+
+                {{ form_label(form.titre, "Titre de l'article:") }}
+                {{ form_widget(form.titre) }}
+                {{ form_row(form.titre) }}
+
+                <br/>
+                
+                {{ form_label(form.contenu, "Corps de l'article:") }}
+                {{ form_widget(form.contenu) }}
+                {{ form_row(form.contenu) }}
+
+                <div class="submit">
+                    {{ form_widget(form.envoyer) }}
+                </div>
+
+                {{ form_rest(form) }}
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+        
+        <div class="ressources">
+            <img src="/{{ note.ressource.getWebPath }}">
+        </div>
+        
+        <div class="div-adapt">
+            {% if note.typeNote.nom is same as("acceuil") %}
+                <a class="bouton-lien-adapt neutre classique-neutre" href="{{ path("ressource-attribution-initialisation", {"id": note.id, "type": "billet"}) }}">Modifier la bannière</a>
+            {% elseif note.typeNote.nom is same as("exercice") %}
+                <a class="bouton-lien-adapt neutre classique-neutre" href="{{ path("ressource-attribution-initialisation", {"id": note.id, "type": "exercice"}) }}">Modifier la bannière</a>
+            {% endif %}
+            <a href="{{ path("banniere-suppression", { "id": note.id }) }}" class="bouton-suppression-adapt suppr classique-suppr">Supprimer la bannière</a>
+            <a href="{{ path("billet-suppression", { "id": note.id }) }}" class="bouton-suppression-adapt suppr classique-suppr">Supprimer le billet</a>
+        </div>
+    </div>
+{% endblock %}

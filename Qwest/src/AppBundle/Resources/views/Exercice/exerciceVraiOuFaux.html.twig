@@ -1,0 +1,23 @@
+{% extends "@App/exerciceGroupeLayout.html.twig" %}
+
+{% block Exercice %}
+    {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+    {{ form_errors(form) }}
+            
+    {% for reponseUtilisateur in form.reponseUtilisateur %}
+        {{ form_label(reponseUtilisateur.corps, reponseUtilisateur.vars.data.question.corps  | raw  | striptags )  }}
+        <div class="choix">
+            {{ form_widget(reponseUtilisateur.corps) }}
+            {{ form_row(reponseUtilisateur.corps) }}
+        </div>
+    {% endfor %}
+
+    <br/>
+
+    <div class="submit submit-exercice">
+        {{ form_widget(form.envoyer) }}
+    
+    {{ form_rest(form) }}
+
+    {{ form_end(form) }}
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Modification d'une question
+{% endblock %}
+
+{% block StockHG3body %}
+    <h1>Modification de l'ordre des questions de: {{ exercice.titre }}</h1>
+    <div class="conteneur">
+        <div class="formulaire">
+            {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+            {{ form_errors(form) }}
+
+            {% if form.question1 is defined %}
+                {{ form_label(form.question1, "Première question:")  }}
+                <ul {{ block('widget_container_attributes') }}>
+                {% for question1 in form.question1 %}
+                    <li>
+                        <div class="choix-complexe">
+                            <div class="cc-widget">
+                                {{ form_widget(question1)}}
+                            </div>
+                            <div class="cc-label">
+                                <p>{{ form_label(question1, question1) | striptags | raw }}</p>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+            
+            {% if form.question1 is defined %}
+                {{ form_label(form.question2, "Deuxième question:")  }}
+                <ul {{ block('widget_container_attributes') }}>
+                {% for question2 in form.question2 %}
+                    <li>
+                        <div class="choix-complexe">
+                            <div class="cc-widget">
+                                {{ form_widget(question2)}}
+                            </div>
+                            <div class="cc-label">
+                                <p>{{ form_label(question2, question2) | striptags | raw }}</p>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+
+            <div class="submit">
+                {{ form_widget(form.envoyer) }}
+            </div>
+
+            {{ form_rest(form) }}
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

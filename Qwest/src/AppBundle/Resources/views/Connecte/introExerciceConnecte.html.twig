@@ -1,0 +1,58 @@
+{% extends "@App/connecteLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - {{ exercice.titre }}
+{% endblock %}
+
+{% block StockHG3body %}
+    {% if exercice.intro is not empty %}
+        {% if exercice.intro.image is not empty or exercice.intro.ressource %}
+        <h1>{{ exercice.intro.titre }}</h1>
+        <div class="interieur-bloc-SP  intro-exercice">
+            {% if exercice.intro.ressource is not null %}
+                <img class="image-bloc-SP" src="{{ asset(note.ressource.webPath) }}"/>
+            {% elseif exercice.intro.image is not null %}
+                <img class="image-bloc-SP" src="{{ asset(exercice.intro.image.webPath) }}"/>
+            {% endif %}
+            <p>{{ exercice.intro.contenu|raw }}</p>
+        </div>
+        {% else %}
+            <h1>{{ exercice.intro.titre }}</h1>
+            <div class="conteneur">
+                <p>{{ exercice.intro.contenu | raw }}</p><br/>
+            </div>
+        {% endif %}
+    {% endif %}
+    <div class="conteneur">
+        {% if app.session.get("nbCaptcha") >= 5 %}
+            {% for message in app.session.flashbag.get('erreur') %}
+                <p class="erreur-marge-0">{{ message }}</p>
+            {% endfor %}
+
+            <p>Veuillez prouver que vous n'êtes pas un robot:</p>
+
+            <div class="formulaire">
+                {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+                {{ form_errors(form) }}
+
+                {{ form_label(form.pseudo, "Votre pseudo:") }}
+                {{ form_widget(form.pseudo) }}
+                {{ form_row(form.pseudo) }}
+
+                {{ captcha.creerCaptcha() | raw }}
+
+                <div class="submit">
+                    {{ form_widget(form.envoyer) }}
+                </div>
+
+                {{ form_rest(form) }}
+
+                {{ form_end(form) }}
+            </div>
+        {% else %}
+            <a class="bouton-lien neutre classique-neutre" href=" {{ path("exercice-inscrits", {"id": exercice.id }) }} ">Commencer l'exercice</a>
+        {% endif %}
+    </div>
+
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+{% endblock %}

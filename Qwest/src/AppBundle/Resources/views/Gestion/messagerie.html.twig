@@ -1,0 +1,97 @@
+{% extends layout %}
+
+{% block title %}
+    {{ parent() }} - Messagerie
+{% endblock %}
+
+{% block StockHG3body %}
+    <h1>Messagerie</h1>
+
+    <div class="conteneur">
+        {% for message in app.session.flashbag.get('message') %}
+            {{ message |raw }}
+        {% endfor %}
+
+        <a class="lien-crea" href="{{ path("message-redaction") }}">Envoyer un nouveau message</a>
+        <div class="conteneur-messagerie">
+            <div class="conteneur-message">
+                {% if messagesRecus is not empty %}
+                    <p>Reçus</p>
+                        {% for me in messagesRecus %}
+                            {% set nbMeNonLu = repositoryMessage.getNonLuByFil(app.session.get("id"), me.fil.id) %}
+                            <div class="bloc-message {% if nbMeNonLu > 0 %}nouveau-message-messagerie{% endif %}">
+                                <div class="message-indication">
+                                    <p>de {{ me.envoyeur.nomComplet }}</p>
+                                    <p>{{ me.dateCreation | date("d/m/Y H:s") }}</p>
+                                </div>
+                                <a href="{{ path("page-discussion-privee", {"id": me.fil.id}) }}">{{ me.objet }}
+                                    {% if nbMeNonLu > 0 and nbMeNonLu < 2  %}
+                                        <span class="non-lu">Un message non lu</span>
+                                    {% elseif nbMeNonLu > 1 %}
+                                        <span class="non-lu">{{ nbMeNonLu }} messages non lus</span>
+                                    {% endif %}
+                                    <br/>{{ me.contenuDebut | raw }}</a>
+
+                            </div>
+                        {% endfor %}
+                {% else %}
+                    <p>Vous n'avez reçus aucun message.</p>
+                {% endif %}
+            </div>
+
+            <div class="conteneur-message">
+                {% if messagesEnvoyes is not empty %}
+                    <p>Envoyés</p>
+
+                        {% for me in messagesEnvoyes %}
+                            {% set nbMeNonLu = repositoryMessage.getNonLuByFil(app.session.get("id"), me.fil.id) %}
+                            <div class="bloc-message {% if nbMeNonLu > 0 %}nouveau-message-messagerie{% endif %}">
+                                <div class="message-indication">
+                                    <p>de {{ me.envoyeur.nomComplet }}</p>
+                                    <p>{{ me.dateCreation | date("d/m/Y H:s") }}</p>
+                                </div>
+                                <a href="{{ path("page-discussion-privee", {"id": me.fil.id}) }}">{{ me.objet }}
+                                    {% if nbMeNonLu > 0 and nbMeNonLu < 2  %}
+                                        <span class="non-lu">Un message non lu</span>
+                                    {% elseif nbMeNonLu > 1 %}
+                                        <span class="non-lu">{{ nbMeNonLu }} messages non lus</span>
+                                    {% endif %}
+                                    <br/>{{ me.contenuDebut | raw }}</a>
+                            </div>
+                        {% endfor %}
+                {% else %}
+                    <p>Vous n'avez envoyé aucun message.</p>
+                {% endif %}
+            </div>
+            <div class="conteneur-message">
+                {% if reponsesOuverte is not empty %}
+                    <p>Réponses ouvertes</p>
+                    {% for me in reponsesOuverte %}
+                        {% set nbMeNonLu = repositoryMessage.getNonLuByFil(app.session.get("id"), me.fil.id) %}
+                        <div class="bloc-message {% if nbMeNonLu > 0 %}nouveau-message-messagerie{% endif %}">
+                            <div class="message-indication">
+                                <p>de {{ me.envoyeur.nomComplet }}</p>
+                                <p>{{ me.dateCreation | date("d/m/Y H:s") }}</p>
+                            </div>
+                            {% if app.session.get("permission") is same as("A") %}
+                                <a href="{{ path("reponse-ouverte-correction", {"id": me.id}) }}">
+                            {% else %}
+                                <a href="{{ path("page-discussion-privee", {"id": me.fil.id}) }}">
+                            {% endif %}
+
+                            {{ me.objet }}
+                                {% if nbMeNonLu > 0 and nbMeNonLu < 2  %}
+                                    <span class="non-lu">Un message non lu</span>
+                                {% elseif nbMeNonLu > 1 %}
+                                    <span class="non-lu">{{ nbMeNonLu }} messages non lus</span>
+                                {% endif %}
+                                <br/>{{ me.contenuDebut | raw }}</a>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>Vous n'avez reçus aucune réponse ouverte.</p>
+                {% endif %}
+            </div>
+        </div>
+
+{% endblock %}

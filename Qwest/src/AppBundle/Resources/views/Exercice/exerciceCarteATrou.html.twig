@@ -1,0 +1,32 @@
+{% extends "@App/exerciceNonGroupeLayout.html.twig" %}
+
+{% block Exercice %}
+    {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+    {{ form_errors(form) }}
+
+    <ul class="carte-liste-formulaire" style="background-image: url({{ asset(question.ressourceFond.webPath) }}); width: {{ question.ressourceFond.dimensionX }}px; height: {{ question.ressourceFond.dimensionY }}px;">
+        {% for sousQuestion in form.subQuestion %}
+            <li style="top: {{ sousQuestion.vars.data.positionY }}%; left: {{ sousQuestion.vars.data.positionX }}%;">
+                <div>
+                    {% for reponse in sousQuestion.reponse %}
+                        <div>
+                            {{ form_label(reponse.corps) }}
+                            {{ form_widget(reponse.corps) }}
+                            {{ form_row(reponse.corps) }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+            
+    <div class="submit">
+        {{ form_widget(form.envoyer) }}
+    </div>
+
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
+            
+    <a class="bouton-lien neutre classique-neutre" href="{{ path("question-liste", {"id": question.exercice.id }) }}#{{ question.numeroOrdre }}">Retourner à la liste des questions</a><br/>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+{% endblock %}

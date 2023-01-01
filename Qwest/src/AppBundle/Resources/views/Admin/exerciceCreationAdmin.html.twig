@@ -1,0 +1,55 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Création d'un exercice
+{% endblock %}
+
+{% block StockHG3body %}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    
+    <h1>Création d'un exercice</h1>
+    <div class="conteneur">
+        <div class="formulaire">
+            <div class="edition">
+                {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+                {{ form_errors(form) }}
+
+                {{ form_label(form.titre, "Titre de l'exercice:") }}
+                {{ form_widget(form.titre) }}
+                {{ form_row(form.titre) }}
+
+                {{ form_label(form.intro.titre, "Titre de l'intro:") }}
+                {{ form_widget(form.intro.titre) }}
+                {{ form_row(form.intro.titre) }}
+
+                {{ form_label(form.intro.contenu, "Contenu:") }}
+                {{ form_widget(form.intro.contenu) }}
+                {{ form_row(form.intro.contenu) }}
+
+                <br/>
+                
+                <div class="bloc-champ-edition">
+                    {{ form_label(form.chapitre, "Chapitre:") }}
+                    {{ form_widget(form.chapitre) }}
+                    {{ form_row(form.chapitre) }}
+                </div>
+                
+                <div class="bloc-champ-edition">
+                    {{ form_label(form.difficulte, "Difficulté:") }}
+                    {{ form_widget(form.difficulte) }}
+                    {{ form_row(form.difficulte) }}
+                </div>
+
+                <br/>
+                
+                <div class="submit">
+                    {{ form_widget(form.envoyer) }}
+                </div>
+
+                {{ form_rest(form) }}
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

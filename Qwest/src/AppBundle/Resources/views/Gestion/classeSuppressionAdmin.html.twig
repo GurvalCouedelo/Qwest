@@ -1,0 +1,11 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Suppression d'une classe
+{% endblock %}
+
+{% block StockHG3body %}
+    <div class="conteneur">
+        <p><a class="bouton-suppression suppr classique-suppr" href="{{ path("classe-suppression", {"id": classe.id, "true": "true"}) }}">Supprimer la classe</a></p>
+    </div>
+{% endblock %}

@@ -1,0 +1,673 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * User
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\UserRepository")
+ */
+class User
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pseudo", type="string", length=50)
+     * @Assert\Length(max=30)
+     */
+    private $pseudo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nom", type="string", length=50)
+     * @Assert\Length(max=30)
+     */
+    private $nom;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="prenom", type="string", length=50)
+     * @Assert\Length(max=30)
+     */
+    private $prenom;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="motDePasse", type="string")
+     * @Assert\Length(max=125)
+     */
+    private $motDePasse;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="motDePasseTemp", type="string", nullable=true)
+     */
+    private $motDePasseTemp;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateInscription", type="datetime")
+     */
+    
+    private $dateInscription;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateConnection", type="datetime")
+     */
+    private $dateConnection;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="permission", type="string", length=1)
+     */
+    private $permission;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="bloque", type="string", length=1)
+     */
+    private $bloque;
+    
+    /**
+     * @ORM\Column(name="totalPoints", type="integer", nullable=true)
+     */
+    private $totalPoints;
+
+    /**
+     * @ORM\Column(name="pointsHonneur", type="integer", nullable=true)
+     */
+    private $pointsHonneur;
+
+    /**
+     * @ORM\Column(name="nombreExercices", type="integer", nullable=true)
+     */
+    private $nombreExercices;
+    
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="derniereActualisation", type="datetime", nullable=true)
+     */
+    private $derniereActualisation;
+    
+    /**
+    * @ORM\OneToMany(targetEntity="AppBundle\Entity\Answer", mappedBy="utilisateur")
+    * @Assert\Valid
+    */
+    private $reponse;
+    
+    /**
+    * @ORM\OneToMany(targetEntity="AppBundle\Entity\Passerelle", mappedBy="utilisateur")
+    * @Assert\Valid
+    */
+    private $passerelle;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ClassGroup", inversedBy="eleve")
+     * @Assert\Valid
+     */
+    private $classeGroupe;
+    
+    /**
+    * @ORM\OneToMany(targetEntity="AppBundle\Entity\Points", mappedBy="utilisateur", cascade={"persist", "remove"} )
+    * @Assert\Valid
+    */
+    private $resultats;
+    
+    /**
+    * @ORM\OneToMany(targetEntity="AppBundle\Entity\Message", mappedBy="destinataire", cascade={"persist", "remove"})
+    * @Assert\Valid
+    */
+    private $reception;
+    
+    /**
+    * @ORM\OneToMany(targetEntity="AppBundle\Entity\Message", mappedBy="envoyeur")
+    * @Assert\Valid
+    */
+    private $envoyes;
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+
+    }
+    
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set pseudo
+     *
+     * @param string $pseudo
+     * @return User
+     */
+    public function setPseudo($pseudo)
+    {
+        $this->pseudo = $pseudo;
+
+        return $this;
+    }
+
+    /**
+     * Get pseudo
+     *
+     * @return string 
+     */
+    public function getPseudo()
+    {
+        return $this->pseudo;
+    }
+
+    /**
+     * Set nom
+     *
+     * @param string $nom
+     * @return User
+     */
+    public function setNom($nom)
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    /**
+     * Get nom
+     *
+     * @return string 
+     */
+    public function getNom()
+    {
+        return $this->nom;
+    }
+
+    /**
+     * Set prenom
+     *
+     * @param string $prenom
+     * @return User
+     */
+    public function setPrenom($prenom)
+    {
+        $this->prenom = $prenom;
+
+        return $this;
+    }
+
+    /**
+     * Get prenom
+     *
+     * @return string 
+     */
+    public function getPrenom()
+    {
+        return $this->prenom;
+    }
+    
+    /**
+     * Get prenom
+     *
+     * @return string 
+     */
+    public function getNomComplet()
+    {
+        return $this->prenom . " " . strtoupper($this->nom) . " | " . $this->pseudo;
+    }
+
+    /**
+     * Set dateInscription
+     *
+     * @param \DateTime $dateInscription
+     * @return User
+     */
+    public function setDateInscription($dateInscription)
+    {
+        $this->dateInscription = $dateInscription;
+
+        return $this;
+    }
+
+    /**
+     * Get dateInscription
+     *
+     * @return \DateTime 
+     */
+    public function getDateInscription()
+    {
+        return $this->dateInscription;
+    }
+
+    /**
+     * Set dateConnection
+     *
+     * @param \DateTime $dateConnection
+     * @return User
+     */
+    public function setDateConnection($dateConnection)
+    {
+        $this->dateConnection = $dateConnection;
+
+        return $this;
+    }
+
+    /**
+     * Get dateConnection
+     *
+     * @return \DateTime 
+     */
+    public function getDateConnection()
+    {
+        return $this->dateConnection;
+    }
+
+    /**
+     * Set permission
+     *
+     * @param string $permission
+     * @return User
+     */
+    public function setPermission($permission)
+    {
+        $this->permission = $permission;
+
+        return $this;
+    }
+
+    /**
+     * Get permission
+     *
+     * @return string 
+     */
+    public function getPermission()
+    {
+        return $this->permission;
+    }
+
+    /**
+     * Set bloque
+     *
+     * @param string $bloque
+     * @return User
+     */
+    public function setBloque($bloque)
+    {
+        $this->bloque = $bloque;
+
+        return $this;
+    }
+
+    /**
+     * Get bloque
+     *
+     * @return string 
+     */
+    public function getBloque()
+    {
+        return $this->bloque;
+    }
+
+    /**
+     * Set motDePasse
+     *
+     * @param string $motDePasse
+     * @return User
+     */
+    public function setMotDePasse($motDePasse)
+    {
+        $this->motDePasse = $motDePasse;
+
+        return $this;
+    }
+
+    /**
+     * Get motDePasse
+     *
+     * @return string 
+     */
+    public function getMotDePasse()
+    {
+        return $this->motDePasse;
+    }
+    
+    public function hashMotDePasse()
+    {
+        $this->setMotDePasse(substr(hash("sha512", $this->getMotDePasse()), 0, 124));
+        return $this->getMotDePasse();
+    }
+    
+
+
+    /**
+     * Remove reponse
+     *
+     * @param \AppBundle\Entity\Answer $reponse
+     */
+    public function removeReponse(\AppBundle\Entity\Answer $reponse)
+    {
+        $this->reponse->removeElement($reponse);
+    }
+
+    /**
+     * Get reponse
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getReponse()
+    {
+        return $this->reponse;
+    }
+
+    /**
+     * Add reponse
+     *
+     * @param \AppBundle\Entity\Answer $reponse
+     * @return User
+     */
+    public function addReponse(\AppBundle\Entity\Answer $reponse)
+    {
+        $this->reponse[] = $reponse;
+
+        return $this;
+    }
+
+    /**
+     * Set motDePasseTemp
+     *
+     * @param string $motDePasseTemp
+     * @return User
+     */
+    public function setMotDePasseTemp($motDePasseTemp)
+    {
+        $this->motDePasseTemp = $motDePasseTemp;
+
+        return $this;
+    }
+
+    /**
+     * Get motDePasseTemp
+     *
+     * @return string 
+     */
+    public function getMotDePasseTemp()
+    {
+        return $this->motDePasseTemp;
+    }
+
+    /**
+     * Add resultats
+     *
+     * @param \AppBundle\Entity\Points $resultats
+     * @return User
+     */
+    public function addResultat(\AppBundle\Entity\Points $resultats)
+    {
+        $this->resultats[] = $resultats;
+
+        return $this;
+    }
+
+    /**
+     * Remove resultats
+     *
+     * @param \AppBundle\Entity\Points $resultats
+     */
+    public function removeResultat(\AppBundle\Entity\Points $resultats)
+    {
+        $this->resultats->removeElement($resultats);
+    }
+
+    /**
+     * Get resultats
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getResultats()
+    {
+        return $this->resultats;
+    }
+
+    /**
+     * Set classeGroupe
+     *
+     * @param \AppBundle\Entity\ClassGroup $classeGroupe
+     * @return User
+     */
+    public function setClasseGroupe(\AppBundle\Entity\ClassGroup $classeGroupe = null)
+    {
+        $this->classeGroupe = $classeGroupe;
+
+        return $this;
+    }
+
+    /**
+     * Get classeGroupe
+     *
+     * @return \AppBundle\Entity\ClassGroup 
+     */
+    public function getClasseGroupe()
+    {
+        return $this->classeGroupe;
+    }
+
+    /**
+     * Add reception
+     *
+     * @param \AppBundle\Entity\Message $reception
+     * @return User
+     */
+    public function addReception(\AppBundle\Entity\Message $reception)
+    {
+        $this->reception[] = $reception;
+
+        return $this;
+    }
+
+    /**
+     * Remove reception
+     *
+     * @param \AppBundle\Entity\Message $reception
+     */
+    public function removeReception(\AppBundle\Entity\Message $reception)
+    {
+        $this->reception->removeElement($reception);
+    }
+
+    /**
+     * Get reception
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getReception()
+    {
+        return $this->reception;
+    }
+
+    /**
+     * Add envoyes
+     *
+     * @param \AppBundle\Entity\Message $envoyes
+     * @return User
+     */
+    public function addEnvoye(\AppBundle\Entity\Message $envoyes)
+    {
+        $this->envoyes[] = $envoyes;
+
+        return $this;
+    }
+
+    /**
+     * Remove envoyes
+     *
+     * @param \AppBundle\Entity\Message $envoyes
+     */
+    public function removeEnvoye(\AppBundle\Entity\Message $envoyes)
+    {
+        $this->envoyes->removeElement($envoyes);
+    }
+
+    /**
+     * Get envoyes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEnvoyes()
+    {
+        return $this->envoyes;
+    }
+
+    /**
+     * Set totalPoints
+     *
+     * @param integer $totalPoints
+     * @return User
+     */
+    public function setTotalPoints($totalPoints)
+    {
+        $this->totalPoints = $totalPoints;
+
+        return $this;
+    }
+
+    /**
+     * Get totalPoints
+     *
+     * @return integer 
+     */
+    public function getTotalPoints()
+    {
+        return $this->totalPoints;
+    }
+
+    /**
+     * Set derniereActualisation
+     *
+     * @param \DateTime $derniereActualisation
+     * @return User
+     */
+    public function setDerniereActualisation($derniereActualisation)
+    {
+        $this->derniereActualisation = $derniereActualisation;
+
+        return $this;
+    }
+
+    /**
+     * Get derniereActualisation
+     *
+     * @return \DateTime 
+     */
+    public function getDerniereActualisation()
+    {
+        return $this->derniereActualisation;
+    }
+
+    /**
+     * Add classeGroupeCreateur
+     *
+     * @param \AppBundle\Entity\ClassGroup $classeGroupeCreateur
+     * @return User
+     */
+    public function addClasseGroupeCreateur(\AppBundle\Entity\ClassGroup $classeGroupeCreateur)
+    {
+        $this->classeGroupeCreateur[] = $classeGroupeCreateur;
+
+        return $this;
+    }
+
+    /**
+     * Remove classeGroupeCreateur
+     *
+     * @param \AppBundle\Entity\ClassGroup $classeGroupeCreateur
+     */
+    public function removeClasseGroupeCreateur(\AppBundle\Entity\ClassGroup $classeGroupeCreateur)
+    {
+        $this->classeGroupeCreateur->removeElement($classeGroupeCreateur);
+    }
+
+    /**
+     * Get classeGroupeCreateur
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getClasseGroupeCreateur()
+    {
+        return $this->classeGroupeCreateur;
+    }
+
+    /**
+     * Set pointsHonneur
+     *
+     * @param integer $pointsHonneur
+     * @return User
+     */
+    public function setPointsHonneur($pointsHonneur)
+    {
+        $this->pointsHonneur = $pointsHonneur;
+
+        return $this;
+    }
+
+    /**
+     * Get pointsHonneur
+     *
+     * @return integer 
+     */
+    public function getPointsHonneur()
+    {
+        return $this->pointsHonneur;
+    }
+
+    /**
+     * Set nombreExercices
+     *
+     * @param integer $nombreExercices
+     * @return User
+     */
+    public function setNombreExercices($nombreExercices)
+    {
+        $this->nombreExercices = $nombreExercices;
+
+        return $this;
+    }
+
+    /**
+     * Get nombreExercices
+     *
+     * @return integer 
+     */
+    public function getNombreExercices()
+    {
+        return $this->nombreExercices;
+    }
+}

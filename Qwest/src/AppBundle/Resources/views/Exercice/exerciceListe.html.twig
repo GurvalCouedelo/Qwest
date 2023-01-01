@@ -1,0 +1,73 @@
+{% extends layout %}
+
+{% block title %}
+    {{ parent() }} - Liste des exercices
+{% endblock %}
+
+{% set classeVerif = null %}
+{% set matiereVerif = null %}
+{% set chapitreVerif = null %}
+
+{% block StockHG3body %}
+    <div class="conteneur">
+        {% for message in app.session.flashbag.get("erreur") %}
+            <p class="erreur-marge-0">{{ message }}</p>
+        {% endfor %}
+
+        {% if app.session.get("permission") is same as("A") %}
+            <a class="bouton-lien crea classique-crea" href=" {{ path("exercice-creation") }} ">Créer un nouvel exercice</a>
+        {% endif %}
+
+        {% if exercices is not empty %}
+            <ul class="liste-exercices">
+                {% for exercice in exercices %}
+                    {% if exercice.chapitre.classe.id is not same as(classeVerif) %}
+                        {% if chapitreVerif is not null %}
+                            </div>
+                            {% set chapitreVerif = null %}
+                        {% endif %}
+                        {% set matiereVerif = null %}
+                        <h1 class="classe-exercice-liste">{{ exercice.chapitre.classe.nom }}</h1>
+                        {% set classeVerif = exercice.chapitre.classe.id %}
+                    {% endif %}
+
+                    {% if exercice.chapitre.matiere.id is not same as(matiereVerif) %}
+                        {% if chapitreVerif is not null %}
+                            </div>
+                            {% set chapitreVerif = null %}
+                        {% endif %}
+                        <h3 class="matiere-exercice-liste">{{ exercice.chapitre.matiere.nom }}</h3>
+                        {% set matiereVerif = exercice.chapitre.matiere.id %}
+
+                    {% endif %}
+
+                    {% if exercice.chapitre.id is not same as(chapitreVerif) %}
+                        {% if chapitreVerif is not null %}
+                            </div>
+                            {% set chapitreVerif = null %}
+                        {% endif %}
+                        <h4 class="titre-chapitre-exercice-liste">{{ exercice.chapitre.nom }}</h4>
+                        <div class="bloc-exercice-chapitre">
+                        {% set chapitreVerif = exercice.chapitre.id %}
+                    {% endif %}
+
+                    {% if app.session.get("permission") is same as("U") %}
+                        <li class="bloc-exercice">
+                            <a href="{{ path("exercice-inscrits", {"id": exercice.id }) }}">{{ exercice.titre }} <span class="difficulte">{{ exercice.difficulte.nom }}</span></a><br/>
+                        </li>
+                    {% else %}
+                        <li class="bloc-exercice">
+                            <a {% if exercice.publie is same as(false) %}class="verrouille"{% endif %} href="{{ path("question-liste", {"id": exercice.id, "true": "false" }) }}">{{ exercice.titre }} <span class="difficulte">{{ exercice.difficulte.nom }}</span></a>
+                            <a  href="{{ path("exercice-suppression", {"id": exercice.id, "true": "false" }) }}"><span style="color: red;">✘</span></a>
+                            <a  href="{{ path("exercice-dupliquer", {"id": exercice.id }) }}"><span style="color: #53c1ff;">x2</span></a>
+                            <a  href="{{ path("passerelle", {"page": "exerciseur\/" ~ exercice.id }) }}">Nouvel éditeur</a><br/>
+                        </li>
+                    {% endif %}
+
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Il n'y a aucun exercice pour l'instant.</p>
+        {% endif %}
+    </div>
+{% endblock %}

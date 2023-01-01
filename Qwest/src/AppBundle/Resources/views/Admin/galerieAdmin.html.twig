@@ -1,0 +1,52 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Galerie
+{% endblock %}
+
+{% block StockHG3body %}
+    <h1>Galerie</h1>
+    <div class="conteneur">
+        {% for message in app.session.flashbag.get('message') %}
+            <p class="erreur-marge-0">{{ message | raw }}</p>
+        {% endfor %}
+        
+        <a class="lien-crea" href="{{ path("ressource-creation") }}">Ajouter une ressource</a>
+        {% if app.session.get("entiteRessource") is not null %}
+            <a class="bouton-lien-80 neutre classique-neutre" href="{{ path("ressource-attribution-desinitialisation", {"type": type, "matiere": matiere.id }) }}">Repasser en mode édition</a>
+        {% endif %}
+        
+        <div class="galerie">
+            <ul class="selection-type-galerie">
+                {% if type is same as("I") %}
+                    <li class="active"><a href="{{ path("galerie", {"type": "I", matiere: matiere.id }) }}">Images</a></li>
+                    <li><a href="{{ path("galerie", {"type": "S", matiere: matiere.id }) }}">Sons</a></li>
+                    <li><a href="{{ path("galerie", {"type": "V", matiere: matiere.id }) }}">Vidéos</a></li>
+                {% elseif type is same as("S") %}
+                    <li><a href="{{ path("galerie", {"type": "I", matiere: matiere.id }) }}">Images</a></li>
+                    <li class="active"><a href="{{ path("galerie", {"type": "S", matiere: matiere.id }) }}">Sons</a></li>
+                    <li><a href="{{ path("galerie", {"type": "V", matiere: matiere.id }) }}">Vidéos</a></li>
+                {% elseif type is same as("V") %}
+                    <li><a href="{{ path("galerie", {"type": "I", matiere: matiere.id }) }}">Images</a></li>
+                    <li><a href="{{ path("galerie", {"type": "S", matiere: matiere.id }) }}">Sons</a></li>
+                    <li class="active"><a href="{{ path("galerie", {"type": "V", matiere: matiere.id }) }}">Vidéos</a></li>
+                {% endif %}
+            </ul>
+            <ul class="selection-matiere-galerie">
+                {% for matiereBouton in matiereListe %}
+                    <li {% if matiereBouton.id is same as(matiere.id) %} class="active" {% endif %}><a href="{{ path("galerie", {"type": type, matiere: matiereBouton.id }) }}">{{ matiereBouton.nom }}</a></li>
+                {% endfor %}
+            </ul>
+            
+            {% for ressource in ressources %}
+                {% if app.session.get("entiteRessource") is null %}
+                    <a href="{{ path("ressource-modification", {"id": ressource.id }) }}">
+                {% else %}
+                    <a href="{{ path("ressource-attribution", {"id": ressource.id }) }}">
+                {% endif %}
+                    {{ ressourceService.createRessource(ressource.id, true) | raw }}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

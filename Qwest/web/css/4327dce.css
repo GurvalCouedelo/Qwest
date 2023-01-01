@@ -1,0 +1,432 @@
+/*Balises simples*/
+@font-face {
+    font-family: "Merienda";
+    src: url('/bundles/stockhg3app/font/merienda/Merienda-Regular.ttf');
+    src: url('/bundles/stockhg3app/font/merienda/Merienda-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+ul{
+    list-style-type: none;
+}
+
+ol{
+    margin-left: 1em;
+}
+
+li{
+    font-size: 1em;
+    font-family: serif;
+}
+
+.interieur-bloc-accueil ul{
+    list-style-type: disc;
+}
+
+a{
+    color: black;
+    text-decoration: none;
+    transition: 0.25s;
+}
+
+a:hover{
+    color: #e86d12;
+    transition: 0.25s;
+}
+
+.selection-type-galerie a:hover, .selection-matiere-galerie a:hover{
+    color: black;
+}
+
+
+
+h1, h2{
+    font-weight: normal;
+    text-align: center;
+    font-family: "Merienda";
+}
+
+h3, h4{
+    font-weight: normal;
+}
+
+.carte h1{
+    font-family: "Courier New";
+}
+
+.important{
+    color: #f0640c;
+}
+
+.pseudo{
+    color: #25c325;
+}
+
+.editable{
+    color: #08507c;
+}
+
+.editable p{
+    font-size: 1em;
+}
+
+.editable:hover{
+    text-decoration: underline;
+    color: #08507c;
+}
+
+.annexe{
+    line-height: normal;
+}
+
+.groupe-h6{
+    font-size: 1.3em;
+    font-weight: normal;
+    font-family: "Merienda";
+}
+
+@media only screen and (min-width: 769px){
+    p, pre, legend, label, .conteneur, a, .taille-normal, input[type=text], input[type=number], .interieur-bloc-accueil, .interieur-bloc-SP, button, option, .texte{
+        font-size: 1.3em;
+        font-family: serif;
+    }
+
+
+    h1{
+        font-size: 3em;
+    }
+
+    h2{
+        font-size: 2em;
+    }
+
+    h3, h4{
+        font-size: 1.5em;
+    }
+    
+    select{
+        font-size: 0.8em;
+    }
+}
+
+@media only screen and (min-width: 560px) and (max-width: 768px){
+    p, pre, legend, label, .conteneur, a, .taille-normal, input[type=text], input[type=number], .interieur-bloc-accueil, .interieur-bloc-SP, button, option, .texte{
+        font-size: 1em;
+        font-family: serif;
+    }
+
+    h1{
+        font-size: 2em;
+    }
+
+    h2{
+        font-size: 1.5em;
+    }
+
+    h3, h4{
+        font-size: 1.2em;
+    }
+
+    .carte h1{
+        color: white;
+        font-size: 2.3em;
+    }
+    
+    select{
+        font-size: 0.6em;
+    }
+}
+
+@media only screen and (max-width: 559px){
+    p, pre, legend, label, .conteneur, a, .taille-normal, input[type=text], input[type=number], .interieur-bloc-accueil, .interieur-bloc-SP , button, option, .texte{
+        font-size: 1em;
+        font-family: serif;
+    }
+
+    h1{
+        font-size: 1.6em;
+    }
+
+    h2{
+        font-size: 1.3em;
+    }
+
+    h3, h4{
+        font-size: 1em;
+    }
+
+    .carte h1{
+        color: white;
+        font-size: 1.7em;
+    }
+}
+
+
+@media only screen and (min-width: 769px) and (max-width: 1280px){
+    .carte h1{
+        color: white;
+        font-size: 3.6em;
+    }
+}
+
+@media only screen and (min-width: 1281px){
+    .carte h1{
+        color: white;
+        font-size: 5em;
+    }
+}
+
+/*Messages*/
+
+.erreur, .erreur-marge-0, .attention{
+    color: red;
+}
+
+.succes{
+    color: green;
+}
+
+/*Autre*/
+
+.conteneur h1{
+    font-size: 2.3em;
+    font-weight: normal;
+    text-align: center;
+    font-family: "Merienda";
+}
+
+.score{
+     font-size: 50px;
+ }
+
+/*Boutons*/
+
+.lien-crea, .formulaire .submit button, .formulaire .ajouter-un-trou button, .form-texte-a-trou .submit button, form input[type=submit], button[type=submit]{
+    color: #ffffff;
+}
+
+.submit button{
+    font-size: 1.5em;
+}
+
+.lien-crea:after{
+    content: " +";
+}
+
+.lien-crea:hover, .formulaire .submit button:hover, .formulaire .ajouter-un-trou button:hover, .form-texte-a-trou .submit button:hover{
+    color: #ffffff;
+}
+
+/*Liste des exercices*/
+
+.titre-chapitre-exercice-liste{
+    /*text-decoration: underline;*/
+    color: #e86d12;
+}
+
+.difficulte{
+    color: #28e328;
+}
+
+/*Tableaux*/
+
+thead{
+    color: white;
+}
+
+th{
+    font-weight: lighter;
+}
+
+td{
+    text-align: center;
+}
+
+.tableau-honneur-1 td, .tableau-honneur-1 td a{
+    color: white;
+}
+
+.tableau-honneur-2 td, .tableau-honneur-2 td a{
+    color: white;
+}
+
+.tableau-honneur-3 td, .tableau-honneur-3 td a{
+    color: white;
+}
+
+/*Billets (page d'accueil)*/
+
+.billet-impair a h2:hover{
+    color: #e86d12;
+    transition: 0.25s;
+}
+
+/*Billets (page spécial)*/
+
+.interieur-bloc-SP p{
+    font-size: 30px;
+    font-weight: normal;
+}
+
+/*Boutons*/
+
+.neutre, .neutre-rempli, .suppr, .crea, .masq{
+    text-align: center;
+    color: #ffffff;
+}
+
+.neutre:hover, .neutre-rempli:hover, .suppr:hover, .crea:hover, .masq:hover{
+    color: #ffffff;
+}
+
+#bouton-aide{
+    font-size: 1.5em;
+    color: #e86d12;
+    text-align: center;
+}
+
+#aide{
+    font-size: 1.5em;
+}
+
+.clique-disparait{
+    font-style: italic;
+}
+
+/* Icones */
+
+.icon{
+    
+}
+
+/*Formulaires*/
+
+
+/* tableau de bord */
+
+.pourcentage{
+    color: white;
+}
+
+/*Messagerie*/
+
+.non-lu{
+    color : #ff2118;
+    font-size: 20px;
+    font-style: italic;
+}
+
+/*Pied de page*/
+
+footer ul{
+    list-style: none;
+}
+
+footer li, footer h6{
+    text-align: center;
+    color: white;
+}
+
+footer li{
+    font-size: 20px;
+}
+
+footer li:hover{
+    text-decoration: underline;
+}
+
+footer h6{
+    font-size: 30px;
+    font-family: "Merienda";
+}
+
+/*Nouvel exerciseur*/
+
+.liste-questions li, #conteneur-formulaire button[type="submit"], #conteneur-formulaire > p{
+    color: #e6e6e6;
+    font-family: Courier New;
+}
+
+#bouton-fenetre, .lien-exerciseur, #bouton-disponibilite{
+    font-family: Courier New;
+    font-size: 1.2em;
+}
+
+#bouton-fenetre{
+    color: #28e328;
+}
+
+.publier{
+    color: #21b2d4;
+}
+
+.masquer{
+    color: #e86d12;
+}
+
+.lien-exerciseur{
+    color: #9d9d9d;
+}
+
+.banderole-titre h1{
+    color: #ffffff;
+    font-family: Courier New;
+}
+
+#conteneur-formulaire input, #conteneur-formulaire label, #conteneur-formulaire p{
+    color: #e6e6e6;
+}
+
+#conteneur-formulaire .trumbowyg-editor p{
+    color: #000000;
+}
+
+#conteneur-formulaire input::placeholder{
+    color: #dedddd;
+    font-size: 1em;
+}
+
+#conteneur-formulaire input:focus::placeholder{
+    font-size: 0em;
+}
+
+.bande-actualisation{
+    text-align: right;
+    font-style: italic;
+}
+
+#pop-up-creation p, #pop-up-suppression p{
+    text-align: center;
+    font-family: Courier New;
+    color: white;
+}
+
+#pop-up-creation #bouton-question-submit, #bouton-proposition-creation, #bouton-question-suppression, .bouton-creation a{
+    color: #efefef;
+}
+
+#conteneur-formulaire form .en-tete-proposition{
+    color: #e86d12;
+    font-weight: bold;
+}
+
+.bouton-suppression-question, .bouton-proposition-suppression, .bouton-ressources-suppression{
+    color: red;
+    font-size: 1.4em;
+}
+
+.conteneur-exerciseur ul{
+    font-size: 1.2em;
+    color: #e6e6e6;
+}
+
+.conteneur-exerciseur ul li{
+    font-family: Courier New;
+}
+
+.bouton-creation a{
+    font-size: 1em;
+}
+

@@ -1,0 +1,46 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Modification d'une question
+{% endblock %}
+
+{% block StockHG3body %}
+    <h1>Modification d'une question</h1>
+    
+    <div class="conteneur">
+        {% for message in app.session.flashbag.get('erreur') %}
+            <p class="erreur-marge-0">{{ message }}</p>
+        {% endfor %}
+    
+        <div class="formulaire">
+            <div class="edition">
+                {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+                {{ form_errors(form) }}
+
+                {{ form_label(form.description, "Consigne:") }}
+                {{ form_widget(form.description) }}
+                {{ form_row(form.description) }}
+
+                {{ form_label(form.points, "Points attribués:") }}
+                {{ form_widget(form.points) }}
+                {{ form_row(form.points) }}
+
+                <div class="bloc-champ-edition">
+                    {{ form_label(form.aide, "Aide à la question:") }}
+                    {{ form_widget(form.aide) }}
+                    {{ form_row(form.aide) }}
+                </div>
+
+                <div class="submit">
+                    {{ form_widget(form.envoyer) }}
+                    <a class="bouton-suppression-80 suppr classique-suppr" href=" {{ path("groupe-suppression", {"id": groupe.id, "true": "false"}) }} ">Supprimer la question</a>
+                </div>
+
+                {{ form_rest(form) }}
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+        
+    </div>
+{% endblock %}

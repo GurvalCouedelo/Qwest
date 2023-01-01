@@ -1,0 +1,23 @@
+{% extends "@App/exerciceNonGroupeLayout.html.twig" %}
+
+{% block Exercice %}
+    {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+    {{ form_errors(form) }}
+
+    {{ form_label(form.objet, "Votre titre:") }}<br/>
+    {{ form_widget(form.objet) }}
+    {{ form_row(form.objet) }}
+
+    {{ form_label(form.contenu, "Votre réponse ouverte:") }}<br/>
+    {{ form_widget(form.contenu) }}
+    {{ form_row(form.contenu) }}
+
+    <br/>
+
+    <div class="submit submit-exercice">
+        {{ form_widget(form.envoyer) }}
+
+    {{ form_rest(form) }}
+
+    {{ form_end(form) }}
+{% endblock %}

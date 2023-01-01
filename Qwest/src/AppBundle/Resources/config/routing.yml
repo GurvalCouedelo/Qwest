@@ -1,0 +1,450 @@
+#tout connecté
+    
+deconnection:
+    path: /deconnection
+    defaults: { _controller: StockHG3appBundle:User:deconnection }
+    
+#non connecté
+
+accueil:
+    path:     /
+    defaults: { _controller: StockHG3appBundle:Public:index }
+    
+test:
+    path:     /test
+    defaults: { _controller: StockHG3appBundle:Public:test }
+    
+inscription:
+    path: /inscription
+    defaults: { _controller: StockHG3appBundle:User:inscription }
+    
+connection:
+    path: /connection
+    defaults: { _controller: StockHG3appBundle:User:connection }
+
+a-propos:
+    path: /a-propos
+    defaults: { _controller: StockHG3appBundle:Public:aProposPublic }
+        
+billet:
+    path: billet/{id}
+    defaults: { _controller: StockHG3appBundle:Public:billet }
+    requirements:
+        id: \d*
+        
+exercice:
+    path: /exercices
+    defaults: { _controller: StockHG3appBundle:User:inscription }
+
+#Mixtes
+
+tableau-honneur:
+    path: /tableau-d'honneur/{niveau}
+    defaults: 
+        _controller: StockHG3appBundle:Board:tableauHonneur
+        niveau: 
+
+#connecte
+
+accueil-connecte:
+    path: /connecte
+    defaults: { _controller: StockHG3appBundle:Connecte:accueilConnecte }
+    
+a-propos-connecte:
+    path: /connecte/a-propos
+    defaults: { _controller: StockHG3appBundle:Connecte:aProposConnecte }
+    
+billet-connecte:
+    path: /connecte/billet/{id}
+    defaults: { _controller: StockHG3appBundle:Connecte:billetConnecte }
+    requirements:
+        id: \d*
+    
+exercice-liste-connecte:
+    path: /connecte/exercices-liste/{matiere}
+    defaults: 
+        _controller: StockHG3appBundle:Connecte:exerciceListeConnecte 
+        matiere: 
+        
+calcul-resultats-connecte:
+    path: /exercice/resultats/{id}
+    defaults: { _controller: StockHG3appBundle:CalculResultats:calculResultats }
+    requirements:
+        id: \d*
+        
+profil-connecte:
+    path: /connecte/profil
+    defaults: { _controller: StockHG3appBundle:Connecte:profilConnecte }
+    
+changer-mot-de-passe-connecte:
+    path: /connecte/changer-mot-de-passe
+    defaults: { _controller: StockHG3appBundle:Connecte:CMDPConnecte }
+
+classe-integrer:
+    path: /connecte/classe-integrer/{id}
+    defaults: { _controller: StockHG3appBundle:Connecte:classeIntegrer }
+    requirements:
+        id: \d*
+
+#admin
+
+accueil-admin:
+    path:     /admin
+    defaults: { _controller: StockHG3appBundle:Admin:accueilAdmin }
+    
+a-propos-admin:
+    path:     /admin/a-propos
+    defaults: { _controller: StockHG3appBundle:Admin:aProposAdmin }
+    
+billet-creation:
+    path: admin/billet-creation/{type}/{id}
+    defaults: 
+        _controller: StockHG3appBundle:Billets:billetCreation 
+        id: 
+        type: accueil
+    requirements:
+        id: \d* 
+        type: accueil|a-propos|exercice
+        
+billet-modification:
+    path: admin/billet-modification/{id}
+    defaults: { _controller: StockHG3appBundle:Billets:billetModification }
+    requirements:
+        id: \d*
+    
+banniere-suppression:
+    path: admin/banniere-suppression/{id}
+    defaults: { _controller: StockHG3appBundle:Billets:banniereSuppression }
+    requirements:
+        id: \d*
+        
+billet-suppression:
+    path: admin/billet-suppression/{id}
+    defaults: { _controller: StockHG3appBundle:Billets:billetSuppression }
+    requirements:
+        id: \d*
+        
+profil-admin:
+    path: /admin/profil
+    defaults: { _controller: StockHG3appBundle:Admin:profilAdmin }
+    
+changer-mot-de-passe-admin:
+    path: /admin/changer-mot-de-passe
+    defaults: { _controller: StockHG3appBundle:Admin:CMDPAdmin }
+    
+galerie:
+    path: /admin/galerie/{type}/{matiere}
+    defaults: { _controller: StockHG3appBundle:Ressources:galerie }
+    requirements:
+        type: I|S|V
+        matiere: \d*
+    
+#Exercices
+
+exercice-admin:
+    path: exercice/{id}
+    defaults: { _controller: StockHG3appBundle:ExerciseReponse:exercice }
+    requirements:
+        id: \d*
+
+exercice-publier:
+    path: exercice/{id}/exercice-publier
+    defaults: { _controller: StockHG3appBundle:Exercise:exercicePublier }
+    requirements:
+        id: \d*
+    
+exercice-creation:
+    path: admin/exercice-creation
+    defaults: { _controller: StockHG3appBundle:Exercise:exerciceCreation }
+    
+    
+question-creation:
+    path: admin/exercice/creation-question/{id}/{groupe}/{typeQuest}
+    defaults: 
+        _controller: StockHG3appBundle:QuestionCreation:questionCreation 
+        groupe:      
+        typeQuest: Association     
+    requirements:
+        id: \d*
+        typeQuest: Association|Vrai ou faux
+        
+reponse-creation:
+    path: admin/question/creation-reponse/{id}
+    defaults: { _controller: StockHG3appBundle:Reponse:reponseCreation }
+    requirements:
+        id: \d*
+        
+ressource-creation:
+    path: admin/question/envoyer-ressource/
+    defaults:  
+        _controller: StockHG3appBundle:Ressources:ressourceCreation
+
+chapitre-creation:
+    path: admin/creation-chapitre/
+    defaults:  
+        _controller: StockHG3appBundle:Chapter:chapitreCreation
+
+texte-a-trou-creation:
+    path: admin/question/creation-texte-a-trou/{id}
+    defaults:
+        _controller: StockHG3appBundle:Question:texteATrouCreation
+    requirements:
+        id: \d*
+        
+exercice-modification:
+    path: admin/exercice-modification/{id}
+    defaults: { _controller: StockHG3appBundle:Exercise:exerciceModification }
+    requirements:
+        id: \d*
+    
+question-modification:
+    path: /admin/exercice/question-modification/{id}
+    defaults: { _controller: StockHG3appBundle:Question:questionModification }
+    requirements:
+        id: \d*
+        
+reponse-modification:
+    path: /admin/question/reponse-modification/{id}
+    defaults: { _controller: StockHG3appBundle:Reponse:reponseModification }
+    requirements:
+        id: \d*
+        
+ressource-modification:
+    path: /admin/question/modification-ressource/{id}
+    defaults: { _controller: StockHG3appBundle:Ressources:ressourceModification }
+    requirements:
+        id: \d*
+        
+groupe-modification:
+    path: /admin/question/modification-groupe/{id}
+    defaults: { _controller: StockHG3appBundle:Group:groupeModification }
+    requirements:
+        id: \d*
+        
+propositions-modification:
+    path: /admin/question/modification-proposition/{id}
+    defaults: { _controller: StockHG3appBundle:Question:propositionsModification }
+    requirements:
+        id: \d*
+        
+texte-a-trou-modification:
+    path: /admin/question/modification-texte-a-trou/{id}
+    defaults: { _controller: StockHG3appBundle:Question:texteATrouModification }
+    requirements:
+        id: \d*
+
+chapitre-modification:
+    path: /admin/chapitre/modification/{id}
+    defaults: { _controller: StockHG3appBundle:Chapter:chapitreModification }
+    requirements:
+        id: \d*
+    
+exercice-suppression:
+    path: admin/exercice/suppression/{id}/{true}
+    defaults: { _controller: StockHG3appBundle:Exercise:exerciceSuppression }
+    requirements:
+        true: true|false
+        id: \d*
+    
+question-suppression:
+    path: admin/question/{id}/suppression
+    defaults: { _controller: StockHG3appBundle:Question:questionSuppression }
+    requirements:
+        id: \d*
+
+reponse-suppression:
+    path: admin/reponse/suppression/{id}
+    defaults: { _controller: StockHG3appBundle:Reponse:reponseSuppression }
+    requirements:
+        id: \d*
+        
+ressource-suppression:
+    path: admin/ressource/suppression/{id}
+    defaults: { _controller: StockHG3appBundle:Ressources:ressourceSuppression }
+    requirements:
+        id: \d*
+        
+groupe-suppression:
+    path: admin/groupe/suppression/{id}/{true}
+    defaults: { _controller: StockHG3appBundle:Group:groupeSuppression }
+    requirements:
+        true: true|false
+        id: \d*
+
+chapitre-suppression:
+    path: admin/chapitre/suppression/{id}/{true}
+    defaults: { _controller: StockHG3appBundle:Chapter:chapitreSuppression }
+    requirements:
+        true: true|false
+        id: \d*
+        
+question-intervertir:
+    path: admin/question/intervertir/{id}
+    defaults: { _controller: StockHG3appBundle:Question:questionIntervertir }
+    requirements:
+        id: \d*
+        
+proposition-transformation:
+    path: admin/question/proposition-transformation/{id}/{type}
+    defaults:  
+        _controller: StockHG3appBundle:Ressources:propositionTransformation
+        type: association 
+    requirements:
+        id: \d*
+        type: association|quizz
+
+reponse-ouverte-correction:
+    path: admin/reponse-ouverte-correction/{id}
+    defaults:
+        _controller: StockHG3appBundle:Message:reponseOuverteCorrection
+        type: association
+    requirements:
+        id: \d*
+        
+#Ressources
+
+ressource-attribution-initialisation:
+    path: admin/question/attribution-ressource-initialisation/{id}/{type}
+    defaults:  
+        _controller: StockHG3appBundle:Ressources:ressourceAttributionInitialisation
+        type: question 
+    requirements:
+        id: \d*
+        type: question|groupe|reponse|billet
+        
+ressource-attribution-desinitialisation:
+    path: admin/attribution-ressource-desinitialisation/{type}/{matiere}
+    defaults:  
+        _controller: StockHG3appBundle:Ressources:ressourceAttributionDesnitialisation
+        type: I 
+    requirements:
+        type: I|S|V
+        matiere: \d*
+        
+ressource-attribution:
+    path: admin/question/{id}/attribution-ressource
+    defaults:  
+        _controller: StockHG3appBundle:Ressources:ressourceAttribution
+    requirements:
+        id: \d*
+        
+ressource-desattribution:
+    path: admin/question/{idQuestion}/{type}/desattribution-ressource/{idRessource}
+    defaults:  
+        _controller: StockHG3appBundle:Ressources:ressourceDesattribution
+        type: question 
+    requirements:
+        idQuestion: \d*
+        idRessource: \d*
+        type: question|groupe
+        
+#Listes, calcul(s)
+
+calcul-resultats-admin:
+    path: exercice/resultats/{id}
+    defaults: { _controller: StockHG3appBundle:CalculResultats:calculResultats }
+    requirements:
+        id: \d*
+        
+exercice-liste-admin:
+    path: admin/exercices-liste/{id}
+    defaults: { _controller: StockHG3appBundle:Exercise:exerciceListe }
+    requirements:
+        id: \d*
+    
+question-liste:
+    path: admin/questions-liste/{id}
+    defaults: { _controller: StockHG3appBundle:Exercise:questionListe }
+    requirements:
+        id: \d*
+
+#Gestion
+
+chapitres-liste:
+    path: admin/chapitres-liste
+    defaults: { _controller: StockHG3appBundle:Chapter:chapitresListe }
+    requirements:
+        id: \d*
+    
+tableau-bord-admin:
+    path: admin/tableau-de-bord
+    defaults: { _controller: StockHG3appBundle:Board:tableauDeBordAdmin }
+    
+liste-des-eleves:
+    path: admin/liste-des-eleves
+    defaults: { _controller: StockHG3appBundle:Board:listeDesElevesAdmin }
+    
+liste-des-classes:
+    path: admin/liste-des-classes
+    defaults: { _controller: StockHG3appBundle:Board:listeDesClasses }
+    
+infos-sur-exercices:
+    path: admin/infos-sur-exercices
+    defaults: { _controller: StockHG3appBundle:Board:informationsSurExercices }
+    
+classe-creation:
+    path: admin/classe-creation
+    defaults: { _controller: StockHG3appBundle:Board:classeCreationAdmin }
+
+classe-modification:
+    path: admin/classe-modification/{id}
+    defaults: { _controller: StockHG3appBundle:Board:classeModificationAdmin }
+    requirements:
+        id: \d*
+
+classe-suppression:
+    path: admin/classe/suppression/{id}/{true}
+    defaults: { _controller: StockHG3appBundle:Board:classeSuppressionAdmin }
+    requirements:
+        true: true|false
+        id: \d*
+
+blocage-utilisateur:
+    path: admin/blocage-utilisateur/{id}
+    defaults: { _controller: StockHG3appBundle:User:blocageUtilisateur }
+    requirements:
+        id: \d*
+
+page-eleve:
+    path: admin/eleve/{id}
+    defaults: { _controller: StockHG3appBundle:User:pageEleveAdmin }
+    requirements:
+        id: \d*
+        
+tableau-honneur-actualisation:
+    path: admin/tableau-honneur-actualisation/{niveau}
+    defaults: 
+        _controller: StockHG3appBundle:Board:tableauHonneurActualisation
+        niveau:
+        
+exercices-prioritaires:
+    path: admin/exercices-prioritaires
+    defaults: { _controller: StockHG3appBundle:Board:exercicesPrioritairesAdmin }
+    
+desuggere-exercice:
+    path: admin/desuggere-exercice/{exerciceId}/{niveauId}
+    defaults: { _controller: StockHG3appBundle:Board:dessugereExerciceAdmin }
+    requirements:
+        exerciceId: \d*
+        niveauId: \d*
+
+#Messages
+
+messagerie:
+    path: messagerie/
+    defaults: { _controller: StockHG3appBundle:Message:messagerie }
+
+page-discussion-privee:
+    path: discussion-privee/{id}
+    defaults: { _controller: StockHG3appBundle:Message:pageDiscussionPrivee }
+    requirements:
+        id: \d*
+
+message-redaction:
+    path: message-redaction/{id}
+    defaults:
+        _controller: StockHG3appBundle:Message:messageRedaction
+        id:
+    requirements:
+        id: \d*
+    

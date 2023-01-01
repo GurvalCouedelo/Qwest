@@ -1,0 +1,36 @@
+{% extends "@App/connecteLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }}
+{% endblock %}
+
+{% block StockHG3body %}
+    <h1>Changer son mot de passe</h1>
+
+    <div class="conteneur">
+        <div class="formulaire">
+            {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+            {{ form_errors(form) }}
+
+            {{ form_label(form.motDePasse, "Votre mot de passe actuel:") }}
+            {{ form_widget(form.motDePasse) }}
+            {{ form_row(form.motDePasse) }}
+
+            {{ form_label(form.motDePasseTemp.first, "Votre nouveau mot de passe:") }}
+            {{ form_widget(form.motDePasseTemp.first) }}
+            {{ form_row(form.motDePasseTemp.first) }}
+
+            {{ form_label(form.motDePasseTemp.second, "Confirmez vsotre nouveau mot de passe:") }}
+            {{ form_widget(form.motDePasseTemp.second) }}
+            {{ form_row(form.motDePasseTemp.second) }}
+
+            <div class="submit">
+                {{ form_widget(form.envoyer) }}
+            </div>
+
+            {{ form_rest(form) }}
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

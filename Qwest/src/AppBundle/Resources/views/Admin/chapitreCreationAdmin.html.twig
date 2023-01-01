@@ -1,0 +1,47 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Création d'un chapitre
+{% endblock %}
+
+{% block StockHG3body %}
+    <h1>Création d'un chapitre</h1>
+
+    <div class="conteneur">
+        <div class="formulaire">
+            <div class="edition">
+                {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+                {{ form_errors(form) }}
+
+                {{ form_label(form.nom, "Nom du chapitre:") }}
+                {{ form_widget(form.nom) }}
+                {{ form_row(form.nom) }}
+                
+                <br/>
+                
+                <div class="bloc-champ-edition">
+                    {{ form_label(form.matiere, "Matiere du chapitre:") }}
+                    {{ form_widget(form.matiere) }}
+                    {{ form_row(form.matiere) }}
+                </div>
+                
+                <div class="bloc-champ-edition">
+                    {{ form_label(form.classe, "Classe du chapitre:") }}
+                    {{ form_widget(form.classe) }}
+                    {{ form_row(form.classe) }}
+                </div>
+                
+                <br/>
+
+                <div class="submit">
+                    {{ form_widget(form.envoyer) }}
+                </div>
+
+                {{ form_rest(form) }}
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

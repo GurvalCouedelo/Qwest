@@ -1,0 +1,117 @@
+<?php
+
+namespace StockHG3\appBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * TrainDiscussion
+ *
+ * @ORM\Table()
+ * @ORM\Entity
+ */
+class TrainDiscussion
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @ORM\OneToMany(targetEntity="StockHG3\appBundle\Entity\Message", mappedBy="fil")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $message;
+
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set nom
+     *
+     * @param string $nom
+     * @return TrainDiscussion
+     */
+    public function setNom($nom)
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    /**
+     * Get nom
+     *
+     * @return string 
+     */
+    public function getNom()
+    {
+        return $this->nom;
+    }
+
+    /**
+     * Set message
+     *
+     * @param \StockHG3\appBundle\Entity\Message $message
+     * @return TrainDiscussion
+     */
+    public function setMessage(\StockHG3\appBundle\Entity\Message $message = null)
+    {
+        $this->message = $message;
+
+        return $this;
+    }
+
+    /**
+     * Get message
+     *
+     * @return \StockHG3\appBundle\Entity\Message 
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->message = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add message
+     *
+     * @param \StockHG3\appBundle\Entity\Message $message
+     *
+     * @return TrainDiscussion
+     */
+    public function addMessage(\StockHG3\appBundle\Entity\Message $message)
+    {
+        $this->message[] = $message;
+
+        return $this;
+    }
+
+    /**
+     * Remove message
+     *
+     * @param \StockHG3\appBundle\Entity\Message $message
+     */
+    public function removeMessage(\StockHG3\appBundle\Entity\Message $message)
+    {
+        $this->message->removeElement($message);
+    }
+}

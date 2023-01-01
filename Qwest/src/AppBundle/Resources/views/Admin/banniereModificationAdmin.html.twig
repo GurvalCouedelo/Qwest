@@ -1,0 +1,29 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Modification d'une bannière
+{% endblock %}
+
+{% block StockHG3body %}
+    <h1>Modification d'un billet</h1>
+    <div class="conteneur">
+        <div class="formulaire">
+            {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+            {{ form_errors(form) }}
+            
+            
+            {{ form_label(form.file, "Bannière:") }}
+            {{ form_widget(form.file) }}
+            {{ form_row(form.file) }}
+
+            <div class="submit">
+                {{ form_widget(form.envoyer) }}
+            </div>
+
+            {{ form_rest(form) }}
+
+            {{ form_end(form) }}
+        </div>
+        <a class="bouton-lien neutre classique-neutre" href="{{ path("billet-modification", {"id": note.id}) }}">Retourner au billet</a>
+    </div>
+{% endblock %}

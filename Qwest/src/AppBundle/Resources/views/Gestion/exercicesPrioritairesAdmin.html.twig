@@ -1,0 +1,56 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Exercices prioritaires
+{% endblock %}
+
+{% block StockHG3body %}
+    <h1>Exercices prioritaires</h1>
+
+    <div class="conteneur">
+        {% for message in app.session.flashbag.get('message') %}
+            <p class="erreur-marge-0">{{ message | raw }}</p>
+        {% endfor %}
+        
+        <div class="bloc">
+            <div class="formulaire">
+                <div class="edition">
+                    {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+                    {{ form_errors(form) }}
+
+                    <div class="bloc-champ-edition">
+                        {{ form_label(form.exercice, "Sélectionnez l'exercice:") }}
+                        {{ form_widget(form.exercice) }}
+                        {{ form_row(form.exercice) }}
+                    </div>
+
+                    <div class="bloc-champ-edition">
+                        {{ form_label(form.niveau, "Sélectionnez le niveau pour lequel l'exercice doit être prioritaire:") }}
+                        {{ form_widget(form.niveau) }}
+                        {{ form_row(form.niveau) }}
+                    </div>
+
+                    <div class="submit">
+                        {{ form_widget(form.envoyer) }}
+                    </div>
+
+                    {{ form_rest(form) }}
+
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+        
+        {% if classesPourExercicesPrioritaires is not empty %}
+                {% for classe in classesPourExercicesPrioritaires %}
+                    <h3 class="important">{{ classe.nom }}</h3>
+                    <ul>
+                        {% for exercice in classe.exercices %}
+                            <li><p>{{ exercice.titre }}<a href="{{ path("desuggere-exercice", {"exerciceId": exercice.id, "niveauId": classe.id }) }}"><span style="color: red;">✘</span></a></p></li>
+                        {% endfor %}
+                    </ul>
+                    <br/>
+                {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}

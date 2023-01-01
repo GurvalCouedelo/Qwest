@@ -1,0 +1,31 @@
+{% extends layout %}
+
+{% block title %}
+    {{ parent() }} - {{ exercice.titre }}
+{% endblock %}
+
+{% block StockHG3body %}
+    <h1>{{ exercice.titre }}</h1>
+    <div class="conteneur">
+        <legend>Question: {{ session.page }} / {{ session.pageNombre }}, {{ question.type.nom }}</legend>
+        
+        <div class="formulaire">
+            <br/>
+            {{ question.groupe.description | raw }}<br/>
+            
+            {% if ressources is not null %}
+                {{ ressources | raw }}
+            {% endif %}
+            
+            {% block Exercice %}
+
+            {% endblock %}
+            
+            {% if question.groupe.aide is not empty %}
+                <a id="bouton-aide">+ Aide</a>
+                <div id="aide" style="display: none;">{{ question.groupe.aide }}<br/> <span class="clique-disparait">Cliquez pour faire disparaitre</span></div>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

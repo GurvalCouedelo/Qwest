@@ -1,0 +1,314 @@
+<?php
+
+namespace StockHG3\appBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * Note
+ *
+ * @ORM\Table()
+ * @ORM\Entity
+ */
+class Note
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="titre", type="string", length=225)
+     * @Assert\Length(max=255)
+     */
+    private $titre;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="contenu", type="string", length=15000)
+     * @Assert\Length(max=15000)
+     */
+    private $contenu;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateCreation", type="datetime")
+     */
+    private $dateCreation;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateModification", type="datetime")
+     */
+    private $dateModification;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="StockHG3\appBundle\Entity\Image", cascade={"persist", "remove"})
+     * @Assert\Valid
+     */
+    private $image;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="StockHG3\appBundle\Entity\Means")
+     * @ORM\JoinColumn(nullable=true)
+     * @Assert\Valid
+     */
+    private $ressource;
+    
+    /**
+     *@ORM\ManyToOne(targetEntity="StockHG3\appBundle\Entity\TypeNote", inversedBy="note")
+     * @Assert\Valid
+     */
+    private $typeNote;
+    
+    /**
+    * @ORM\OneToOne(targetEntity="StockHG3\appBundle\Entity\Exercise", mappedBy="intro")
+    * @Assert\Valid
+    */
+    private $exercice;
+
+    
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set contenu
+     *
+     * @param string $contenu
+     * @return Note
+     */
+    public function setContenu($contenu)
+    {
+        $this->contenu = $contenu;
+
+        return $this;
+    }
+
+    /**
+     * Get contenu
+     *
+     * @return string 
+     */
+    public function getContenu()
+    {
+        return $this->contenu;
+    }
+    
+    /**
+     * Get contenu
+     *
+     * @return string 
+     */
+    public function getDebutContenu()
+    {
+        return substr($this->contenu, 0, 750) . "...";
+    }
+
+    /**
+     * Set dateCreation
+     *
+     * @param \DateTime $dateCreation
+     * @return Note
+     */
+    public function setDateCreation($dateCreation)
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCreation
+     *
+     * @return \DateTime 
+     */
+    public function getDateCreation()
+    {
+        return $this->dateCreation;
+    }
+
+    /**
+     * Set dateModification
+     *
+     * @param \DateTime $dateModification
+     * @return Note
+     */
+    public function setDateModification($dateModification)
+    {
+        $this->dateModification = $dateModification;
+
+        return $this;
+    }
+
+    /**
+     * Get dateModification
+     *
+     * @return \DateTime 
+     */
+    public function getDateModification()
+    {
+        return $this->dateModification;
+    }
+
+    /**
+     * Set titre
+     *
+     * @param string $titre
+     * @return Note
+     */
+    public function setTitre($titre)
+    {
+        $this->titre = $titre;
+
+        return $this;
+    }
+
+    /**
+     * Get titre
+     *
+     * @return string 
+     */
+    public function getTitre()
+    {
+        return $this->titre;
+    }
+
+    /**
+     * Set image
+     *
+     * @param \StockHG3\appBundle\Entity\Image $image
+     * @return Note
+     */
+    public function setImage(\StockHG3\appBundle\Entity\Image $image = null)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return \StockHG3\appBundle\Entity\Image 
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * Set typeNote
+     *
+     * @param \StockHG3\appBundle\Entity\TypeNote $typeNote
+     * @return Note
+     */
+    public function setTypeNote(\StockHG3\appBundle\Entity\TypeNote $typeNote = null)
+    {
+        $this->typeNote = $typeNote;
+
+        return $this;
+    }
+
+    /**
+     * Get typeNote
+     *
+     * @return \StockHG3\appBundle\Entity\TypeNote 
+     */
+    public function getTypeNote()
+    {
+        return $this->typeNote;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+    }
+
+    /**
+     * Add exercice
+     *
+     * @param \StockHG3\appBundle\Entity\Exercice $exercice
+     * @return Note
+     */
+    public function addExercice(\StockHG3\appBundle\Entity\Exercise $exercice)
+    {
+        $this->exercice[] = $exercice;
+
+        return $this;
+    }
+
+    /**
+     * Remove exercice
+     *
+     * @param \StockHG3\appBundle\Entity\Exercice $exercice
+     */
+    public function removeExercice(\StockHG3\appBundle\Entity\Exercise $exercice)
+    {
+        $this->exercice->removeElement($exercice);
+    }
+
+    /**
+     * Get exercice
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getExercice()
+    {
+        return $this->exercice;
+    }
+
+    /**
+     * Set exercice
+     *
+     * @param \StockHG3\appBundle\Entity\Exercise $exercice
+     * @return Note
+     */
+    public function setExercice(\StockHG3\appBundle\Entity\Exercise $exercice = null)
+    {
+        $this->exercice = $exercice;
+
+        return $this;
+    }
+
+    /**
+     * Set banniere
+     *
+     * @param \StockHG3\appBundle\Entity\Means $banniere
+     *
+     * @return Note
+     */
+    public function setBanniere(\StockHG3\appBundle\Entity\Means $banniere = null)
+    {
+        $this->banniere = $banniere;
+
+        return $this;
+    }
+
+    /**
+     * Get banniere
+     *
+     * @return \StockHG3\appBundle\Entity\Means
+     */
+    public function getBanniere()
+    {
+        return $this->banniere;
+    }
+}

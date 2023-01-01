@@ -1,0 +1,42 @@
+{% extends "layout.html.twig" %}
+
+{% block description %}
+    {{ parent() }}
+{% endblock %}
+{% block title %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <nav id='cssmenu'>
+        <ul>
+            <div class="haut">
+                <li><a class="titre-menu" href='{{ path("accueil") }}'><span class="titre-qwest">Q?west </span><span class="titre-HG">HG</span></a></li>
+                <li class='last'><a href='{{ path("exercice") }}'>Exercices</a></li>
+                <li class='last'><a href='{{ path("a-propos") }}'>A propos</a></li>
+            </div>
+            
+            <div class="bas">
+                <li class='last inscription'><a href='{{ path("inscription") }}'>S'inscrire</a></li>
+                <li class='has-sub connection'><a href='{{ path("connection") }}'>Se connecter</a></li>
+            </div>
+        </ul>
+    </nav>
+
+    <div class="bloc-page taille-conteneur">
+            {% block StockHG3body %}
+            {% endblock %}
+        </div>
+    <footer>
+        <div class="liste">
+            <h6>Qui sommes nous?</h6><br/>
+            <div>
+                <ul><a href="{{ path("a-propos") }}">
+                    <li>Notre histoire,
+                    Nos anciens sites,
+                    Comment a t-on développé ce site?</li>
+                </a></ul>
+            </div>
+        </div>
+    </footer>
+{% endblock %}

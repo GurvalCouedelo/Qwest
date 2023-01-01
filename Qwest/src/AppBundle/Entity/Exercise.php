@@ -1,0 +1,729 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * Exercise
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\ExerciseRepository")
+ */
+class Exercise
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="titre", type="string", length=255)
+     * @Assert\Length(max=255)
+     */
+    private $titre;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateCreation", type="datetime")
+     */
+    private $dateCreation;
+    
+    /**
+    * @ORM\OneToMany(targetEntity="AppBundle\Entity\Question", mappedBy="exercice", cascade={"persist", "remove"})
+    * @Assert\Valid
+    */
+    private $question;
+    
+    /**
+    * @ORM\OneToMany(targetEntity="AppBundle\Entity\Points", mappedBy="exercice", cascade={"remove"})
+    * @Assert\Valid
+    */
+    private $resultats;
+    
+    /**
+    * @ORM\OneToOne(targetEntity="AppBundle\Entity\Note", inversedBy="exercice", cascade={"persist", "remove"})
+    * @Assert\Valid
+    */
+    private $intro;
+    
+    /**
+    * @ORM\OneToMany(targetEntity="AppBundle\Entity\AssociationGroup", mappedBy="exercice", cascade={"remove"})
+    * @Assert\Valid
+    */
+    private $groupe;
+
+    /**
+    * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Difficulty", inversedBy="exercice")
+    * @ORM\JoinColumn(nullable=true)
+    * @Assert\Valid
+    */
+    private $difficulte;
+    
+    /**
+    * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Passerelle", inversedBy="exercice")
+    * @ORM\JoinColumn(nullable=true)
+    * @Assert\Valid
+    */
+    private $passerelle;
+
+    /**
+    * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Chapter", inversedBy="exercice")
+    * @Assert\Valid
+    */
+    private $chapitre;
+    
+    /**
+    * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Classroom", inversedBy="exercices", cascade={"persist"})
+    * @Assert\Valid
+    */
+    private $prioritaire;
+
+    /**
+     * @ORM\Column(name="publie", type="boolean")
+     */
+    private $publie;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="totalScores", type="integer", nullable=true)
+     */
+    private $totalScores;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="moyenneScores", type="integer", nullable=true)
+     */
+    private $moyenneScores;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="medianeScores", type="integer", nullable=true)
+     */
+    private $medianeScores;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="nbScores", type="integer", nullable=true)
+     */
+    private $nbScores;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="scores100", type="integer", nullable=true)
+     */
+    private $scores100;
+    
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="derniereActualisation", type="datetime", nullable=true)
+     */
+    private $derniereActualisation;
+
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+    
+    /**
+     * Set id
+     *
+     * @return integer 
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * Set titre
+     *
+     * @param string $titre
+     * @return Exercise
+     */
+    public function setTitre($titre)
+    {
+        $this->titre = $titre;
+
+        return $this;
+    }
+
+    /**
+     * Get titre
+     *
+     * @return string 
+     */
+    public function getTitre()
+    {
+        return $this->titre;
+    }
+
+    /**
+     * Set dateCreation
+     *
+     * @param \DateTime $dateCreation
+     * @return Exercise
+     */
+    public function setDateCreation($dateCreation)
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCreation
+     *
+     * @return \DateTime 
+     */
+    public function getDateCreation()
+    {
+        return $this->dateCreation;
+    }
+
+    /**
+     * Set question
+     *
+     * @param \AppBundle\Entity\Question $question
+     * @return Exercise
+     */
+    public function setQuestion(\AppBundle\Entity\Question $question = null)
+    {
+        $this->question = $question;
+
+        return $this;
+    }
+
+    /**
+     * Get question
+     *
+     * @return \AppBundle\Entity\Question 
+     */
+    public function getQuestion()
+    {
+        return $this->question;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->question = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add question
+     *
+     * @param \AppBundle\Entity\Question $question
+     * @return Exercise
+     */
+    public function addQuestion(\AppBundle\Entity\Question $question)
+    {
+        $this->question[] = $question;
+
+        return $this;
+    }
+
+    /**
+     * Remove question
+     *
+     * @param \AppBundle\Entity\Question $question
+     */
+    public function removeQuestion(\AppBundle\Entity\Question $question)
+    {
+        $this->question->removeElement($question);
+    }
+
+    /**
+     * Set resultats
+     *
+     * @param \AppBundle\Entity\Points $resultats
+     * @return Exercise
+     */
+    public function setResultats(\AppBundle\Entity\Points $resultats = null)
+    {
+        $this->resultats = $resultats;
+
+        return $this;
+    }
+
+    /**
+     * Get resultats
+     *
+     * @return \AppBundle\Entity\Points 
+     */
+    public function getResultats()
+    {
+        return $this->resultats;
+    }
+
+    /**
+     * Add resultats
+     *
+     * @param \AppBundle\Entity\Points $resultats
+     * @return Exercise
+     */
+    public function addResultat(\AppBundle\Entity\Points $resultats)
+    {
+        $this->resultats[] = $resultats;
+
+        return $this;
+    }
+
+    /**
+     * Remove resultats
+     *
+     * @param \AppBundle\Entity\Points $resultats
+     */
+    public function removeResultat(\AppBundle\Entity\Points $resultats)
+    {
+        $this->resultats->removeElement($resultats);
+    }
+
+    /**
+     * Set intro
+     *
+     * @param \AppBundle\Entity\Note $intro
+     * @return Exercise
+     */
+    public function setIntro(\AppBundle\Entity\Note $intro = null)
+    {
+        $this->intro = $intro;
+
+        return $this;
+    }
+
+    /**
+     * Get intro
+     *
+     * @return \AppBundle\Entity\Note 
+     */
+    public function getIntro()
+    {
+        return $this->intro;
+    }
+
+    /**
+     * Add groupe
+     *
+     * @param \AppBundle\Entity\AssociationGroup $groupe
+     * @return Exercise
+     */
+    public function addGroupe(\AppBundle\Entity\AssociationGroup $groupe)
+    {
+        $this->groupe[] = $groupe;
+
+        return $this;
+    }
+
+    /**
+     * Remove groupe
+     *
+     * @param \AppBundle\Entity\AssociationGroup $groupe
+     */
+    public function removeGroupe(\AppBundle\Entity\AssociationGroup $groupe)
+    {
+        $this->groupe->removeElement($groupe);
+    }
+
+    /**
+     * Get groupe
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGroupe()
+    {
+        return $this->groupe;
+    }
+
+    /**
+     * Set publie
+     *
+     * @param boolean $publie
+     *
+     * @return Exercise
+     */
+    public function setPublie($publie)
+    {
+        $this->publie = $publie;
+
+        return $this;
+    }
+
+    /**
+     * Get publie
+     *
+     * @return boolean
+     */
+    public function getPublie()
+    {
+        return $this->publie;
+    }
+
+    /**
+     * Set difficulte
+     *
+     * @param \AppBundle\Entity\Difficulty $difficulte
+     *
+     * @return Exercise
+     */
+    public function setDifficulte(\AppBundle\Entity\Difficulty $difficulte = null)
+    {
+        $this->difficulte = $difficulte;
+
+        return $this;
+    }
+
+    /**
+     * Get difficulte
+     *
+     * @return \AppBundle\Entity\Difficulty
+     */
+    public function getDifficulte()
+    {
+        return $this->difficulte;
+    }
+
+    /**
+     * Set chapitre
+     *
+     * @param \AppBundle\Entity\Chapter $chapitre
+     *
+     * @return Exercise
+     */
+    public function setChapitre(\AppBundle\Entity\Chapter $chapitre = null)
+    {
+        $this->chapitre = $chapitre;
+
+        return $this;
+    }
+
+    /**
+     * Get chapitre
+     *
+     * @return \AppBundle\Entity\Chapter
+     */
+    public function getChapitre()
+    {
+        return $this->chapitre;
+    }
+
+    /**
+     * Set niveau
+     *
+     * @param \AppBundle\Entity\Classroom $niveau
+     *
+     * @return Exercise
+     */
+    public function setNiveau(\AppBundle\Entity\Classroom $niveau = null)
+    {
+        $this->niveau = $niveau;
+
+        return $this;
+    }
+
+    /**
+     * Get niveau
+     *
+     * @return \AppBundle\Entity\Classroom
+     */
+    public function getNiveau()
+    {
+        return $this->niveau;
+    }
+
+    /**
+     * Set urgent
+     *
+     * @param \AppBundle\Entity\Classroom $urgent
+     *
+     * @return Exercise
+     */
+    public function setUrgent(\AppBundle\Entity\Classroom $urgent = null)
+    {
+        $this->urgent = $urgent;
+
+        return $this;
+    }
+
+    /**
+     * Get urgent
+     *
+     * @return \AppBundle\Entity\Classroom
+     */
+    public function getUrgent()
+    {
+        return $this->urgent;
+    }
+
+    /**
+     * Add urgent
+     *
+     * @param \AppBundle\Entity\Classroom $urgent
+     *
+     * @return Exercise
+     */
+    public function addUrgent(\AppBundle\Entity\Classroom $urgent)
+    {
+        $this->urgent[] = $urgent;
+
+        return $this;
+    }
+
+    /**
+     * Remove urgent
+     *
+     * @param \AppBundle\Entity\Classroom $urgent
+     */
+    public function removeUrgent(\AppBundle\Entity\Classroom $urgent)
+    {
+        $this->urgent->removeElement($urgent);
+    }
+
+    /**
+     * Add prioritaire
+     *
+     * @param \AppBundle\Entity\Classroom $prioritaire
+     *
+     * @return Exercise
+     */
+    public function addPrioritaire(\AppBundle\Entity\Classroom $prioritaire)
+    {
+        $this->prioritaire[] = $prioritaire;
+
+        return $this;
+    }
+
+    /**
+     * Remove prioritaire
+     *
+     * @param \AppBundle\Entity\Classroom $prioritaire
+     */
+    public function removePrioritaire(\AppBundle\Entity\Classroom $prioritaire)
+    {
+        $this->prioritaire->removeElement($prioritaire);
+    }
+
+    /**
+     * Get prioritaire
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPrioritaire()
+    {
+        return $this->prioritaire;
+    }
+
+    /**
+     * Set totalScores
+     *
+     * @param integer $totalScores
+     *
+     * @return Exercise
+     */
+    public function setTotalScores($totalScores)
+    {
+        $this->totalScores = $totalScores;
+
+        return $this;
+    }
+
+    /**
+     * Get totalScores
+     *
+     * @return integer
+     */
+    public function getTotalScores()
+    {
+        return $this->totalScores;
+    }
+
+    /**
+     * Set moyenneScores
+     *
+     * @param integer $moyenneScores
+     *
+     * @return Exercise
+     */
+    public function setMoyenneScores($moyenneScores)
+    {
+        $this->moyenneScores = $moyenneScores;
+
+        return $this;
+    }
+
+    /**
+     * Get moyenneScores
+     *
+     * @return integer
+     */
+    public function getMoyenneScores()
+    {
+        return $this->moyenneScores;
+    }
+
+    /**
+     * Set medianeScores
+     *
+     * @param integer $medianeScores
+     *
+     * @return Exercise
+     */
+    public function setMedianeScores($medianeScores)
+    {
+        $this->medianeScores = $medianeScores;
+
+        return $this;
+    }
+
+    /**
+     * Get medianeScores
+     *
+     * @return integer
+     */
+    public function getMedianeScores()
+    {
+        return $this->medianeScores;
+    }
+
+    /**
+     * Set scores100
+     *
+     * @param integer $scores100
+     *
+     * @return Exercise
+     */
+    public function setScores100($scores100)
+    {
+        $this->scores100 = $scores100;
+
+        return $this;
+    }
+
+    /**
+     * Get scores100
+     *
+     * @return integer
+     */
+    public function getScores100()
+    {
+        return $this->scores100;
+    }
+
+    /**
+     * Set derniereActualisation
+     *
+     * @param \DateTime $derniereActualisation
+     *
+     * @return Exercise
+     */
+    public function setDerniereActualisation($derniereActualisation)
+    {
+        $this->derniereActualisation = $derniereActualisation;
+
+        return $this;
+    }
+
+    /**
+     * Get derniereActualisation
+     *
+     * @return \DateTime
+     */
+    public function getDerniereActualisation()
+    {
+        return $this->derniereActualisation;
+    }
+
+    /**
+     * Set scores
+     *
+     * @param integer $scores
+     *
+     * @return Exercise
+     */
+    public function setScores($scores)
+    {
+        $this->scores = $scores;
+
+        return $this;
+    }
+
+    /**
+     * Get scores
+     *
+     * @return integer
+     */
+    public function getScores()
+    {
+        return $this->scores;
+    }
+
+    /**
+     * Set nbScores
+     *
+     * @param integer $nbScores
+     *
+     * @return Exercise
+     */
+    public function setNbScores($nbScores)
+    {
+        $this->nbScores = $nbScores;
+
+        return $this;
+    }
+
+    /**
+     * Get nbScores
+     *
+     * @return integer
+     */
+    public function getNbScores()
+    {
+        return $this->nbScores;
+    }
+
+    /**
+     * Set passerelle
+     *
+     * @param \AppBundle\Entity\Passerelle $passerelle
+     *
+     * @return Exercise
+     */
+    public function setPasserelle(\AppBundle\Entity\Passerelle $passerelle = null)
+    {
+        $this->passerelle = $passerelle;
+
+        return $this;
+    }
+
+    /**
+     * Get passerelle
+     *
+     * @return \AppBundle\Entity\Passerelle
+     */
+    public function getPasserelle()
+    {
+        return $this->passerelle;
+    }
+}

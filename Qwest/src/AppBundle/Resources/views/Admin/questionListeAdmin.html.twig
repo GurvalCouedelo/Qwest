@@ -1,0 +1,610 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Liste des questions de: {{ exercice.titre }}
+{% endblock %}
+
+{% block StockHG3body %}
+    {% set nbBonneReponses = 0 %}
+    {% set nbRessources = 0 %}
+
+    {% set assoc = false %}
+    {% set vOf = false %}
+    {% set tableauGroupes = [] %}
+
+    {% set groupeSortie = 0 %}
+    {% set numeroQuestion = 1 %}
+    <h1>{{ exercice.titre }}</h1>
+
+    <div class="conteneur">
+        {% for message in app.session.flashbag.get('erreur') %}
+            <p class="erreur-marge-0">{{ message }}</p>
+        {% endfor %}
+        {% if questions is not empty %}
+            <a class="editable" href="{{ path("exercice-modification", {"id": id }) }}">
+                Chapitre de l'exercice: {{ exercice.chapitre.nom }}, {{ exercice.chapitre.matiere.nom }}, {{ exercice.chapitre.classe.nom }}<br/>
+                Difficulté de l'exercice: {{ exercice.difficulte.nom }}<br/>
+            </a>
+        
+            <div class="div-adapt">
+                {% if exercice.intro is not empty %}
+                    <a class="bouton-lien-45 neutre classique-neutre" href=" {{ path("billet-modification", {"id": exercice.intro.id }) }} ">Modifier l'intro</a>
+                {% else %}
+                    <a class="bouton-lien-45 neutre classique-neutre" href=" {{ path("billet-creation", {"id": exercice.id, "type": "exercice" }) }} ">Créer l'intro</a>
+                {% endif %}
+                <a class="bouton-lien-45 neutre-rempli classique-neutre" href="{{ path("exercice-inscrits", {"id": id }) }}">Tester l'exercice</a>
+            </div>
+        
+            {% if exercice.publie is same as(true) %}
+                <a class="bouton-lien masq classique-masq" href=" {{ path("exercice-publier", {"id": exercice.id }) }} ">Masquer l'exercice</a>
+            {% else %}
+                <a class="bouton-lien crea classique-crea" href=" {{ path("exercice-publier", {"id": exercice.id }) }} ">Publier l'exercice</a>
+            {% endif %}
+
+            <a class="lien-crea" href=" {{ path("question-creation", {"id": exercice.id }) }} ">Créer une nouvelle question</a>
+            <a class="lien-crea" href=" {{ path("passerelle", {"page": "question/creer/" ~ exercice.id }) }} ">Créer une question des nouveaux types</a>
+            
+            <ul>
+                {% for question in questions %}
+                
+<!--                    Boutons de suppression des questions groupées-->
+                
+                    {% if groupe is defined %}
+                        {% if question.type.nom is not same as("Association") and assoc is same as(true) or question.type.nom is same as("Association") and question.groupe.id is not same as(groupe) and assoc is same as(true) %}
+                                <div class="div-adapt">
+                                    <a class="bouton-lien-adapt suppr classique-suppr" href=" {{ path("groupe-suppression", {"id": groupeSortie, "true": "false" }) }} ">Supprimer la question</a>
+                                    <a class="bouton-lien-adapt crea classique-crea" href=" {{ path("sous-question-creation", {"id": exercice.id, "groupe": groupeSortie }) }} ">Créer une association</a>
+                                    <a class="bouton-lien-adapt crea classique-crea" href=" {{ path("ressource-attribution-initialisation", {"id": groupe, "type": "groupe" }) }} ">Attribuer une ressource à la question</a>
+                                </div>
+                                </li>
+                            {% set assoc = false %}  
+                            {% set numeroQuestion = numeroQuestion + 1 %}
+                        {% elseif question.type.nom is not same as("Vrai ou faux") and vOf is same as(true) or question.type.nom is same as("Vrai ou faux") and question.groupe.id is not same as(groupe) and vOf is same as(true) %}
+                                <div class="div-adapt">
+                                    <a class="bouton-lien-adapt suppr classique-suppr" href=" {{ path("groupe-suppression", {"id": groupeSortie, "true": "false" }) }} ">Supprimer la question</a>
+                                    <a class="bouton-lien-adapt crea classique-crea" href=" {{ path("sous-question-creation", {"id": exercice.id, "groupe": groupeSortie, "typeQuest": "Vrai ou faux" }) }} ">Créer une proposition</a>
+                                    <a class="bouton-lien-adapt crea classique-crea" href=" {{ path("ressource-attribution-initialisation", {"id": groupe, "type": "groupe" }) }} ">Attribuer une ressource</a>
+                                </div>
+                                </li>
+                            {% set vOf = false %}  
+                            {% set numeroQuestion = numeroQuestion + 1 %}
+                        {% endif %}
+                        
+                    {% endif %}
+
+<!--                    Début des questions-->
+
+                    {% if question.type.nom is same as("Question à trou") or question.type.nom is same as("Quizz") %}
+                        <li class="question">
+                    {% endif %}
+                                
+                
+                    {% if question.type.nom is same as("Association") and assoc is same as(false) or question.type.nom is same as("Vrai ou faux") and vOf is same as(false) or question.type.nom is same as("Nouvelles associations") or question.type.nom is same as("Nouveau vrai ou faux") %}
+                        <li class="question">   
+                            {% if question.type.nom is same as("Associations") or question.type.nom is same as("Vrai ou faux") %}
+                                <p>Question {{ numeroQuestion }}, {{ question.type.nom }}, {{ question.groupe.points }} pts</p>
+                                <p><a href="{{ path("groupe-modification", {"id": question.groupe.id }) }}" class="editable">
+                                        Consigne générale: {{ question.groupe.description | striptags  | raw }}</a>
+                                </a></p>
+                            {% elseif question.type.nom is same as("Nouvelles associations") or question.type.nom is same as("Nouveau vrai ou faux") %}
+                                <p>Question {{ numeroQuestion }}, {{ question.type.nom }}, {{ question.points }} pts</p>
+                                <p><a href="{{ path("question-modification", {"id": question.id }) }}" class="editable">
+                                        Consigne générale: {{ question.corps | striptags  | raw }}</a>
+                                </a></p>
+                            {% endif %}
+                            
+                            {% if question.type.nom is same as("Associations") or question.type.nom is same as("Vrai ou faux") %}
+                                {% for ressourceBoucle in question.groupe.ressources %}
+                                    {% set nbRessources = nbRessources + 1 %}
+                                {% endfor %}
+                            {% elseif question.type.nom is same as("Nouvelles associations") or question.type.nom is same as("Nouveau vrai ou faux") %}
+                                {% for ressourceBoucle in question.ressources %}
+                                    {% set nbRessources = nbRessources + 1 %}
+                                {% endfor %}
+                            {% endif %}
+                
+                            {% if nbRessources is same as(0) %}
+                                <p>Il n'y a aucune ressource</p>
+                            {% elseif nbRessources is same as(1) %}
+                                <p>Ressource:</p>
+                            {% else %}
+                                <p>Ressources:</p>
+                            {% endif %}
+
+                            
+                            {% for ressource in question.ressources %}
+                                {% if ressource is not null %}
+                                    {{ loop.index }}.
+                                    <a href="{{ path("ressource-modification", {"id": ressource.id, "provenance": question.id }) }}" class="editable">
+                                        {{ ressource.alt | raw }}
+                                    </a><a  href="{{ path("ressource-desattribution", {"idQuestion": question.id, "type": "question", "idRessource": ressource.id }) }}">
+                                    <span style="color: red;">✘</span></a><br/>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% set nbRessources = 0 %}
+                            
+                            <div class="conteneur-question-entiere">
+                                <div class="conteneur-question">
+                                    {% if question.type.nom is same as("Association") or question.type.nom is same as("Nouvelles associations") %}
+                                        <p>Première proposition:</p>
+                                    {% elseif question.type.nom is same as("Vrai ou faux") %}
+                                        <p>Proposition:</p>
+                                    {% elseif question.type.nom is same as("Nouveau vrai ou faux") %}
+                                        <p>Vrai ou faux:</p>
+                                    {% endif %}
+                                </div>
+                                <div class="conteneur-reponse">
+                                    {% if question.type.nom is same as("Association") or question.type.nom is same as("Nouvelles associations") %}
+                                        <p>Associée avec cette seconde proposition:</p>
+                                    {% elseif question.type.nom is same as("Vrai ou faux") %}
+                                        <p>Vrai ou faux:</p>
+                                    {% elseif question.type.nom is same as("Nouveau vrai ou faux") %}
+                                        <p>Réponse:</p>
+                                    {% endif %}
+                                    
+                                </div>
+                                <div class="conteneur-ressources">
+                                    {% if question.type.nom is same as("Association") %}
+                                        <p>Type de la première proposition:</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% if question.type.nom is same as("Association") %}
+                                {% set assoc = true %} 
+                                {% set groupe = question.groupe.id %} {% set groupeSortie = question.groupe.id %}
+                            {% elseif question.type.nom is same as("Vrai ou faux") %}
+                                {% set vOf = true %}
+                                {% set groupe = question.groupe.id %} {% set groupeSortie = question.groupe.id %}
+                            {% endif %}
+                            
+                        
+                        {% endif %}
+                            
+                                
+<!--                        Deuxième partie des questions -->
+
+
+                        {% if question.type.nom is same as("Question à trou") or question.type.nom is same as("Quizz") or question.type.nom is same as("Associations") or question.type.nom is same as("Vrai ou faux") %}
+                            <div class="conteneur-question-entiere" id="{{ question.numeroOrdre }}">
+                                <div class="conteneur-question">
+                                    {% if question.type.nom is same as("Question à trou") or question.type.nom is same as("Quizz") %}
+                                        <p>Question {{ numeroQuestion }}, {{ question.type.nom  }}, {% if question.points is  null %}0{% else %}{{ question.points }}{% endif %} pts</p>
+                                        <a href="{{ path("question-modification", {"id": question.id }) }}" class="editable">{{ question.corps | raw  }}</a>
+                                    {% elseif question.type.nom is same as("Association") %}
+                                        <a href="{{ path("sous-question-modification", {"id": question.id }) }}" class="editable">{{ question.corps | raw }}</a>
+                                    {% elseif question.type.nom is same as("Vrai ou faux") %}
+                                        <a href="{{ path("sous-question-modification", {"id": question.id }) }}" class="editable">{{ question.corps | raw }}</a>
+                                    {% elseif question.type.nom is same as("Nouvelles associations") %}
+                                        {% for sousQuestion in question.subQuestion %}
+                                            <a href="{{ path("passerelle", {"page": "question/association/" ~ question.id ~ "/" ~ sousQuestion.id ~ "/" }) }}" class="editable">{{ sousQuestion.corps | raw }}</a>
+                                        {% endfor %}
+                                    {% elseif question.type.nom is same as("Nouveau vrai ou faux") %}
+                                        {% for sousQuestion in question.subQuestion %}
+                                            <a href="{{ path("passerelle", {"page": "question/vraiOuFaux/" ~ question.id ~ "/" ~ sousQuestion.id ~ "/" }) }}" class="editable">{{ sousQuestion.corps | raw }}</a>
+                                        {% endfor %}
+                                    {% endif %}
+                                    
+                                </div><br/>
+                                <div class="conteneur-reponse">
+                                    {% if question.type.nom is not same as("Nouvelles associations") and question.type.nom is not same as("Nouveau vrai ou faux") %}
+                                        {% for reponse in question.bonneReponses %}
+                                            {% set nbBonneReponses = nbBonneReponses + 1 %}
+                                        {% endfor %}
+                                    {% else %}
+                                        {% set nbBonneReponses = 1 %}
+                                    {% endif %}
+
+                                    {% if nbBonneReponses is same as(0) %}
+                                        {% if question.type.nom is same as("Question à trou") %}
+                                            <p>Il n'y a aucune réponse.</p>
+                                        {% elseif question.type.nom is same as("Quizz") %}
+                                            <p>Il n'y a aucune proposition.</p>
+                                        {% elseif question.type.nom is same as("Nouvelles associations") %}
+                                            <p>Il n'y a aucune association.</p>
+                                        {% elseif question.type.nom is same as("Nouveau vrai ou faux") %}
+                                            <p>Il n'y a aucun vrai ou faux.</p>
+                                        {% endif %}
+                                    {% elseif nbBonneReponses is same as(1) %}
+                                        {% if question.type.nom is same as("Question à trou") %}
+                                            <p>Bonne réponse:</p>
+                                        {% elseif question.type.nom is same as("Quizz") %}
+                                            <p>Proposition:</p>
+                                        {% endif %}
+                                    
+                                        {% if question.type.nom is not same as("Nouvelles associations") and question.type.nom is not same as("Nouveau vrai ou faux") %}
+                                            {% for reponse in question.bonneReponses %}
+                                                {% if reponse.question.type.nom is same as("Question à trou") %}
+                                                    <a href="{{ path("reponse-modification", {"id": reponse.id }) }}" class="editable">
+                                                        <strong>{{ reponse.corps | raw }}</strong></a><br/>
+                                                {% elseif reponse.question.type.nom is same as("Quizz") %}
+                                                    {% if reponse.ressource is empty %}
+                                                        <a href="{{ path("reponse-modification", {"id": reponse.id }) }}" class="editable">
+                                                        <strong>{{ reponse.corps | striptags("<em>") | raw }}</strong></a><br/>
+                                                        {% if reponse.verite is same as(true) %}
+                                                            <span style="color: green;">✔</span>
+                                                        {% else %}
+                                                            <span style="color: red;">✘</span>
+                                                        {% endif %}
+                                                    {% else %}
+                                                            <a href="{{ path("reponse-modification", {"id": reponse.id }) }}" class="editable">
+                                                                <strong>{{ reponse.ressource.alt | raw }}</strong></a><br/>
+                                                                {% if reponse.verite is same as(true) %}
+                                                                    <span style="color: green;">✔</span>
+                                                                {% else %}
+                                                                    <span style="color: red;">✘</span>
+                                                                {% endif %}
+                                                    {% endif %}
+                                                {% elseif reponse.question.type.nom is same as("Association")%}
+                                                        {% if reponse.question.ressources is empty %}
+                                                            <a href="{{ path("sous-question-modification", {"id": reponse.question.id }) }}" class="editable">
+                                                                <strong>{{ reponse.corps | raw  | striptags("<em>") }}</strong></a><br/>
+                                                        {% else %}
+                                                            {% for ressourceBoucle in reponse.question.ressources %}
+                                                                <a href="{{ path("ressource-modification", {"id": ressourceBoucle.id, "provenance": reponse.question.id }) }}" class="editable">
+                                                                    <strong>{{ ressourceBoucle.alt  | striptags("<em>") | raw }}</strong></a><br/>
+                                                            {% endfor %}
+                                                        {% endif %}
+
+                                                {% elseif question.type.nom is same as("Vrai ou faux") %}
+                                                    {#<a href="{{ path("sous-question-modification", {"id": reponse.question.id }) }}" class="editable">#}
+                                                        {% if reponse.verite is same as(true) %}
+                                                            <span style="color: green;">✔</span>
+                                                        {% else %}
+                                                            <span style="color: red;">✘</span>
+                                                        {% endif %}
+                                                {% endif %}
+
+                                                {% if reponse.nbPoint is same as(0) %}
+                                                    Aucun point rapporté.
+                                                {% elseif reponse.nbPoint is same as(1) %}
+                                                    Un point rapporté.
+                                                {% else %}
+                                                    {{ reponse.nbPoint }} points rapportés.
+                                                {% endif %}
+
+                                                {% if reponse.question.type.nom is same as("Quizz") and reponse.ressource is empty %}
+                                                    <a href="{{ path("ressource-attribution-initialisation", {"id": reponse.id, "type": "reponse" }) }}" class="editable annexe"> | Texte</a>
+                                                {% elseif reponse.question.type.nom is same as("Quizz") and reponse.ressource is not empty %}
+                                                    <a href="{{ path("proposition-transformation", {"id": reponse.id, "type": "quizz" }) }}" class="editable annexe"> | Ressource</a>
+                                                {% endif %}
+                                                <br/>
+                                            {% endfor %}
+                                        {% else %}
+                                            {% for sousQuestion in question.subQuestion %}
+                                                {% for bonneReponse in sousQuestion.bonneReponse %}
+                                                    {% if question.type.nom is same as("Nouvelles associations") %}
+                                                        <a href="{{ path("passerelle", {"page": "question/association/" ~ question.id ~ "/" ~ sousQuestion.id ~ "/" }) }}" class="editable">
+                                                            <strong>{{ bonneReponse.corps | raw }}</strong>
+                                                        </a><br/>
+                                                    {% elseif question.type.nom is same as("Nouveau vrai ou faux") %}
+                                                        <a href="{{ path("passerelle", {"page": "question/vraiOuFaux/" ~ question.id ~ "/" ~ sousQuestion.id ~ "/" }) }}" class="editable">
+                                                        {% if bonneReponse.verite is same as(true) %}
+                                                            <span style="color: green;">✔</span> Vrai
+                                                        {% else %}
+                                                            <span style="color: red;">✘</span> Faux
+                                                        {% endif %}
+                                                        </a><br/>            
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% else %}
+                                        {% if question.type.nom is same as("Question à trou") %}
+                                            <p>Bonnes réponses:</p>
+                                        {% elseif question.type.nom is same as("Quizz") %}
+                                            <p>Propositions:</p>
+                                        {% elseif question.type.nom is same as("Nouvelles associations") %}
+                                            <p>Associations:</p>
+                                        {% elseif question.type.nom is same as("Nouveau vrai ou faux") %}
+                                            <p>Vrai ou faux:</p>
+                                        {% endif %}
+
+                                        {% for reponse in question.bonneReponses %}
+                                            {% if reponse.question.type.nom is same as("Question à trou") %}
+                                                <a href="{{ path("reponse-modification", {"id": reponse.id }) }}" class="editable">
+                                                    <strong>{{ reponse.corps | raw }}</strong></a><br/>
+                                            {% elseif reponse.question.type.nom is same as("Quizz") %}
+                                                {% if reponse.ressource is empty %}
+                                                    <a href="{{ path("reponse-modification", {"id": reponse.id }) }}" class="editable">
+                                                        <strong>{{ reponse.corps  | striptags("<em>") | raw  }}</strong></a><br/>
+                                                        {% if reponse.verite is same as(true) %}
+                                                            <span style="color: green;">✔</span>
+                                                        {% else %}
+                                                            <span style="color: red;">✘</span>
+                                                        {% endif %}
+                                                {% else %}
+                                                    <a href="{{ path("reponse-modification", {"id": reponse.id }) }}" class="editable">
+                                                        <strong>{{ reponse.ressource.alt | raw }}</strong></a><br/>
+                                                        {% if reponse.verite is same as(true) %}
+                                                            <span style="color: green;">✔</span>
+                                                        {% else %}
+                                                                <span style="color: red;">✘</span>
+                                                        {% endif %}
+                                                {% endif %}
+                                            {% endif %}
+
+                                            {% if reponse.nbPoint is same as(0) %}
+                                                Aucun point rapporté.
+                                            {% elseif reponse.nbPoint is same as(1) %}
+                                                    Un point rapporté.
+                                            {% else %}
+                                                {{ reponse.nbPoint }} points rapportés.
+                                            {% endif %}
+
+                                            {% if reponse.question.type.nom is same as("Quizz") and reponse.ressource is empty %}
+                                                <a href="{{ path("ressource-attribution-initialisation", {"id": reponse.id, "type": "reponse" }) }}" class="editable annexe"> | Texte</a>
+                                            {% elseif reponse.question.type.nom is same as("Quizz") and reponse.ressource is not empty %}
+                                                <a href="{{ path("proposition-transformation", {"id": reponse.id, "type": "quizz" }) }}" class="editable annexe"> | Ressource</a>
+                                            {% endif %}
+                                            <br/>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="conteneur-ressources">
+                                    {% if question.type.nom is same as("Question à trou") or question.type.nom is same as("Quizz") %}
+                                        {% for ressource in question.ressources %}
+                                            {% set nbRessources = loop.index %}
+                                        {% endfor %}
+
+                                        {% if nbRessources is same as(0) %}
+                                            <p>Il n'y a aucune ressource</p>
+                                            {% set nbRessources = 0 %}
+                                        {% elseif nbRessources is same as(1) %}
+                                            <p>Ressource:</p>
+                                        {% else %}
+                                            <p>Ressources:<br/></p>
+                                        {% endif %}
+                                        
+                                        {% for ressource in question.ressources %}
+                                                <br/>{{ loop.index }}.<a href="{{ path("ressource-modification", {"id": ressource.id, "provenance": question.id }) }}" class="editable">{{ ressource.alt | raw }}</a><a  href="{{ path("ressource-desattribution", {"idQuestion": question.id, "type": "question", "idRessource": ressource.id }) }}"><span style="color: red;">✘</span></a>
+
+                                    <br/>
+                                        {% endfor %}
+                                        {% set nbRessources = 0 %}
+                                    {% elseif question.type.nom is same as("Association") %}
+                                        {% for ressource in question.ressources %}
+                                            <a href="{{ path("proposition-transformation", {"id": question.id, "type": "association" }) }}" class="editable"><p>Ressource</p></a>
+                                        {% else %}
+                                            <a href="{{ path("ressource-attribution-initialisation", {"id": question.id, "type": "question" }) }}" class="editable"><p>Texte</p></a>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            {% elseif question.type.nom is same as("Nouvelles associations") or question.type.nom is same as("Nouveau vrai ou faux") %}
+                                    {% for sousQuestion in question.subQuestion %}
+                                        <div class="conteneur-question-entiere" id="{{ question.numeroOrdre }}">
+                                            <div class="conteneur-question">
+                                                <a href="{{ path("passerelle", {"page": "question/association/" ~ question.id ~ "/" ~ sousQuestion.id ~ "/" }) }}" class="editable">{{ sousQuestion.corps | raw }}</a>
+                                            </div>
+                                            <div class="conteneur-reponse">
+                                                {% for bonneReponse in sousQuestion.bonneReponse %}
+                                                    {% if question.type.nom is same as("Nouvelles associations") %}
+                                                        <a href="{{ path("passerelle", {"page": "question/association/" ~ question.id ~ "/" ~ sousQuestion.id ~ "/" }) }}" class="editable">
+                                                            <strong>{{ bonneReponse.corps | raw }}</strong>
+                                                        </a><br/>
+                                                    {% elseif question.type.nom is same as("Nouveau vrai ou faux") %}
+                                                        <a href="{{ path("passerelle", {"page": "question/vraiOuFaux/" ~ question.id ~ "/" ~ sousQuestion.id ~ "/" }) }}" class="editable">
+                                                        {% if bonneReponse.verite is same as(true) %}
+                                                            <span style="color: green;">✔</span> Vrai
+                                                        {% else %}
+                                                            <span style="color: red;">✘</span> Faux
+                                                        {% endif %}
+                                                        </a><br/>            
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        </div> 
+                                    {% endfor %}
+                                
+                                        
+                            {% elseif question.type.nom is same as("Texte à trou") and question.groupe.id not in tableauGroupes %}
+                                    <li class="question" id="{{ question.numeroOrdre }}">
+                                        <p>Question {{ numeroQuestion }}, {{ question.type.nom }}</p>
+                                        <p><a href=" {{ path("groupe-modification", {"id": question.groupe.id }) }} " class="editable">
+                                            Consigne générale: {{ question.groupe.description  | striptags  | raw }}
+                                        </a></p>
+                                        
+                                        {% if question.points is empty or question.points is same as(0) %}
+                                            La question en elle même ne rapporte pas de point.
+                                        {% elseif question.points is same as(1) %}
+                                            La question rapporte un point.
+                                        {% else %}
+                                            La question rapporte {{ question.points }} points.
+                                        {% endif %}
+
+                                        {% for ressource in question.groupe.ressources %}
+                                            {% set nbRessources = loop.index %}
+                                        {% endfor %}
+                                        
+                                        {% if nbRessources is same as(0) %}
+                                            <p>Il n'y a aucune ressource</p>
+                                        {% elseif nbRessources is same as(1) %}
+                                            <p>Ressource:</p>
+                                            {% for ressource in question.groupe.ressources %}
+                                                {{ loop.index }}.<a href="{{ path("ressource-modification", {"id": ressource.id, "provenance": question.id }) }}" class="editable">{{ ressource.alt | raw }}<br/></a>
+                                            {% endfor %}
+                                        {% else %}
+                                            <p>Ressource:</p>
+                                            {% for ressource in question.groupe.ressources %}
+                                                {{ loop.index }}.<a href="{{ path("ressource-modification", {"id": ressource.id, "provenance": question.id }) }}" class="editable">{{ ressource.alt | raw }}<br/></a>
+                                            {% endfor %}
+                                        {% endif %}
+                                        <br/>
+                                        <p>{{ question.groupe.texteATrou | striptags | raw }}</p>
+
+                                        <div class="div-adapt">
+                                            <a class="bouton-lien-adapt suppr classique-suppr" href=" {{ path("groupe-suppression", {"id": question.groupe.id, "true": "false" }) }} ">Supprimer la question</a>
+                                            <a class="bouton-lien-adapt crea classique-crea" href="{{ path("texte-a-trou-modification", {"id": question.groupe.id }) }}">Modifier le texte</a>
+                                            <a class="bouton-lien-adapt crea classique-crea" href="{{ path("ressource-attribution-initialisation", {"id": question.groupe.id, "type": "groupe" }) }} ">Attribuer une ressource pour la question</a>
+                                        </div>
+                                        {% set nbRessources = 0 %}
+                                        {% set tableauGroupes = tableauGroupes|merge([question.groupe.id]) %}
+                                        {% set numeroQuestion = numeroQuestion + 1 %}
+                                    </li>
+                            {% elseif question.type.nom is same as("Nouveau texte à trou") %}
+                                    <li class="question" id="{{ question.numeroOrdre }}">
+                                        <p>Question {{ numeroQuestion }}, {{ question.type.nom }}, {{ question.points }}pts</p>
+                                        <p><a href="{{ path("question-modification", {"id": question.id }) }}" class="editable">
+                                            Consigne générale: {{ question.corps  | striptags  | raw }}
+                                        </a></p>
+
+                                        {% for ressource in question.ressources %}
+                                            {% set nbRessources = loop.index %}
+                                        {% endfor %}
+                                        
+                                        {% if nbRessources is same as(0) %}
+                                            <p>Il n'y a aucune ressource</p>
+                                        {% elseif nbRessources is same as(1) %}
+                                            <p>Ressource:</p>
+                                            {% for ressource in question.ressources %}
+                                                {{ loop.index }}.<a href="{{ path("ressource-modification", {"id": ressource.id, "provenance": question.id }) }}" class="editable">{{ ressource.alt | raw }}<br/></a>
+                                            {% endfor %}
+                                        {% else %}
+                                            <p>Ressource:</p>
+                                            {% for ressource in question.ressources %}
+                                                {{ loop.index }}.<a href="{{ path("ressource-modification", {"id": ressource.id, "provenance": question.id }) }}" class="editable">{{ ressource.alt | raw }}<br/></a>
+                                            {% endfor %}
+                                        {% endif %}
+                                        <br/>
+                                        <p>{{ question.texteATrou | striptags | raw }}</p>
+                                        
+                                        {% set nbRessources = 0 %}
+                        {% elseif question.type.nom is same as("Ouverte") %}
+                            <li class="question" id="{{ question.numeroOrdre }}">
+                                <p>Question {{ numeroQuestion }}, {{ question.type.nom }}</p>
+                                <a class="editable"  href="{{ path("question-modification", {"id": question.id }) }}"><p>{{ question.corps  | striptags("<em><strong>")  | raw }}</p></a>
+                                {% if nbRessources is same as(0) %}
+                                    <p>Il n'y a aucune ressource</p>
+                                {% elseif nbRessources is same as(1) %}
+                                    <p>Ressource:</p>
+                                    {% for ressource in question.groupe.ressources %}
+                                        {{ loop.index }}.<a href="{{ path("ressource-modification", {"id": ressource.id, "provenance": question.id }) }}" class="editable">{{ ressource.alt | raw }}<br/></a>
+                                    {% endfor %}
+                                {% else %}
+                                    <p>Ressource:</p>
+                                    {% for ressource in question.groupe.ressources %}
+                                    {{ loop.index }}.<a href="{{ path("ressource-modification", {"id": ressource.id, "provenance": question.id }) }}" class="editable">{{ ressource.alt | raw }}<br/></a>
+                                {% endfor %}
+                                {% endif %}
+                                <br/>
+
+                                <div class="div-adapt">
+                                    <a class="bouton-lien-adapt suppr classique-suppr" href=" {{ path("question-suppression", {"id": question.id, "true": "false" }) }} ">Supprimer la question</a>
+                                    <a class="bouton-lien-adapt crea classique-crea" href="{{ path("question-modification", {"id": question.id }) }}">Modifier la question</a>
+                                    <a class="bouton-lien-adapt crea classique-crea" href="{{ path("ressource-attribution-initialisation", {"id": question.id, "type": "groupe" }) }} ">Attribuer une ressource pour la question</a>
+                                </div>
+                                {% set nbRessources = 0 %}
+                                {% set numeroQuestion = numeroQuestion + 1 %}
+                            </li>
+                        {% elseif question.type.nom is same as("Carte à trou") %}
+                            <li class="question" id="{{ question.numeroOrdre }}">
+                                <p>Question {{ numeroQuestion }}, {{ question.type.nom }}</p>
+                                <a class="editable"  href="{{ path("question-modification", {"id": question.id }) }}"><p>{{ question.corps  | striptags("<em><strong>")  | raw }}</p></a>
+                                
+                                {% if nbRessources is same as(0) %}
+                                    <p>Il n'y a aucune ressource annexe</p>
+                                {% elseif nbRessources is same as(1) %}
+                                    <p>Ressource:</p>
+                                    {% for ressource in question.groupe.ressources %}
+                                        {{ loop.index }}.<a href="{{ path("ressource-modification", {"id": ressource.id, "provenance": question.id }) }}" class="editable">{{ ressource.alt | raw }}<br/></a>
+                                    {% endfor %}
+                                {% else %}
+                                    <p>Ressource:</p>
+                                    {% for ressource in question.groupe.ressources %}
+                                        {{ loop.index }}.<a href="{{ path("ressource-modification", {"id": ressource.id, "provenance": question.id }) }}" class="editable">{{ ressource.alt | raw }}<br/></a>
+                                    {% endfor %}
+                                {% endif %}
+                                    
+                                <br/>
+
+                                {% if question.ressourceFond is null %}
+                                    <p>Il n'y a aucune ressource en fond</p>
+                                {% else %}
+                                    <div class="conteneur-question-entiere">
+                                        <img src="{{ asset(question.ressourceFond.webPath) }}"/>
+                                    </div>
+                                {% endif %}
+                                    
+                                <div class="div-adapt">
+                                    <a class="bouton-lien-adapt suppr classique-suppr" href=" {{ path("question-suppression", {"id": question.id, "true": "false" }) }} ">Supprimer la question</a>
+                                    <a class="bouton-lien-adapt crea classique-crea" href="{{ path("carte-modification", {"id": question.id }) }}">Modifier la carte</a>
+                                    <a class="bouton-lien-adapt crea classique-crea" href="{{ path("ressource-attribution-initialisation", {"id": question.id, "type": "groupe" }) }} ">Attribuer une ressource pour la question</a>
+                                </div>
+                                {% set nbRessources = 0 %}
+                                {% set numeroQuestion = numeroQuestion + 1 %}
+                            </li>
+                        {% endif %}
+                                           
+<!--                            Boutons de suppression-->
+                                                                
+                            {% if question.type.nom is same as("Question à trou") or question.type.nom is same as("Quizz") or question.type.nom is same as("Nouvelles associations") or question.type.nom is same as("Nouveau vrai ou faux") or question.type.nom is same as("Nouveau texte à trou") %}
+                                    <div class="div-adapt">
+                                        <a class="bouton-suppression-adapt suppr classique-suppr" href="{{ path("question-suppression", {"id": question.id }) }}">Supprimer la question</a>
+                                        {% if question.type.nom is same as("Question à trou") %}
+                                            <a class="bouton-lien-adapt crea classique-crea" href="{{ path("reponse-creation", {"id": question.id }) }}">Rajouter une nouvelle bonne réponse</a>
+                                        {% elseif question.type.nom is same as("Quizz") %}
+                                            <a class="bouton-lien-adapt crea classique-crea" href="{{ path("reponse-creation", {"id": question.id }) }}">Rajouter une nouvelle proposition</a>
+                                        {% elseif question.type.nom is same as("Nouvelles associations") %}
+                                            <a class="bouton-lien-adapt crea classique-crea" href="{{ path("passerelle", {"page": "question/association/" ~ question.id ~ "/0/" }) }}">Rajouter une nouvelle association</a>
+                                        {% elseif question.type.nom is same as("Nouveau vrai ou faux") %}
+                                            <a class="bouton-lien-adapt crea classique-crea" href="{{ path("passerelle", {"page": "question/vraiOuFaux/" ~ question.id ~ "/0/" }) }}">Rajouter un nouveau vrai ou faux</a>
+                                        {% elseif question.type.nom is same as("Nouveau texte à trou") %}
+                                            <a class="bouton-lien-adapt crea classique-crea" href="{{ path("passerelle", {"page": "question/texteATrou/" ~ question.id }) }}">Modifier le texte à trou</a>
+                                        {% endif %}
+                                        <a class="bouton-lien-adapt crea classique-crea" href="{{ path("ressource-attribution-initialisation", {"id": question.id, "type": "question" }) }}">Rajouter une nouvelle ressource</a>
+                                    </div>
+                                </li>
+                                {% set numeroQuestion = numeroQuestion + 1 %}
+                            {% endif %}
+                        {% set nbBonneReponses = 0 %}
+                        {% set nbRessources = 0 %}
+                {% endfor %}
+                            
+                {% if assoc is same as(true) %}
+                        <div class="div-adapt">
+                            <a class="bouton-lien-adapt suppr classique-suppr" href=" {{ path("groupe-suppression", {"id": groupeSortie, "true": "false" }) }} ">Supprimer la question</a>
+                            <a class="bouton-lien-adapt crea classique-crea" href=" {{ path("sous-question-creation", {"id": exercice.id, "groupe": groupeSortie }) }} ">Créer une proposition</a>
+                            <a class="bouton-lien-adapt crea classique-crea" href=" {{ path("ressource-creation", {"id": groupeSortie, "type": "groupe" }) }} ">Attribuer une ressource pour la question</a>
+                        </div>
+                    </li>
+                    {% set assoc = false %}
+                {% elseif vOf is same as(true) %}
+                        <div class="div-adapt">
+                            <a class="bouton-lien-adapt suppr classique-suppr" href=" {{ path("groupe-suppression", {"id": groupeSortie, "true": "false" }) }} ">Supprimer la question</a>
+                            <a class="bouton-lien-adapt crea classique-crea" href=" {{ path("sous-question-creation", {"id": exercice.id, "groupe": groupeSortie, "typeQuest": "Vrai ou faux" }) }} ">Créer une proposition</a>
+                            <a class="bouton-lien-adapt crea classique-crea" href=" {{ path("ressource-creation", {"id": groupeSortie, "type": "groupe" }) }} ">Attribuer une ressource</a>
+                        </div>
+                    </li>
+                {% endif %}
+            </ul>
+            <a class="lien-crea" href=" {{ path("question-creation", {"id": exercice.id }) }} ">Créer une nouvelle question</a>
+            <a class="lien-crea" href=" {{ path("passerelle", {"page": "question/creer/" ~ exercice.id }) }} ">Créer une question des nouveaux types</a>
+
+                                        
+        {% else %} <!-- Si l'exercice ne possède pas de questions-->
+                                        
+            <a class="editable" href="{{ path("exercice-modification", {"id": id }) }}">
+                Chapitre de l'exercice: {{ exercice.chapitre.nom }}, {{ exercice.chapitre.matiere.nom }}, {{ exercice.chapitre.classe.nom }}<br/>
+                Difficulté de l'exercice: {{ exercice.difficulte.nom }}<br/>
+            </a>
+
+            <div class="div-45">
+                {% if exercice.intro is not empty %}
+                    <a class="bouton-lien-45 neutre classique-neutre" href=" {{ path("billet-modification", {"id": exercice.intro.id }) }} ">Modifier l'intro</a>
+                {% else %}
+                    <a class="bouton-lien-45 neutre classique-neutre" href=" {{ path("billet-creation", {"id": exercice.id, "type": "exercice" }) }} ">Créer l'intro</a>
+                {% endif %}
+                {% if exercice.publie is same as(true) %}
+                    <a class="bouton-lien-45 neutre classique-neutre" href=" {{ path("exercice-publier", {"id": exercice.id }) }} ">Masquer l'exercice</a>
+                {% else %}
+                    <a class="bouton-lien-45 neutre classique-neutre" href=" {{ path("exercice-publier", {"id": exercice.id }) }} ">Publier l'exercice</a>
+                {% endif %}
+            </div>
+            <a class="lien-crea" href=" {{ path("question-creation", {"id": exercice.id }) }} ">Créer une nouvelle question</a>
+
+            <p>Il n'y a aucune question dans cet exercice.</p>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,1 @@
+<button id="bouton-proposition-creation" question-id="<?php echo $question->idQ; ?>">Creer une proposition +</button>

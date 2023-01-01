@@ -1,0 +1,17 @@
+{% extends "@App/connecteLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - {{ note.titre }}
+{% endblock %}
+
+{% block StockHG3body %}
+    <div class="billet">
+        <h1 class="titre-billet">{{ note.titre }}</h1>
+        <div class="interieur-bloc-SP">
+            {% if note.image.webPath is defined %}
+                <img class="image-bloc-SP" src="{{ asset(note.image.webPath) }}"/>
+            {% endif %}
+            {{ note.contenu|raw }}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,125 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }}  - Tableau de bord
+{% endblock %}
+
+{% block StockHG3body %}
+    <h1>Tableau de bord</h1>
+    
+    <div class="conteneur">
+        {% for message in app.session.flashbag.get("erreur") %}
+            <p class="erreur-marge-0">{{ message }}</p>
+        {% endfor %}
+        
+        
+        <div class="bloc">
+            <p><strong>Catégorie utilisateur:</strong></p>
+            {% if nombreUtilisateur is same as("0") %}
+                <p>Il n'y a aucun utilisateur enregistré.</p>
+            {% else %}
+                {% if nombreUtilisateur is same as("1") %}
+                    <p>Il y a 1 utilisateur enregistré.</p>
+                {% else %}
+                    <p>Il y a {{ nombreUtilisateur }} utilisateurs enregistrés.</p>
+                {% endif %}
+                <br/>
+
+                {% if nombreUtilisateur1hour is same as("0") %}
+                    <p>Il n'y a <strong class="important">aucun</strong> utilisateur connecté depuis une <strong>heure</strong>.</p>
+                {% elseif nombreUtilisateur1hour is same as("1") %}
+                    <p>Il y a <strong class="important">1</strong> utilisateur connecté depuis une <strong>heure</strong> soit <strong class="important">{{ pourcUtilisateur1hour | round(2, 'floor') }}%:</strong></p><div class="pourcentage heure" style="width: {{ pourcUtilisateur1hour }}%;"></div>
+                {% else %}
+                    <p>Il y a <strong class="important">{{ nombreUtilisateur1hour }}</strong> utilisateurs connectés une depuis une <strong>heure</strong> soit <strong class="important">{{ pourcUtilisateur1hour | round(2, 'floor') }}%:</strong></p><div class="pourcentage heure" style="width: {{ pourcUtilisateur1hour }}%;"></div>
+                {% endif %}
+
+                {% if nombreUtilisateur1day is same as("0") %}
+                    <p>Il n'y a <strong class="important">aucun</strong> utilisateur connecté depuis un <strong>jour</strong>.</p>
+                {% elseif nombreUtilisateur1day is same as("1") %}
+                    <p>Il y a <strong class="important">1</strong> utilisateur connecté depuis un <strong>jour</strong> soit <strong class="important">{{ pourcUtilisateur1day | round(2, 'floor') }}%:</strong></p><div class="pourcentage jour" style="width: {{ pourcUtilisateur1day }}%;"></div>
+                {% else %}
+                    <p>Il y a <strong class="important">{{ nombreUtilisateur1day }}</strong> utilisateurs connectés depuis un <strong>jour</strong> soit <strong class="important">{{ pourcUtilisateur1day | round(2, 'floor') }}%:</strong></p><div class="pourcentage jour" style="width: {{ pourcUtilisateur1day }}%;"></div>
+                {% endif %}
+
+
+                {% if nombreUtilisateur1week is same as("0") %}
+                    <p>Il n'y a <strong class="important">aucun</strong> utilisateur connecté depuis une <strong>semaine</strong>.</p>
+                {% elseif nombreUtilisateur1week is same as("1") %}
+                    <p>Il y a <strong class="important">1</strong> utilisateur connecté depuis une <strong>semaine</strong> soit <strong class="important">{{ pourcUtilisateur1week | round(2, 'floor') }}%:</strong></p><div class="pourcentage semaine" style="width: {{ pourcUtilisateur1week }}%;"></div>
+                {% else %}
+                    <p>Il y a <strong class="important">{{ nombreUtilisateur1week }}</strong> utilisateurs connectés depuis une <strong>semaine</strong> soit <strong class="important">{{ pourcUtilisateur1week | round(2, 'floor') }}%:</strong></p><div class="pourcentage semaine" style="width: {{ pourcUtilisateur1week }}%;"></div>
+                {% endif %}
+                <br/>
+            {% endif %}
+        </div>
+        <br/>
+        
+        <div class="bloc">
+            <p><strong>Catégorie exercices:</strong></p>
+            
+            <table>
+                <thead>
+                    <th></th>
+                    <th colspan="2">Toutes les classes</th>
+                    <th colspan="2">Seconde</th>
+                    <th colspan="2">Première G</th>
+                    <th colspan="2">Première ST</th>
+                    <th colspan="2">Terminale</th>
+                    <th colspan="2">Autres classes</th>
+                </thead><thead>
+                    <th></th>
+                    <th>Connections</th>
+                    <th>Exercices réalisés</th>
+                    <th>Connections</th>
+                    <th>Exercices réalisés</th>
+                    <th>Connections</th>
+                    <th>Exercices réalisés</th>
+                    <th>Connections</th>
+                    <th>Exercices réalisés</th>
+                    <th>Connections</th>
+                    <th>Eexercices réalisés</th>
+                    <th>Connections</th>
+                    <th>Exercices réalisés</th>
+                </thead>
+
+                {% set listeClasses = ["un jour", "sept jours", "un mois", "un an", "toujours"] %}
+                
+                <tbody>
+                    {% for connection in tableauConnections %}
+                        <tr>
+                            <td>Depuis {{ listeClasses[loop.index0] }}</td>
+                            <th>{{ connection["Toute catégories"] }}</th>
+                            <th>{{ tableauExercicesRealises[loop.index0]["Toute catégories"] }}</th>
+                            <th>{{ connection["Seconde"] }}</th>
+                            <th>{{ tableauExercicesRealises[loop.index0]["Seconde"] }}</th>
+                            <th>{{ connection["Première G"] }}</th>
+                            <th>{{ tableauExercicesRealises[loop.index0]["Première G"] }}</th>
+                            <th>{{ connection["Première ST"] }}</th>
+                            <th>{{ tableauExercicesRealises[loop.index0]["Première ST"] }}</th>
+                            <th>{{ connection["Terminale"] }}</th>
+                            <th>{{ tableauExercicesRealises[loop.index0]["Terminale"] }}</th>
+                            <th>{{ connection["Autres"] }}</th>
+                            <th>{{ tableauExercicesRealises[loop.index0]["Autres"] }}</th>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            <br/>
+        </div>
+        
+        <div class="bloc">
+            <p><strong>Utilisateurs les plus récents:</strong></p>
+            {% for utilisateur in utilisateursRecents %}
+                <a href="{{ path("page-eleve", {"id": utilisateur.id}) }}"><strong>{{ utilisateur.nomComplet }}</strong> | {{ utilisateur.dateConnection | date("d/m/Y H:i") }}</a><br/>
+            {% endfor %}
+            
+            <br/>
+        </div>
+        
+        <div class="bloc">
+            <p>La version actuelle de php est la: {{ version }}</p>
+        </div>
+        <br/>
+    </div>
+{% endblock %}

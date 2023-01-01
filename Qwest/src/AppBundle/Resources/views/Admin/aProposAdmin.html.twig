@@ -1,0 +1,26 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - A propos
+{% endblock %}
+
+{% block StockHG3body %}
+    <h1>A propos</h1>
+    
+    {% for note in listNote %}
+        <div class="billet">
+            <a class="titre-billet" href="{{ path("billet-modification", { "id": note.id }) }}"><h1>{{ note.titre }}</h1></a>
+            <div class="interieur-bloc-SP">
+                <p>{{ note.contenu|raw }}</p>
+            </div>
+        </div>
+    {% else %}
+        <div class="conteneur">
+            <p>La page à propos est vide.</p>
+        </div>
+    {% endfor %}
+
+    <div class="conteneur">
+        <a class="bouton-lien crea classique-crea" href=" {{ path("billet-creation", {"type": "a-propos"}) }} ">Aller complèter cette page</a>
+    </div>
+{% endblock %}

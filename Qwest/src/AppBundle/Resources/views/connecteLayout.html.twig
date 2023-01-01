@@ -1,0 +1,57 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <nav id='cssmenu'>
+        <ul>
+            <div class="haut">
+                <li><a class="titre-menu" href='{{ path("accueil-connecte") }}'><span class="titre-qwest">Q?west </span><span class="titre-HG">HG</span></a></li>
+                <li><a>Exercices</a>
+                    <ul>
+                        <li class='has-sub'><a href="{{ path("exercice-liste-connecte", {"matiere": "histoire"}) }}">Histoire</a></li>
+                        <li class='has-sub'><a href="{{ path("exercice-liste-connecte", {"matiere": "géographie"}) }}">Géographie</a></li>
+                        <li class='has-sub'><a href="{{ path("exercice-liste-connecte", {"matiere": "éducation-civique"}) }}">Eduction civique</a></li>
+                        <li class='has-sub'><a href="{{ path("exercice-liste-connecte", {"matiere": "culture-générale"}) }}">Culture générale</a></li>
+                        <li class='has-sub'><a href="{{ path("exercice-liste-connecte", {"matiere": "méthode"}) }}">Méthode</a></li>
+                        <li class='has-sub'><a href="{{ path("exercice-liste-connecte", {"matiere": "tous-les-exercices"}) }}">Tous les exercices toute classe comprise</a></li>
+                    </ul>
+                </li>
+                <li class='has-sub'><a href='{{ path("tableau-honneur") }}'>Tableau d'honneur</a>
+                    <ul>
+                        <li><a href='{{ path("tableau-honneur", {"niveau": "Seconde"}) }}'>Seconde</a></li>
+                        <li><a href='{{ path("tableau-honneur", {"niveau": "Première ST"}) }}'>Première ST</a></li>
+                        <li><a href='{{ path("tableau-honneur", {"niveau": "Première G"}) }}'>Première G</a></li>
+                        <li><a href='{{ path("tableau-honneur", {"niveau": "Terminale"}) }}'>Terminale</a></li>
+                        <li><a href='{{ path("tableau-honneur") }}'>Général</a></li>
+                    </ul>
+                </li>
+                <li class='last'><a href='{{ path("a-propos-connecte") }}'>A propos</a></li>
+            </div>
+            <div class="bas">
+                <li class='deconnection'><a href='{{ path("deconnection") }}'>Se déconnecter</a></li>
+                <li class='pseudo'><a href="{{ path("profil-connecte") }}">{{ app.session.get("pseudo") }}</a></li>
+                <li class='message-menu'><a href="{{ path("messagerie") }}">{{ app.session.get("texteMessage") | raw }}</a></li>
+            </div>
+        </ul>
+    </nav>
+
+        <div class="bloc-page taille-conteneur">
+            {% block StockHG3body %}
+            {% endblock %}
+        </div>
+    <footer>
+        <div class="liste">
+            <h6>Qui sommes nous?</h6><br/>
+            <div>
+                <ul><a href="{{ path("a-propos-connecte") }}">
+                    <li>Notre histoire,
+                    Nos anciens sites,
+                    Comment a t-on développé ce site?</li>
+                </a></ul>
+            </div>
+        </div>
+    </footer>
+{% endblock %}

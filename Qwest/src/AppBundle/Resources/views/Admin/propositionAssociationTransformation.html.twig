@@ -1,0 +1,49 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Transformation d'une proposition
+{% endblock %}
+
+{% block StockHG3body %}
+    
+    <h1>Transformation d'une proposition</h1>
+    <div class="conteneur">
+        {% for message in app.session.flashbag.get('message') %}
+            {{ message | raw }}
+        {% endfor %}
+        <div class="formulaire">
+            {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+            {{ form_errors(form) }}
+
+            {{ form_label(form.corps, "Texte de l\'association:") }}
+            {{ form_widget(form.corps) }}
+            {{ form_row(form.corps) }}
+
+            {% for bonneReponse in form.bonneReponses %}
+                {{ form_label(bonneReponse.corps, "Texte de la seconde association:") }}
+                {{ form_widget(bonneReponse.corps) }}
+                {{ form_row(bonneReponse.corps) }}
+
+                {{ form_label(bonneReponse.nbPoint, "Point(s) remporté(s) par une bonne association:") }}
+                {{ form_widget(bonneReponse.nbPoint) }}
+                {{ form_row(bonneReponse.nbPoint) }}
+
+                {{ form_label(bonneReponse.commentaire, "Commentaire à la correction:") }}
+                {{ form_widget(bonneReponse.commentaire) }}
+                {{ form_row(bonneReponse.commentaire) }}
+            {% endfor %}
+            
+            <p class="attention">Attention! Si vous faites passez le type cette proposition de "ressource" à "texte", la ressource sera détruite.</p>
+            
+            <div class="submit">
+                {{ form_widget(form.envoyer) }}
+            </div>
+
+            {{ form_rest(form) }}
+
+            {{ form_end(form) }}
+            
+            <a class="bouton-lien neutre classique-neutre" href="{{ path("question-liste", {"id": entite.exercice.id }) }}#{{ entite.numeroOrdre }}">Retourner à la liste des questions</a><br/>
+        </div>
+    </div>
+{% endblock %}

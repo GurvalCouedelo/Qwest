@@ -1,0 +1,38 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Changer son profil
+{% endblock %}
+
+{% block StockHG3body %}
+    <h1>Changer son profil</h1>
+    
+    <div class="conteneur">
+        <div class="formulaire">
+            {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+            {{ form_errors(form) }}
+
+            {{ form_label(form.pseudo, "Votre pseudo:") }}
+            {{ form_widget(form.pseudo) }}
+            {{ form_row(form.pseudo) }}
+
+            {{ form_label(form.nom, "Votre nom:") }}
+            {{ form_widget(form.nom) }}
+            {{ form_row(form.nom) }}
+
+            {{ form_label(form.prenom, "Votre prenom:") }}
+            {{ form_widget(form.prenom) }}
+            {{ form_row(form.prenom) }}
+
+            <div class="submit">
+                {{ form_widget(form.envoyer) }}
+            </div>
+
+            {{ form_rest(form) }}
+
+            {{ form_end(form) }}
+        </div>
+        
+        <a class="bouton-lien neutre classique-neutre" href="{{ path("changer-mot-de-passe-admin") }}">Modifier son mot de passe</a>
+    </div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Modification d'une paire de propositions
+{% endblock %}
+
+{% block StockHG3body %}
+
+    <h1><strong class="important">{{ proposition.type.nom }}: </strong>modification d'une paire de propositions</h1>
+    <div class="conteneur">
+        
+        <div class="formulaire">
+            <div class="edition">
+                <p>{{ proposition.groupe.description | raw }}<br/></p>
+                
+                {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+                {{ form_errors(form) }}
+
+                {{ form_label(form.corps, "Texte de la proposition:") }}
+                {{ form_widget(form.corps) }}
+                {{ form_row(form.corps) }}
+
+                {% for bonneReponse in form.bonneReponses %}
+                    <br/>
+                
+                    <div class="choix">
+                        {{ form_widget(bonneReponse.verite) }}
+                        {{ form_row(bonneReponse.verite) }}
+                    </div>
+                    <div class="bloc-champ-edition">
+                        {{ form_label(bonneReponse.nbPoint, "Points attribués:") }}
+                        {{ form_widget(bonneReponse.nbPoint) }}
+                        {{ form_row(bonneReponse.nbPoint) }}
+                    </div>
+                
+                    <br/>
+                
+                    <div class="bloc-champ-edition">
+                        {{ form_label(bonneReponse.commentaire, "Commentaire à la correction:") }}
+                        {{ form_widget(bonneReponse.commentaire) }}
+                        {{ form_row(bonneReponse.commentaire) }}
+                    </div>
+                {% endfor %}
+
+                <div class="bloc-champ-edition">
+                    {{ form_label(form.type, "Transformer la proposition en question:") }}
+                    {{ form_widget(form.type) }}
+                    {{ form_row(form.type) }}
+                </div>
+
+                <div class="submit">
+                    {{ form_widget(form.envoyer) }}
+                    <a class="bouton-suppression-80 suppr classique-suppr" href="{{ path("question-suppression", {"id": proposition.id }) }}">Supprimer la proposition</a>
+                </div>
+
+                {{ form_rest(form) }}
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+        
+    </div>
+{% endblock %}

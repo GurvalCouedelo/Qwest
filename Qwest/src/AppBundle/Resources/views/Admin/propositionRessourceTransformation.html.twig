@@ -1,0 +1,53 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Transformation d'une proposition
+{% endblock %}
+
+{% block StockHG3body %}
+    
+    <h1>Transformation d'une proposition</h1>
+    <div class="conteneur">
+        {% for message in app.session.flashbag.get('message') %}
+            {{ message | raw }}
+        {% endfor %}
+        
+        <p>{{ entite.corps }}</p><br/>
+        
+        <div class="formulaire">
+            <div class="edition">
+                {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+                {{ form_errors(form) }}
+
+                <div class="bloc-champ-edition">
+                    {{ form_label(form.file, "Ressource à ajouter:") }}
+                    {{ form_widget(form.file) }}
+                    {{ form_row(form.file) }}
+                </div>
+
+                {{ form_label(form.lien, "Ou lien d'une vidéo:") }}
+                {{ form_widget(form.lien) }}
+                {{ form_row(form.lien) }}
+
+                {{ form_label(form.alt, "Description de la ressource:") }}
+                {{ form_widget(form.alt) }}
+                {{ form_row(form.alt) }}
+
+                <div class="submit">
+                    {{ form_widget(form.envoyer) }}
+                    {% if type is same as("quizz") %}
+                        <a class="bouton-lien-80 neutre classique-neutre" href="{{ path("question-liste", {"id": entite.question.exercice.id }) }}#{{ entite.question.numeroOrdre }}">Retourner à la liste des questions</a><br/>
+                    {% elseif type is same as("association") %}
+                        <a class="bouton-lien-80 neutre classique-neutre" href="{{ path("question-liste", {"id": entite.exercice.id }) }}#{{ entite.numeroOrdre }}">Retourner à la liste des questions</a><br/>
+                    {% endif %}
+                </div>
+
+                {{ form_rest(form) }}
+
+                {{ form_end(form) }}
+
+                
+            </div>
+        </div>
+    </div>
+{% endblock %}

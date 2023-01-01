@@ -1,0 +1,31 @@
+{% extends "@App/exerciceGroupeLayout.html.twig" %}
+
+{% block Exercice %}
+    <div class="form-texte-a-trou">
+        {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+        {{ form_errors(form) }}
+
+        {% for reponseUtilisateur in form.reponseUtilisateur %}
+            {% if reponseUtilisateur.reponseAssoc is defined %}
+                {{ form_label(reponseUtilisateur.reponseAssoc, reponseUtilisateur.vars.data.question.corps  | striptags | raw ) }}
+                {{ form_widget(reponseUtilisateur.reponseAssoc) }}
+            {% elseif reponseUtilisateur.corps is defined %}
+                {{ form_label(reponseUtilisateur.corps, reponseUtilisateur.vars.data.question.corps  | striptags | raw ) }}
+                {{ form_widget(reponseUtilisateur.corps) }}
+            {% endif %}
+        {% endfor %}
+
+        {% if groupe.finTexte is not empty or groupe.finTexte is not null %}
+            <label>{{ groupe.finTexte | raw }}</label>
+        {% endif %}
+    </div>
+
+    <br/>
+
+    <div class="submit submit-exercice">
+        {{ form_widget(form.envoyer) }}
+
+    {{ form_rest(form) }}
+
+    {{ form_end(form) }}
+{% endblock %}

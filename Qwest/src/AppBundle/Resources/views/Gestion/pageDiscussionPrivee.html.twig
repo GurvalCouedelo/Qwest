@@ -1,0 +1,48 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Discussion en privée
+{% endblock %}
+
+{% set corrige = null %}
+
+{% block StockHG3body %}
+
+    <div class="conteneur">
+        <h1>Discussion privée</h1>
+        <div class="conteneur-discussion">
+            {% if messages is not empty %}
+
+                    {% for me in messages %}
+                        <div class="bloc-discussion {% if me.envoyeur.id is same as(app.session.get("id")) %} envoye {% endif %}">
+                            <p>{{ me.objet }}</p>
+                            {% if me.envoyeur.id is same as(app.session.get("id")) %}Vous{% else %}{{ me.envoyeur.nom }}{% endif %} - <i>{{ me.dateCreation | date("d/m/Y/ H:s") }}</i><br/><br/>
+                            <p>{{ me.contenu | raw }}</p>
+                            {% if me.type is same as("C") %}
+                                {% for point in me.points %}
+                                    {% set corrige = point.points %}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    {% if corrige is not null %}
+                        {% if app.session.get("permission") is same as("U") %}
+                            <p> Votre résultat est de <span  class="score">{{ corrige }}/100.</span>
+                        {% else %}
+                            <p> Vous avez attribué à cet élève <span  class="score">{{ corrige }}/100.</span>
+                        {% endif %}
+                    {% endif %}
+
+            {% else %}
+                <p>Vous n'avez reçus aucun message.</p>
+            {% endif %}
+            <div class="div-45">
+                <a class="bouton-lien-45 crea classique-crea" href=" {{ path("message-redaction", {"id": fil.id}) }} ">Répondre</a>
+                <a class="bouton-lien-45 neutre classique-neutre" href=" {{ path("messagerie") }} ">Retourner à la messagerie</a>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

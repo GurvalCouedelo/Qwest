@@ -1,0 +1,48 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Envoyer une ressource
+{% endblock %}
+
+{% block StockHG3body %}
+    <h1>Envoyer une ressource</h1>
+    
+    <div class="conteneur">
+        {% for message in app.session.flashbag.get('erreur') %}
+            <p class="erreur-marge-0">{{ message }}</p>
+        {% endfor %}
+    
+        <div class="formulaire">
+            <div class="edition">
+                {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+                {{ form_errors(form) }}
+
+                {{ form_label(form.file, "Ressource à ajouter:") }}
+                {{ form_widget(form.file) }}
+                {{ form_row(form.file) }}
+                
+                <div class="bloc-champ-edition">
+                    {{ form_label(form.lien, "Ou alors lien de votre vidéo:") }}
+                    {{ form_widget(form.lien) }}
+                    {{ form_row(form.lien) }}
+                </div>
+
+                {{ form_label(form.alt, "Description:") }}
+                {{ form_widget(form.alt) }}
+                {{ form_row(form.alt) }}
+
+                {{ form_label(form.matiere, "Matière:") }}
+                {{ form_widget(form.matiere) }}
+                {{ form_row(form.matiere) }}
+
+                <div class="submit">
+                    {{ form_widget(form.envoyer) }}
+                </div>
+
+                {{ form_rest(form) }}
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

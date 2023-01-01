@@ -1,0 +1,38 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Creation d'une proposition à associer
+{% endblock %}
+
+{% block StockHG3body %}
+    <h1>Creation d'une proposition à associer</h1>
+    <div class="conteneur">
+        <div class="formulaire">
+            <div class="edition">
+                {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+                {{ form_errors(form) }}
+
+                {{ form_label(form.corps, "Corps de la proposition à rentrer:") }}
+                {{ form_widget(form.corps) }}
+                {{ form_row(form.corps) }}
+
+                {{ form_label(form.nbPoint, "Nombre de points obtenus:") }}
+                {{ form_widget(form.nbPoint) }}
+                {{ form_row(form.nbPoint) }}
+
+                {{ form_label(form.commentaire, "Commentaire à la correction:") }}
+                {{ form_widget(form.commentaire) }}
+                {{ form_row(form.commentaire) }}
+
+                <div class="submit">
+                    {{ form_widget(form.envoyer) }}
+                </div>
+
+                {{ form_rest(form) }}
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+        <a class="bouton-suppression suppr classique-suppr" href="{{ path("reponse-suppression", {"id": bonneReponse.id }) }}">Supprimer cette proposition</a><br/>
+    </div>
+{% endblock %}

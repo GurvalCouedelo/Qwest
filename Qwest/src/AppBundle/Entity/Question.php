@@ -1,0 +1,668 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Config\Definition\Exception\Exception;
+
+/**
+ * Question
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\QuestionRepository")
+ * @ORM\HasLifecycleCallbacks
+ */
+class Question
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="corps", type="string", length=1024)
+     * @Assert\Length(max=1024)
+     */
+    private $corps;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="aide", type="string", length=1024, nullable=true)
+     * @Assert\Length(max=1024)
+     */
+    private $aide;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="points", type="integer", nullable=true)
+     */
+    private $points = 1;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="numeroOrdre", type="integer")
+     */
+    private $numeroOrdre;
+    
+    /**
+    * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Exercise", inversedBy="question")
+    * @Assert\Valid
+    */
+    private $exercice;
+    
+    /**
+    * @ORM\OneToMany(targetEntity="AppBundle\Entity\Answer", mappedBy="question", cascade={"remove"})
+    * @ORM\JoinColumn(nullable=true)
+    * @Assert\Valid
+    */
+    private $reponseUtilisateur;
+    
+    /**
+    * @ORM\OneToMany(targetEntity="AppBundle\Entity\GoodAnswer", mappedBy="question", cascade={"persist", "remove"})
+    * @Assert\Valid
+    */
+    private $bonneReponses;
+    
+    /**
+    * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TypeQuestion", inversedBy="question")
+    * @ORM\JoinColumn(nullable=false)
+    * @Assert\Valid
+    */
+    private $type;
+    
+    /**
+    * @ORM\Column(name="trouOuListe", type="string", length=1, nullable=true)
+    * @Assert\Length(max=1)
+    */
+    private $trouOuListe;
+    
+    /**
+    * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Means", mappedBy="question", cascade={"persist"})
+    * @ORM\JoinColumn(nullable=true)
+    * @Assert\Valid
+    */
+    private $ressources;
+    
+    /**
+    * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Means", inversedBy="questionRessourceFond")
+    * @ORM\JoinColumn(nullable=true)
+    * @Assert\Valid
+    */
+    private $ressourceFond;
+    
+    /**
+    *@ORM\OneToOne(targetEntity="AppBundle\Entity\Reverser", mappedBy="question1")
+    * @Assert\Valid
+    **/
+    private $reverser;
+    
+    /**
+    *@ORM\OneToOne(targetEntity="AppBundle\Entity\Reverser", mappedBy="question2")
+    * @Assert\Valid
+    **/
+    private $reverser2;
+    
+    /**
+    * @ORM\ManyToOne(targetEntity="AppBundle\Entity\AssociationGroup", inversedBy="question")
+    * @ORM\JoinColumn(nullable=true)
+    * @Assert\Valid
+    */
+    private $groupe;
+    
+    /**
+    * @ORM\OneToMany(targetEntity="AppBundle\Entity\SubQuestion", mappedBy="question", cascade={"persist", "remove"})
+    * @ORM\JoinColumn(nullable=true)
+    * @Assert\Valid
+    */
+    private $subQuestion;
+
+    /**
+     *@ORM\OneToMany(targetEntity="AppBundle\Entity\Message", mappedBy="question", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=true)
+     * @Assert\Valid
+     **/
+    private $reponseOuverte;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="texteATrou", type="string", length=15000, nullable=true)
+     * @Assert\Length(max=15000)
+     */
+    private $texteATrou;
+    
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->reponseUtilisateur = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->bonneReponses = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ressources = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    public function __to_string()
+    {
+        return $this->getCorps();
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+    
+    /**
+     * Set id
+     *
+     * @return integer 
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * Set corps
+     *
+     * @param string $corps
+     * @return Question
+     */
+    public function setCorps($corps)
+    {
+        $this->corps = $corps;
+
+        return $this;
+    }
+
+    /**
+     * Get corps
+     *
+     * @return string 
+     */
+    public function getCorps()
+    {
+        return $this->corps;
+    }
+    
+    /**
+     * Get corps
+     *
+     * @return string 
+     */
+    public function getCorpsForm()
+    {
+        return strip_tags($this->numeroOrdre . ". " . $this->corps);
+    }
+
+    /**
+     * Set aide
+     *
+     * @param string $aide
+     * @return Question
+     */
+    public function setAide($aide)
+    {
+        $this->aide = $aide;
+
+        return $this;
+    }
+
+    /**
+     * Get aide
+     *
+     * @return string 
+     */
+    public function getAide()
+    {
+        return $this->aide;
+    }
+
+    /**
+     * Set points
+     *
+     * @param integer $points
+     * @return Question
+     */
+    public function setPoints($points)
+    {
+        $this->points = $points;
+
+        return $this;
+    }
+
+    /**
+     * Get points
+     *
+     * @return integer 
+     */
+    public function getPoints()
+    {
+        return $this->points;
+    }
+
+    /**
+     * Set numeroOrdre
+     *
+     * @param integer $numeroOrdre
+     * @return Question
+     */
+    public function setNumeroOrdre($numeroOrdre)
+    {
+        $this->numeroOrdre = $numeroOrdre;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroOrdre
+     *
+     * @return integer 
+     */
+    public function getNumeroOrdre()
+    {
+        return $this->numeroOrdre;
+    }
+
+    /**
+     * Set exercice
+     *
+     * @param \AppBundle\Entity\Exercise $exercice
+     * @return Question
+     */
+    public function setExercice(\AppBundle\Entity\Exercise $exercice = null)
+    {
+        $this->exercice = $exercice;
+
+        return $this;
+    }
+
+    /**
+     * Get exercice
+     *
+     * @return \AppBundle\Entity\Exercise 
+     */
+    public function getExercice()
+    {
+        return $this->exercice;
+    }
+
+    /**
+     * Add reponseUtilisateur
+     *
+     * @param \AppBundle\Entity\Answer $reponseUtilisateur
+     * @return Question
+     */
+    public function addReponseUtilisateur(\AppBundle\Entity\Answer $reponseUtilisateur)
+    {
+        $this->reponseUtilisateur[] = $reponseUtilisateur;
+
+        return $this;
+    }
+
+    /**
+     * Remove reponseUtilisateur
+     *
+     * @param \AppBundle\Entity\Answer $reponseUtilisateur
+     */
+    public function removeReponseUtilisateur(\AppBundle\Entity\Answer $reponseUtilisateur)
+    {
+        $this->reponseUtilisateur->removeElement($reponseUtilisateur);
+    }
+
+    /**
+     * Get reponseUtilisateur
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getReponseUtilisateur()
+    {
+        return $this->reponseUtilisateur;
+    }
+
+    /**
+     * Add bonneReponses
+     *
+     * @param \AppBundle\Entity\GoodAnswer $bonneReponses
+     * @return Question
+     */
+    public function addBonneReponse(\AppBundle\Entity\GoodAnswer $bonneReponses)
+    {
+        $this->bonneReponses[] = $bonneReponses;
+
+        return $this;
+    }
+
+    /**
+     * Remove bonneReponses
+     *
+     * @param \AppBundle\Entity\GoodAnswer $bonneReponses
+     */
+    public function removeBonneReponse(\AppBundle\Entity\GoodAnswer $bonneReponses)
+    {
+        $this->bonneReponses->removeElement($bonneReponses);
+    }
+
+    /**
+     * Get bonneReponses
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getBonneReponses()
+    {
+        return $this->bonneReponses;
+    }
+
+    /**
+     * Set type
+     *
+     * @param \AppBundle\Entity\TypeQuestion $type
+     * @return Question
+     */
+    public function setType(\AppBundle\Entity\TypeQuestion $type = null)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return \AppBundle\Entity\TypeQuestion 
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Add ressources
+     *
+     * @param \AppBundle\Entity\Means $ressources
+     * @return Question
+     */
+    public function addRessource(\AppBundle\Entity\Means $ressources)
+    {
+        $this->ressources[] = $ressources;
+
+        return $this;
+    }
+
+    /**
+     * Remove ressources
+     *
+     * @param \AppBundle\Entity\Means $ressources
+     */
+    public function removeRessource(\AppBundle\Entity\Means $ressources)
+    {
+        $this->ressources->removeElement($ressources);
+    }
+
+    /**
+     * Get ressources
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRessources()
+    {
+        return $this->ressources;
+    }
+
+    /**
+     * Set reverser
+     *
+     * @param \AppBundle\Entity\Reverser $reverser
+     * @return Question
+     */
+    public function setReverser(\AppBundle\Entity\Reverser $reverser = null)
+    {
+        $this->reverser = $reverser;
+
+        return $this;
+    }
+
+    /**
+     * Get reverser
+     *
+     * @return \AppBundle\Entity\Reverser 
+     */
+    public function getReverser()
+    {
+        return $this->reverser;
+    }
+
+    /**
+     * Set reverser2
+     *
+     * @param \AppBundle\Entity\Reverser $reverser2
+     * @return Question
+     */
+    public function setReverser2(\AppBundle\Entity\Reverser $reverser2 = null)
+    {
+        $this->reverser2 = $reverser2;
+
+        return $this;
+    }
+
+    /**
+     * Get reverser2
+     *
+     * @return \AppBundle\Entity\Reverser 
+     */
+    public function getReverser2()
+    {
+        return $this->reverser2;
+    }
+    
+    public function getNomUnique()
+    {
+        return sprintf('%s - %s', $this->name, $this->value);
+    }
+
+    /**
+     * Set groupe
+     *
+     * @param \AppBundle\Entity\AssociationGroup $groupe
+     * @return Question
+     */
+    public function setGroupe(\AppBundle\Entity\AssociationGroup $groupe = null)
+    {
+        $this->groupe = $groupe;
+
+        return $this;
+    }
+
+    /**
+     * Get groupe
+     *
+     * @return \AppBundle\Entity\AssociationGroup 
+     */
+    public function getGroupe()
+    {
+        return $this->groupe;
+    }
+
+    /**
+     * Add groupe
+     *
+     * @param \AppBundle\Entity\AssociationGroup $groupe
+     * @return Question
+     */
+    public function addGroupe(\AppBundle\Entity\AssociationGroup $groupe)
+    {
+        $this->groupe[] = $groupe;
+
+        return $this;
+    }
+
+    /**
+     * Remove groupe
+     *
+     * @param \AppBundle\Entity\AssociationGroup $groupe
+     */
+    public function removeGroupe(\AppBundle\Entity\AssociationGroup $groupe)
+    {
+        $this->groupe->removeElement($groupe);
+    }
+
+    /**
+     * Set trouOuListe
+     *
+     * @param string $trouOuListe
+     * @return Question
+     */
+    public function setTrouOuListe($trouOuListe)
+    {
+        $this->trouOuListe = $trouOuListe;
+
+        return $this;
+    }
+
+    /**
+     * Get trouOuListe
+     *
+     * @return string 
+     */
+    public function getTrouOuListe()
+    {
+        return $this->trouOuListe;
+    }
+
+    /**
+     * Add reponseOuverte
+     *
+     * @param \AppBundle\Entity\Message $reponseOuverte
+     * @return Question
+     */
+    public function addReponseOuverte(\AppBundle\Entity\Message $reponseOuverte)
+    {
+        $this->reponseOuverte[] = $reponseOuverte;
+
+        return $this;
+    }
+
+    /**
+     * Remove reponseOuverte
+     *
+     * @param \AppBundle\Entity\Message $reponseOuverte
+     */
+    public function removeReponseOuverte(\AppBundle\Entity\Message $reponseOuverte)
+    {
+        $this->reponseOuverte->removeElement($reponseOuverte);
+    }
+
+    /**
+     * Get reponseOuverte
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getReponseOuverte()
+    {
+        return $this->reponseOuverte;
+    }
+
+    /**
+     * Add subQuestion
+     *
+     * @param \AppBundle\Entity\SubQuestion $subQuestion
+     *
+     * @return Question
+     */
+    public function addSubQuestion(\AppBundle\Entity\SubQuestion $subQuestion)
+    {
+        $this->subQuestion[] = $subQuestion;
+
+        return $this;
+    }
+
+    /**
+     * Remove subQuestion
+     *
+     * @param \AppBundle\Entity\SubQuestion $subQuestion
+     */
+    public function removeSubQuestion(\AppBundle\Entity\SubQuestion $subQuestion)
+    {
+        $this->subQuestion->removeElement($subQuestion);
+    }
+
+    /**
+     * Get subQuestion
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSubQuestion()
+    {
+        return $this->subQuestion;
+    }
+    
+    public function setSubQuestion(){
+        foreach($this->getSubQuestion() as $sousQuestion){
+            $sousQuestion->setQuestion($this);
+        }
+    }
+
+    /**
+     * Set ressourceFond
+     *
+     * @param \AppBundle\Entity\Means $ressourceFond
+     *
+     * @return Question
+     */
+    public function setRessourceFond(\AppBundle\Entity\Means $ressourceFond = null)
+    {
+        $this->ressourceFond = $ressourceFond;
+
+        return $this;
+    }
+
+    /**
+     * Get ressourceFond
+     *
+     * @return \AppBundle\Entity\Means
+     */
+    public function getRessourceFond()
+    {
+        return $this->ressourceFond;
+    }
+
+    /**
+     * Set texteATrou
+     *
+     * @param string $texteATrou
+     *
+     * @return Question
+     */
+    public function setTexteATrou($texteATrou)
+    {
+        $this->texteATrou = $texteATrou;
+
+        return $this;
+    }
+
+    /**
+     * Get texteATrou
+     *
+     * @return string
+     */
+    public function getTexteATrou()
+    {
+        return $this->texteATrou;
+    }
+}

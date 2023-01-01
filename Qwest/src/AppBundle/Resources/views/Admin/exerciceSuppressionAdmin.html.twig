@@ -1,0 +1,11 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Suppression d'un exercice
+{% endblock %}
+
+{% block StockHG3body %}
+    <div class="conteneur">
+        <p><a class="bouton-suppression suppr classique-suppr" href="{{ path("exercice-suppression", {"id": exercice.id, "true": "true"}) }}">Supprimer l'exercice</a></p>
+    </div>
+{% endblock %}

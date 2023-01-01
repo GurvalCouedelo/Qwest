@@ -1,0 +1,55 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Création d'une proposition
+{% endblock %}
+
+{% block StockHG3body %}
+    <h1><strong class="important">{{ question.type.nom }}: </strong>création d'une proposition</h1>
+    
+    <div class="conteneur">
+        {% for message in app.session.flashbag.get('message') %}
+            {{ message | raw }}
+        {% endfor %}
+    
+        <p>{{ question.groupe.description | raw }}<br/></p>
+        
+        <div class="formulaire">
+            <div class="edition">
+                {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+                {{ form_errors(form) }}
+
+                {{ form_label(form.corps, "Corps de la proposition:") }}
+                {{ form_widget(form.corps) }}
+                {{ form_row(form.corps) }}
+
+                {% for bonneReponse in form.bonneReponses %}
+                    {{ form_label(bonneReponse.nbPoint, "Nombre de points attribués à la proposition:") }}
+                    {{ form_widget(bonneReponse.nbPoint) }}
+                    {{ form_row(bonneReponse.nbPoint) }}
+
+                    <div class="choix">
+                        {{ form_widget(bonneReponse.verite) }}
+                        {{ form_row(bonneReponse.verite) }}
+                    </div>
+
+                    <div class="bloc-champ-edition">
+                        {{ form_label(bonneReponse.commentaire, "Commentaire à la correction:") }}
+                        {{ form_widget(bonneReponse.commentaire) }}
+                        {{ form_row(bonneReponse.commentaire) }}
+                    </div>
+                {% endfor %}
+
+                <div class="submit">
+                    {{ form_widget(form.envoyer) }}
+                    <a class="bouton-lien-80 neutre classique-neutre" href="{{ path("question-liste", {"id": id }) }}">Retourner à la liste des questions</a><br/>
+                </div>
+
+                {{ form_rest(form) }}
+
+                {{ form_end(form) }}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

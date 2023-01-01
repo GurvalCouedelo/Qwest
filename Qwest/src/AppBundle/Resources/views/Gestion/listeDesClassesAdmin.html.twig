@@ -1,0 +1,35 @@
+{% extends layout %}
+
+{% block title %}
+    {{ parent() }} - Liste des classes
+{% endblock %}
+
+{% block StockHG3body %}
+    
+    <div class="conteneur">
+        <h1>Liste des classes</h1>
+        {% for message in app.session.flashbag.get('message') %}
+            {{ message | raw }}
+        {% endfor %}
+        
+        {% if listeClasses is not empty %}
+            <table class="petit-tableau">
+                <thead>
+                    <th>Nom</th>
+                    <th>Niveau</th>
+                </thead>
+
+                {% for cl in listeClasses %}
+                    <tr>
+                        <td><a href="{{ path("classe-modification", {"id": cl.id}) }}">{{ cl.nom }}</a></td>
+                        <td>{{ cl.niveau.nom }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>Vous n'avez pas encore créé de classe.</p>
+        {% endif %}
+            
+        <a class="lien-crea" href="{{ path("classe-creation") }}">Créer une classe</a>
+    </div>
+{% endblock %}

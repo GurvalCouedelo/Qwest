@@ -1,0 +1,232 @@
+@font-face {
+    font-family: 'uppereastsideregular';
+    src: url('../font/uppereastside-fontfacekit/UpperEastSide-webfont.eot');
+    src: url('../font/uppereastside-fontfacekit/UpperEastSide-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../font/uppereastside-fontfacekit/UpperEastSide-webfont.woff') format('woff'),
+         url('../font/uppereastside-fontfacekit/UpperEastSide-webfont.ttf') format('truetype'),
+         url('../font/uppereastside-fontfacekit/UpperEastSide-webfont.svg#uppereastsideregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+.nouveau-message{
+    color: #f00c0c;
+}
+
+.titre-qwest{
+    color: #f0640c;
+}
+
+.titre-HG{
+    color: #28e328;
+}
+
+/* Menu des mobiles */
+
+#cssmenuPetit {
+    display: block;
+    text-align: center;
+}
+
+#cssmenuPetit a{
+    color: white;
+}
+
+#cssmenuPetit ul{
+    background-color: #2a2929;
+    margin: 0;
+    padding: 0;
+    transition: 0.5s;
+}
+
+#cssmenuPetit ul li{
+    border-bottom: 2px solid #b5b0b4;
+    padding-bottom: 2px;
+    padding-top: 2px;
+}
+
+#cssmenuPetit ul li ul li{
+    border-bottom: 1px solid #b5b0b4;
+}
+
+#cssmenuPetit ul li ul li:last-child{
+    border-bottom: none;
+}
+
+#cssmenuPetit .bas{
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+#poigne:hover{
+    cursor: pointer;
+}
+
+/* menu classique */
+
+@media only screen and (min-width: 768px) and (max-width: 1400px){ 
+    #cssmenu > ul .haut > li > a,  #cssmenu > ul .bas > li > a{
+        font-size: 14px;
+    }
+}
+
+@media only screen and (min-width: 1401px){ 
+    #cssmenu > ul .haut > li > a,  #cssmenu > ul .bas > li > a{
+        font-size: 20px;
+    }
+}
+
+#cssmenu {
+    font-weight: 600;
+    font-family: "uppereastsideregular";
+    zoom: 1;
+}
+
+/*Base*/
+
+#cssmenu > ul {
+    background-color: #2a2929;
+    transition: 0.5s;
+    min-width: 100%;
+        
+    display: inline-block;
+}
+
+#cssmenu .bas
+{
+    display: inline-block;
+    width: auto;
+    float: right;
+}
+
+#cssmenu .haut {
+    display: inline-block;
+    width: auto;
+}
+
+#cssmenu ul .haut > li, #cssmenu ul .bas > li{
+    margin: 0px;
+    margin-left: 0px;
+    padding: 0px;
+    list-style: none;
+    transition: 0.25s;
+    display: inline-block
+}
+
+#cssmenu > ul .haut > li > a,  #cssmenu > ul .bas > li > a{
+    margin: 30px 26px 30px 26px;
+    display: block;
+    line-height: 18px;
+
+    color: #ffffff;
+
+    font-family: "sans-serif";
+    text-decoration: none;
+}
+
+#cssmenu > ul > li > .premierLien {
+    margin-left: 26px;
+}
+
+/*Boutons spéciaux*/
+
+#cssmenu > ul .bas > .connection, #cssmenu > ul .bas  > .deconnection, #cssmenu > ul .bas  > .inscription, #cssmenu > ul .bas  > .pseudo, #cssmenu > ul .bas  > .message-menu{
+    float: right;
+}
+
+#cssmenu > ul .bas  > .connection:hover, #cssmenu > ul .bas  > .deconnection:hover, #cssmenu > ul .bas  > .inscription:hover, #cssmenu > ul .bas  > .pseudo:hover, #cssmenu > ul .bas  > .message-menu:hover{
+    margin-left: 0px;
+}
+
+#cssmenu > ul .bas  > .connection > a, #cssmenu > ul .bas  > .deconnection > a, #cssmenu > ul .bas  > .inscription > a, #cssmenu > ul .bas  > .pseudo > a, #cssmenu > ul .bas  > .message-menu > a{
+    margin: 18px 10px 18px 10px;
+    padding: 12px 20px 12px 20px;
+}
+
+#cssmenu > ul .bas  > .inscription > a{
+    border: 1px solid #f0640c;
+    color: #f0640c;
+    border-radius: 25px;
+    transition: 0.25s;
+}
+
+#cssmenu > ul .bas  > .deconnection > a{
+    border: 1px solid #f00c0c;
+    color: #f00c0c;
+    border-radius: 25px;
+    transition: 0.25s;
+}
+
+#cssmenu > ul .bas  > .inscription > a:hover{
+    color: #ffffff;
+    background-color: #f0640c;
+    transition: 0.25s;
+}
+
+#cssmenu > ul .bas  > .deconnection > a:hover{
+    color: #ffffff;
+    background-color: #f00c0c;
+    transition: 0.25s;
+}
+
+#cssmenu > ul .bas  > .message-menu > a{
+    color: white;
+}
+
+#cssmenu > ul .bas  > .connection > a{
+    color: #28e328;
+}
+
+#cssmenu > ul .bas  > .pseudo > a{
+    color: #28e328;
+}
+
+    /*Sous-menu*/
+
+#cssmenu > ul ul {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    top: 120px;
+    background-color: #2a2929;
+    margin: 0;
+    padding: 0;
+    margin-top: 14px;
+    z-index: -1;
+}
+
+#cssmenu > ul li:hover ul{
+    opacity: 1;
+    visibility: visible;
+    color: #000;
+    z-index: 2;
+    top: 64px;
+    transition: opacity 0.5s;
+}
+
+#cssmenu > ul ul li {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+}
+
+#cssmenu > ul ul li a {
+    padding: 30px 36px;
+    display: block;
+    width: 150px;
+
+    font-size: 13px;
+    color: #ffffff;
+    text-decoration: none;
+    font-family: "georgia";
+
+    transition: all 0.25s;
+}
+
+#cssmenu > ul ul li a:hover{
+    background-color: #f0640c;
+    transition: all 0.25s;
+}

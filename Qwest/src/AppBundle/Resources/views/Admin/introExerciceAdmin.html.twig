@@ -1,0 +1,25 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - {{ exercice.titre }}
+{% endblock %}
+
+{% block StockHG3body %}
+    {% if exercice.intro.ressource is not empty %}
+        <h1>{{ exercice.intro.titre }}</h1>
+        <div class="interieur-bloc-SP  intro-exercice">
+            {% if exercice.intro.ressource is not null %}
+                <img class="image-bloc-SP" src="{{ asset(exercice.intro.ressource.webPath) }}"/>
+            {% endif %}
+            <p>{{ exercice.intro.contenu|raw }}</p>
+        </div>
+    {% else %}
+        <h1>{{ exercice.intro.titre }}</h1>
+        <div class="conteneur">
+            <p>{{ exercice.intro.contenu | raw }}</p><br/>
+        </div>
+    {% endif %}
+        <div class="conteneur">
+            <a class="bouton-lien neutre classique-neutre" href=" {{ path("exercice-inscrits", {"id": exercice.id }) }} ">Commencer l'exercice</a>
+        </div>
+{% endblock %}

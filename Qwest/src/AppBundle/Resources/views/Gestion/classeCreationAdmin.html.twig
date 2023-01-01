@@ -1,0 +1,45 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {% if action is same as("C") %}
+        {{ parent() }} - Création d'une classe
+    {% else %}
+        {{ parent() }} - Modification d'une classe
+    {% endif %}
+
+{% endblock %}
+
+{% block StockHG3body %}
+    {% if action is same as("C") %}
+        <h1>Création d'une classe</h1>
+    {% else %}
+        <h1>Modification d'une classe</h1>
+    {% endif %}
+
+    <div class="conteneur">
+        <div class="formulaire">
+            {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+            {{ form_errors(form) }}
+
+            {{ form_label(form.nom, "Nom de la classe:") }}
+            {{ form_widget(form.nom) }}
+            {{ form_row(form.nom) }}
+
+            {{ form_label(form.niveau, "Niveau de votre classe:") }}
+            {{ form_widget(form.niveau) }}
+            {{ form_row(form.niveau) }}
+
+            <div class="submit">
+                {{ form_widget(form.envoyer) }}
+            </div>
+
+            {{ form_rest(form) }}
+
+            {{ form_end(form) }}
+        </div>
+
+        {% if action is same as("M") %}
+            <p><a class="bouton-suppression suppr classique-suppr" href="{{ path("classe-suppression", {"id": classe.id, "true": "false"}) }}">Supprimer la classe</a></p>
+        {% endif %}
+    </div>
+{% endblock %}

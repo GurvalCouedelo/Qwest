@@ -1,0 +1,54 @@
+{% extends "@App/adminLayout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Modification d'une paire de propositions
+{% endblock %}
+
+{% block StockHG3body %}
+
+    <h1>Modification d'une paire de propositions</h1>
+    <div class="conteneur">
+        <div class="formulaire">
+            <div class="edition">
+                <p>{{ proposition.groupe.description | raw }}</p><br/>
+                
+                {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+                {{ form_errors(form) }}
+
+                {{ form_label(form.corps, "Première proposition:") }}
+                {{ form_widget(form.corps) }}
+                {{ form_row(form.corps) }}
+
+                {% for bonneReponse in form.bonneReponses %}
+                    {{ form_label(bonneReponse.corps, "Seconde proposition:") }}
+                    {{ form_widget(bonneReponse.corps) }}
+                    {{ form_row(bonneReponse.corps) }}
+
+                    <div class="bloc-champ-edition">
+                        {{ form_label(bonneReponse.nbPoint, "Points attribués:") }}
+                        {{ form_widget(bonneReponse.nbPoint) }}
+                        {{ form_row(bonneReponse.nbPoint) }}
+                    </div>
+
+                    {{ form_label(bonneReponse.commentaire, "Commentaire à la correction:") }}
+                    {{ form_widget(bonneReponse.commentaire) }}
+                    {{ form_row(bonneReponse.commentaire) }}
+                {% endfor %}
+
+                {{ form_label(form.type, "Transformer la proposition en question:") }}
+                {{ form_widget(form.type) }}
+                {{ form_row(form.type) }}
+
+                <div class="submit">
+                    {{ form_widget(form.envoyer) }}
+                    <a class="bouton-suppression-80 suppr classique-suppr" href="{{ path("question-suppression", {"id": proposition.id }) }}">Supprimer la paire de propositions</a>
+                </div>
+
+                {{ form_rest(form) }}
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+        
+    </div>
+{% endblock %}
